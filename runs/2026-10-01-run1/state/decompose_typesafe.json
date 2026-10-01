@@ -1,0 +1,251 @@
+{
+ "model": "jev-1.13.0",
+ "points": [
+  {
+   "n": 1,
+   "text": "P1. A cell's receipt chain is a per-cell append-only ledger row `(cell_id, seq, prev_hash, before_image, after_image, cause_ref, deps_map, wall_clock, hash)` where `hash = SHA-256(cell_id || seq || prev_hash || canonical(before_image) || canonical(after_image) || canonical(cause_ref) || canonical(deps_map))`. The double-entry property means every row stores both before and after states plus the triggering cause and exact dependency versions, making changes auditable and reversible. Cost: full before/after images cause log growth proportional to state size per mutation unless deltas or checkpoints are used."
+  },
+  {
+   "n": 2,
+   "text": "P2. A cell's committed current state is `tip.after_image`, where the tip is the highest-`seq` receipt whose chain verifies from a trusted anchor/genesis. Boot rebuilds `cell_tip = (seq, hash, after_image_ref)` by scanning `receipt_log` and checking `receipt[k].prev_hash == receipt[k-1].hash`. Invariant: no valid cell has a missing hash link or uncommitted tail. Failure: any gap or mismatch quarantines the cell rather than allowing boot from a suspect tail."
+  },
+  {
+   "n": 3,
+   "text": "P3. Single-cell rewind uses the receipt chain as an append-only time machine: locate the target receipt `R_t` by `seq` or `hash`, verify it back to the anchor, read current tip `R_cur`, then append `R_rw = (cell_id, tip.seq+1, tip.hash, before=tip.after, after=R_t.after, cause={\"op\":\"rewind\",\"target_receipt\":R_t.hash}, deps=R_t.deps, ts=now, hash=...)`. Invariant: old receipts are never deleted; the rewind is just a new valid transition whose `after_image` equals the target's `after_image`. Failure: if another writer changed the tip first, the append fails on `prev_hash` mismatch and the caller must retry against the new tip."
+  },
+  {
+   "n": 4,
+   "text": "P4. Single-cell rewind must account for dependents, not just the rewound cell. The runtime keeps `dep_index[ (cell_id, receipt_hash) ] -> [dependent_receipt_ids]` built from each receipt's `deps_map`. If a dependent consumed a receipt that is no longer the cell's current tip, that dependent is marked `stale` and must be re-evaluated or rewound. Invariant: no dependent may silently continue using a superseded dependency version. Failure: ignoring the index causes organ-level inconsistency even though each individual cell's hash chain is valid."
+  },
+  {
+   "n": 5,
+   "text": "P5. A single-cell snapshot is an immutable export record `cell_snapshot.json = {schema_version, cell_id, tip_seq, tip_hash, after_image, prev_hash, proof_type, chain_proof, dep_pins, created_at}`. To make it, the cell is read under its per-cell mutex or a read lease, and the snapshot is content-addressed by `file_sha256`; the included proof is the ordered receipt headers from anchor to tip, or a Merkle path if the ledger is Merkelized. Invariant: `tip_hash` must match the hash of the receipt at `tip_seq`, and `after_image` must byte-for-byte equal that receipt's after image. Failure: taking the snapshot without a lease can produce a torn record where `tip_seq` and `after_image` belong to different tips."
+  },
+  {
+   "n": 6,
+   "text": "P6. A single-cell bootable drop-in packages `cell_drop_in/` with `cell_snapshot.json`, `receipt_log.cbor`, `schema.cbor`, `api_manifest.json`, and `dep_pins.json`. On load, the host verifies the receipt log, recomputes `tip_hash`, compares it to the snapshot, then instantiates the cell with `state = tip.after_image`; the first future mutation appends a receipt with `prev_hash = tip.hash`. Invariant: a dropped-in cell boots only from a fully verified tip, not from an unchecked `after_image`. Failure: if the log is huge it inflates the drop-in; if it contains secrets or large blobs, packaging leaks them, so redaction must itself be handled as a new signed/redacted receipt variant."
+  },
+  {
+   "n": 7,
+   "text": "P7. To nest a single saved cell in a host quilt, the host imports it as a boundary cell and writes an import record `{host_cell_id, imported_cell_id, imported_tip_hash, content_hash, mapping}` into its import journal. Host inputs become normal receipts in the nested cell's log with `cause={\"type\":\"host_input\",\"host_txn_id\":...}`; host reads pin the exact nested receipt hash/content hash. Invariant: the nested cell's own receipt chain remains authoritative, and the host never mutates its state directly. Failure: two concurrent writers to the same nested cell will conflict on `prev_hash`; the adapter must serialize writes or elect one writer."
+  },
+  {
+   "n": 8,
+   "text": "P8. An organ is defined by `organ_manifest.json = {organ_id, version, members:[{cell_id, role, tip_hash, seq}], organ_ledger_hash, external_pins, exports}`. Its group-level bookkeeping is an append-only hash-chained file `organ_ledger.jsonl`; rows are `(ledger_seq, prev_ledger_hash, txn_id, type, cut_vector, cause, ts, hash)` where `cut_vector = {cell_id: tip_hash}`. Invariant: `organ_ledger_hash` must cover exactly the member-tip vector, so tampering with any cell's tip breaks the organ hash. Failure: a manifest that lists a tip without the corresponding cell log is not bootable."
+  },
+  {
+   "n": 9,
+   "text": "P9. Organ rewind is a two-phase group transaction. It writes an `organ_intent.jsonl` row `{txn_id, type:\"rewind\", target_cut:T, status:\"preparing\"}`, then for each member cell in deterministic order appends a cell rewind receipt to the target cut. Only after every member append succeeds does it write `organ_ledger.jsonl` row `{type:\"rewind_commit\", cut_vector:new_tips, cause:txn_id, hash:...}`. Invariant: an organ commit exists only if all member tips match the cut. Failure: a crash between member rewinds leaves the organ `status:\"partial\"`; recovery must compare the intent log to cell tips and either complete or compensate."
+  },
+  {
+   "n": 10,
+   "text": "P10. An organ snapshot is an archive `organ_snapshot/` containing `manifest.json`, per-member `cell_snapshot.json` files, member receipt logs, `external_pins.json`, and an `organ_ledger_slice.jsonl` up to the cut. Snapshot capture first acquires the organ write barrier so no member appends during the cut, then records the member tip vector. Invariant: the cut must be causally closed—every `deps_map` reference from one member to another must point at a version at or before the cut. Failure: an omitted external pin or a cut taken mid-transaction makes boot fail or start with a dangling dependency."
+  },
+  {
+   "n": 11,
+   "text": "P11. An organ saved as a bootable drop-in is the organ snapshot plus a loader manifest giving init order and public API. The loader verifies every member cell chain and the organ ledger hash before instantiating any member; if one member fails, the whole organ refuses to boot. Invariant: all member cells load from exactly the same cut vector, so the group cannot come up in a mixed old/new state. Failure: full receipt logs make the drop-in large; an honest packaging system must either accept the size or prune to a checkpoint plus recent receipts."
+  },
+  {
+   "n": 12,
+   "text": "P12. To nest an organ as a sub-quilt, the host imports the drop-in under a namespace prefix, e.g. `sub_<organ_id>_<cell_id>`, and maps only the manifest's `exports` to host cells. Interactions are recorded as input receipts inside the sub-quilt member cells with `cause={\"type\":\"subquilt_input\",\"host_txn_id\":...}`; internal receipts remain unmodified. Invariant: namespaced IDs prevent collisions between sub-quilt and host. Failure: if a host bypasses exports and writes a member cell directly, it causes a normal `prev_hash` conflict only if serialized; otherwise the write pattern becomes non-linearized across two ledgers."
+  },
+  {
+   "n": 13,
+   "text": "P13. Whole-quilt coordination uses a hash-chained `quilt_ledger.jsonl` with rows `(global_seq, prev_global_hash, txn_id, type, global_cut_vector, organ_cut_vectors, cause, ts, hash)` and a monotonic `global_epoch`. The global cut vector is the set of all cell tips or all organ tip vectors across the quilt. Invariant: a quilt-wide cut is a single causal line across all cells, not a wall-clock grouping. Failure: using wall-clock time instead of causal barriers can include an effect but omit its cause."
+  },
+  {
+   "n": 14,
+   "text": "P14. Whole-quilt rewind uses hierarchical two-phase commit: choose a prior global cut from `quilt_ledger.jsonl`, have every organ execute its organ rewind to that cut, then append a `type:\"rewind_commit\"` global ledger row with the new global cut vector. Invariant: the quilt is committed only when every organ ledger and every member cell is at the designated tip. Failure: partial rewind leaves the quilt in a mixed state; the global ledger is marked `status:\"partial\"` and boot refuses until roll-forward or roll-back completes. Cost is O(total cells) plus a global write barrier."
+  },
+  {
+   "n": 15,
+   "text": "P15. A whole-quilt snapshot is a directory `quilt_snapshot/` with `quilt_manifest.json`, per-organ or per-cell snapshots, receipt logs, `external_pins.json`, and a `global_ledger_slice.jsonl`. Snapshot capture increments `global_epoch`, waits for all in-flight receipts to land before the epoch barrier, then records the resulting global cut. Invariant: every cell tip in the snapshot belongs to the same global cut and the manifest hash covers all member artifacts. Failure: the stop-the-world barrier pauses writes; if availability is required, keep old receipts for MVCC reads while new writes continue past the cut."
+  },
+  {
+   "n": 16,
+   "text": "P16. A whole-quilt bootable drop-in packages the global snapshot plus runtime config and bootstrap order. On boot the loader verifies all cell receipt chains, organ ledgers, and the global ledger hash, instantiates cells, wires dependencies from `deps_map`, and only then starts the scheduler. Invariant: the booted quilt has the same cell identities, receipts, and tip hashes as the snapshot; the first new receipts extend those chains. Failure: if timers, RNG seeds, or other nondeterministic runtime state are not saved as first-class cells/manifest fields, the restored quilt can diverge immediately."
+  },
+  {
+   "n": 17,
+   "text": "P17. Nesting a whole quilt as a sub-quilt requires an adapter that exposes only the saved quilt's `exports`. The parent records each boundary interaction in a `boundary_ledger`; an input into the sub-quilt becomes a receipt in the target sub-quilt cell with `cause={\"type\":\"parent_input\",\"parent_receipt_hash\":...}`, and an output read by the parent is pinned by the sub-quilt receipt hash. Invariant: the sub-quilt's internal ledger remains isolated and authoritative; the parent cannot forge internal receipts because it only creates input receipts through the adapter. Failure: if the parent pins a child output by mutable pointer instead of receipt hash, a later child rewind invalidates the parent's state."
+  },
+  {
+   "n": 18,
+   "text": "P18. Pruning is a storage failure mode. Because rewind depth depends on retained receipts, a cell may keep only a recent log tail plus a checkpoint snapshot; old receipts move to cold storage keyed by `(cell_id, receipt_hash)`. Invariant: the live tip hash must still chain back to the last checkpoint hash, and the manifest must pin that checkpoint's content hash. Failure: if cold storage is unavailable or the checkpoint is corrupt, boot from snapshot may still work but rewind beyond the checkpoint is impossible and audit history is lost."
+  },
+  {
+   "n": 19,
+   "text": "P19. Rewinding one cell can ripple through dependents. A cell's receipt `deps_map` pins another cell by `receipt_hash`; when the producer is rewound, the consumer's pin points to a superseded historical receipt. The system must re-resolve dependencies and append a new consumer receipt with `cause={\"type\":\"dep_rewound\",\"dep_cell\":X,\"old_receipt\":...,\"new_receipt\":...}`. Invariant: causal consistency is restored only when all downstream receipts are re-evaluated or explicitly frozen. Failure: an unbounded ripple can cascade across the quilt and undo unrelated work; a freeze policy is needed to bound it."
+  },
+  {
+   "n": 20,
+   "text": "P20. Organ and global ledgers require crash-atomic ordering with cell logs. The rule is: fsync member cell receipt logs before fsyncing the organ commit row, and fsync organ commits before fsyncing the global quilt commit row. Invariant: a committed group/global row implies all referenced cell and organ tips are durable. Failure: if the ordering is reversed, a power loss can leave a committed group row pointing to a missing or unflushed cell tip."
+  },
+  {
+   "n": 21,
+   "text": "P21. External dependencies must be pinned by content hash. A bootable save records `external_pins.json` as `{name, content_hash, version, retrieval_uri}`; at load, the runtime checks hashes of any loaded dependency before wiring it. Invariant: no impure dependency is referenced by mutable path or version tag only. Failure: if a retrieval URI changes but the content hash is present, the loader can fetch elsewhere; if the hash is absent, tampering or accidental drift cannot be detected."
+  },
+  {
+   "n": 22,
+   "text": "P22. Chain integrity depends on deterministic serialization. Before/after images and receipt fields must be encoded with a stable canonical format such as canonical CBOR with sorted keys and explicit schema version. Invariant: given the same receipt and schema version, canonical bytes reproduce the same hash. Failure: non-deterministic map ordering or floating NaN payloads cause a fork where identical logical state yields different hashes and breaks verification."
+  },
+  {
+   "n": 23,
+   "text": "P23. Concurrent snapshot/rewind writes are controlled by per-cell mutexes and version checks. A global or organ snapshot acquires read leases on all member cells to produce a linearized cut; mutations either block or fail. Invariant: the recorded cut reflects one valid linearization of all cells. Failure: if mutations are not blocked, the snapshot may contain A's new tip and B's old tip that never coexisted at one logical instant. MVCC can avoid the stop by reading historical receipt tips while writes continue."
+  },
+  {
+   "n": 24,
+   "text": "P24. Hash algorithm and schema evolution are failure modes. Receipts should include an algorithm tag or domain separator per cell/organ schema version, e.g. `hash_algo=SHA-256`, `schema=3`. Invariant: any migration to a new hash or schema is itself recorded as a receipt or new anchor with `cause={\"type\":\"schema_migration\"}`. Failure: silently changing hash algorithm invalidates old chains; silently changing serialization changes hashes even when state did not change."
+  },
+  {
+   "n": 25,
+   "text": "P25. Partial commit reconciliation handles failures in multi-cell operations. Every organ/global transaction starts in an intent log; recovery scans intents against current cell tips and commits or compensates. Invariant: a completed transaction has exactly one terminal ledger row and no member cell left at an uncommitted intermediate tip. Failure: without reconciliation, a crash during a rewind can leave cells at different cuts and the organ cannot satisfy its manifest hash."
+  },
+  {
+   "n": 26,
+   "text": "P26. Namespacing is a nesting failure mode. Nested cell IDs must be rewritten as `subquilt_id + cell_id`, and receipt hashes must include the namespaced cell ID so identical local IDs cannot collide. Invariant: `cell_id` is globally unique inside the composed quilt. Failure: two nested quilts with the same local IDs can overwrite logs or wire dependencies incorrectly if the loader relies on unqualified IDs."
+  },
+  {
+   "n": 27,
+   "text": "P27. Composite parent-child snapshot is a nesting-specific failure. If a parent quilt depends on a child sub-quilt's exported receipt hash, the parent snapshot must also record the child drop-in's manifest hash and cut vector. On restore, the child must be loaded and verified at that exact cut before the parent's dependent cells are wired. Invariant: the parent global cut cannot commit unless all child manifests load successfully. Failure: a missing or mismatched child artifact makes the parent unstartable, even if all parent cells verify."
+  },
+  {
+   "n": 28,
+   "text": "P28. Non-deterministic runtime state must be saved explicitly. Random seeds, timers, network pending queues, and monotonic clocks are not reconstructible from receipt after-images alone, so they must be represented as special cells or manifest fields. Invariant: a bootable quilt reproduces the same first transition when given the same inputs. Failure: omitting an RNG seed causes post-boot receipts to diverge from the original timeline even though the initial cell states are identical."
+  },
+  {
+   "n": 29,
+   "text": "P29. The central invariants repeat at every granularity: receipt chains are append-only and hash-linked; every state change, including rewind, restore, and import, is a new receipt; snapshots are content-addressed cuts; group commits are atomic across members; dependencies are pinned by receipt hash or content hash rather than mutable pointers; and boot always verifies before instantiating. Failure at any level is containment: a single cell hash break quarantines that cell, an organ hash break quarantines the organ, and a global cut mismatch quarantines the whole quilt."
+  },
+  {
+   "n": 30,
+   "text": "P30. The overall failure boundary is that receipt chains prove local history but do not by themselves enforce cross-cell consistency, access control, liveness, or external availability. Those require the organ/global ledgers, intent logs, content-pinned external manifests, boot verifiers, and namespace/export boundaries described above. Every mechanism has cost: logs grow, snapshots pause writes or duplicate history, nesting requires adapters, and recovery needs scanning intent logs. Honest design therefore treats auditability as a base property and consistency/availability as an explicitly paid balance.\n\nANSWER\n\nReceipt chains provide append-only, hash-linked, double-entry cell history. Rewind appends a new receipt whose `before` is the current tip and `after` is the target receipt's after-image; dependents are invalidated via the `deps_map` reverse index. Snapshot captures a verified tip or causally closed cut into content-addressed artifacts. Save-as-bootable-drop-in packages receipt logs, snapshots, manifests, schemas, and externally pinned dependencies; loaders verify all hashes before instantiating. Organs add a hash-chained `organ_ledger` and two-phase intent/commit for atomic group cuts. Whole quilts add a global ledger/epoch and hierarchical commit. Nesting uses namespaced cell IDs, export boundaries, and boundary input receipts; parent pins child outputs by receipt hash. Core invariants: no receipt deletion, no boot from unverified state, no mutable dependency pointers, no group commit without all member tips, and every rewind/restore is itself a receipt. Failure modes include stale dependents, partial commits, torn cuts, pruning loss, nondeterministic serialization/RNG omission, external-pin drift, hash/schema migration, and namespace collisions."
+  }
+ ],
+ "answers": {
+  "p_load_P2": {
+   "type": "noul",
+   "noul": 0.61
+  },
+  "p_load_P4": {
+   "type": "noul",
+   "noul": 0.55
+  },
+  "p_load_P8": {
+   "type": "noul",
+   "noul": 0.57
+  },
+  "p_load_P12": {
+   "type": "noul",
+   "noul": 0.54
+  },
+  "p_load_P20": {
+   "type": "noul",
+   "noul": 0.23
+  },
+  "p_load_P25": {
+   "type": "noul",
+   "noul": 0.35
+  },
+  "p_load_P27": {
+   "type": "noul",
+   "noul": 0.34
+  },
+  "p_load_P28": {
+   "type": "noul",
+   "noul": 0.51
+  },
+  "p_load_P1": {
+   "type": "noul",
+   "noul": 0.57
+  },
+  "p_load_P3": {
+   "type": "noul",
+   "noul": 0.55
+  },
+  "p_load_P14": {
+   "type": "noul",
+   "noul": 0.41
+  },
+  "p_load_P29": {
+   "type": "noul",
+   "noul": 0.12
+  },
+  "p_load_P6": {
+   "type": "noul",
+   "noul": 0.54
+  },
+  "p_load_P9": {
+   "type": "noul",
+   "noul": 0.46
+  },
+  "p_load_P10": {
+   "type": "noul",
+   "noul": 0.42
+  },
+  "p_load_P5": {
+   "type": "noul",
+   "noul": 0.43
+  },
+  "p_load_P15": {
+   "type": "noul",
+   "noul": 0.44
+  },
+  "p_load_P11": {
+   "type": "noul",
+   "noul": 0.38
+  },
+  "p_load_P16": {
+   "type": "noul",
+   "noul": 0.47
+  },
+  "p_load_P17": {
+   "type": "noul",
+   "noul": 0.59
+  },
+  "p_load_P21": {
+   "type": "noul",
+   "noul": 0.4
+  },
+  "p_load_P26": {
+   "type": "noul",
+   "noul": 0.5
+  },
+  "p_load_P30": {
+   "type": "noul",
+   "noul": 0.15
+  },
+  "p_load_P13": {
+   "type": "noul",
+   "noul": 0.49
+  },
+  "p_load_P19": {
+   "type": "noul",
+   "noul": 0.34
+  },
+  "p_load_P22": {
+   "type": "noul",
+   "noul": 0.35
+  },
+  "p_load_P18": {
+   "type": "noul",
+   "noul": 0.36
+  },
+  "p_load_P7": {
+   "type": "noul",
+   "noul": 0.66
+  },
+  "p_load_P23": {
+   "type": "noul",
+   "noul": 0.4
+  },
+  "p_load_P24": {
+   "type": "noul",
+   "noul": 0.28
+  }
+ },
+ "usage": {
+  "input_tokens": 6447,
+  "output_tokens": 595
+ }
+}

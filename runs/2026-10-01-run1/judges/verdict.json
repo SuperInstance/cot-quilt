@@ -1,0 +1,62 @@
+{
+ "run": "2026-10-01-run1",
+ "judges_used": {
+  "typesafe": "jev-1.13.0 noul battery",
+  "adversarial": "NousResearch/Hermes-3-Llama-3.1-405B"
+ },
+ "separation_receipt": "no model judges a node set it composed; flash cross-reviewed typesafe-only nodes; typesafe+hermes judged flash-merged nodes",
+ "typesafe_battery": {
+  "answers": {
+   "p_complete": {
+    "type": "noul",
+    "noul": 0.71
+   },
+   "p_implementable": {
+    "type": "noul",
+    "noul": 0.16
+   },
+   "p_missing_major": {
+    "type": "noul",
+    "noul": 0.29
+   },
+   "p_faulty": {
+    "type": "noul",
+    "noul": 0.37
+   }
+  },
+  "usage": {
+   "input_tokens": 6680,
+   "output_tokens": 78
+  }
+ },
+ "hermes": {
+  "missing": [
+   {
+    "point": "P12",
+    "title": "Nested organ exports",
+    "content": "Sub-quilt imports organ under namespace prefix and maps only manifest exports. Host bypassing exports causes non-linearized cross-ledger writes.",
+    "weight": 0.645
+   }
+  ],
+  "faulty": [
+   {
+    "id": "N07",
+    "problem": "Missing key details about nested cell imports and host interaction",
+    "severity": "minor"
+   }
+  ],
+  "verdict": {
+   "pass": true,
+   "completeness": 0.98,
+   "rationale": "The graph covers the key points of the CoT well, with only a minor omission around nested organ exports. The overall structure and invariants are represented accurately."
+  }
+ },
+ "numbers": {
+  "p_complete": 0.71,
+  "p_implementable": 0.16,
+  "p_missing_major": 0.29,
+  "p_faulty": 0.37,
+  "hermes_pass": true,
+  "hermes_completeness": 0.98
+ }
+}
