@@ -117,3 +117,25 @@ out: {graph_v1[], graph_v2{clusters, divergent, critique_nodes}, judge{score, ga
   - generalization noul 0.38 (honest uncertainty outside allocation-rule domain)
   - completeness score 1.15/3 ≈ "reusable WITH the critique cells" — matches the
     v4-pro judge's own gap list; the graph is not yet a general routing table.
+
+## run-1 (2026-10-01, lane 63-a/63-a-r): FLEET-Q-REWIND-ORGAN — the Node pipeline
+
+`scripts/run1_pipeline.mjs` (zero deps): 1× deepseek-v4-pro CoT (18,217 chars, `finish=stop`)
+→ **two independent decomposer arms** (flash ×3 temperatures 0.2/0.7/1.1 + typesafe
+jev-1.13.0 per-point noul battery) → deterministic local cluster-merge (jaccard 0.42,
+seed-vote stability) → **compose/test-separated judges** (typesafe probability battery +
+Hermes-3-405B adversarial attack on DeepInfra; no model judges nodes it composed) → critique
+folded back as cells → `graph.json` + `exports/organ-candidate-rewind.json`.
+
+- Final (remediated) graph: **49 cells / 104 edges**, 8 core + 14 stable + 26 volatile +
+  1 critique; seed-stability 45.8%. Judges: hermes pass=true completeness 0.95 (its missing
+  mechanism became cell C01); typesafe p_complete 0.71, p_faulty 0.27.
+- Resume discipline exercised for real: the run was interrupted, audited on-disk
+  (`runs/2026-10-01-run1/AUDIT-63a-r.md`), then remediated with 4 receipted calls reusing
+  every healthy stage (`REMEDIATION-63a-r.md`) — ledger append-only 27 rows, all-in spend
+  $0.098 deepseek-declared.
+- Cross-feed: `exports/coverage-table.md` diffs the graph's organ candidate against ORGAN
+  BOOT v0 (quilt-jev-toolkit @ ecaf2e4): custody core COVERED, rewind + write-side
+  transactions UNCOVERED — the graph is organ-boot v1's demand signal.
+- Methodology (how such runs are constructed) is documented for zero-shot readers in
+  [`RUN-REPORT.md`](RUN-REPORT.md).

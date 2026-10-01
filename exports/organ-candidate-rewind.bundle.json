@@ -1,0 +1,1219 @@
+{
+ "schemaVersion": "quilt.organ.v1",
+ "manifest": {
+  "name": "cell-rewind-organ",
+  "cells": [
+   {
+    "id": "N03",
+    "kind": "cell",
+    "stability": "core",
+    "weight": 0.95
+   },
+   {
+    "id": "N04",
+    "kind": "cell",
+    "stability": "core",
+    "weight": 0.85
+   },
+   {
+    "id": "N07",
+    "kind": "cell",
+    "stability": "stable",
+    "weight": 0.8
+   },
+   {
+    "id": "N09",
+    "kind": "cell",
+    "stability": "stable",
+    "weight": 0.925
+   },
+   {
+    "id": "N10",
+    "kind": "cell",
+    "stability": "stable",
+    "weight": 0.85
+   },
+   {
+    "id": "N11",
+    "kind": "cell",
+    "stability": "core",
+    "weight": 0.85
+   },
+   {
+    "id": "N14",
+    "kind": "cell",
+    "stability": "core",
+    "weight": 0.883
+   },
+   {
+    "id": "N17",
+    "kind": "cell",
+    "stability": "core",
+    "weight": 0.767
+   },
+   {
+    "id": "N18",
+    "kind": "cell",
+    "stability": "stable",
+    "weight": 0.75
+   },
+   {
+    "id": "N19",
+    "kind": "cell",
+    "stability": "core",
+    "weight": 0.75
+   },
+   {
+    "id": "N20",
+    "kind": "cell",
+    "stability": "stable",
+    "weight": 0.6
+   },
+   {
+    "id": "N22",
+    "kind": "cell",
+    "stability": "core",
+    "weight": 0.7
+   },
+   {
+    "id": "N23",
+    "kind": "cell",
+    "stability": "core",
+    "weight": 0.75
+   },
+   {
+    "id": "N24",
+    "kind": "cell",
+    "stability": "stable",
+    "weight": 0.8
+   },
+   {
+    "id": "N25",
+    "kind": "cell",
+    "stability": "stable",
+    "weight": 0.975
+   },
+   {
+    "id": "N26",
+    "kind": "cell",
+    "stability": "stable",
+    "weight": 0.7
+   },
+   {
+    "id": "N30",
+    "kind": "cell",
+    "stability": "stable",
+    "weight": 0.633
+   },
+   {
+    "id": "N31",
+    "kind": "cell",
+    "stability": "stable",
+    "weight": 0.825
+   },
+   {
+    "id": "N34",
+    "kind": "cell",
+    "stability": "stable",
+    "weight": 0.75
+   },
+   {
+    "id": "N35",
+    "kind": "cell",
+    "stability": "stable",
+    "weight": 0.8
+   },
+   {
+    "id": "N36",
+    "kind": "cell",
+    "stability": "stable",
+    "weight": 0.725
+   },
+   {
+    "id": "N37",
+    "kind": "cell",
+    "stability": "stable",
+    "weight": 0.75
+   },
+   {
+    "id": "C01",
+    "kind": "cell",
+    "stability": "critique",
+    "weight": 0.506
+   }
+  ],
+  "receiptRange": [
+   "1b174f643850c89df23a373b22c7e6afa27a0ad03119edb1387f80c619e975e7",
+   "3b7ab3470b47d52aaead3048b82632a3bfe326c29602f20700cea878cf466739",
+   "e9647148d6d2596fa9f1cd1551fc475f5b364fe2805c44fd24e56bf0f189cd03",
+   "4cdfa9c439f21e4fdc44c5b278883df8496c79f8ce16a19d3ffbb746a95adb43",
+   "ebd193839693bb1d197541178be6a62920ed069d4493f1e6de885c3ddaad6cbf",
+   "d391ebe155b4fd603423cab499606c779e7ba7c6eee5808b89199e054b70cca8",
+   "4a85c2a97ba591c541fa2c57315491fdad4d9e547cb06b073f18b358214ab4bd",
+   "5f5772c43123a173f0b6988727aad93a700991eb43b5a42121824860c6733189",
+   "40e0db6e0180a9b7396eb548ac4d88ee76366d215d5ff183c6d897ed4420a7db",
+   "53c600a09db0295de26a1e8204e09e4f1cd99f7f116c7eb791c433f32fbbce03",
+   "20aa4d7396a11c9a01bd95c0b650dcc2151761b8cb15c34e7e7879440d1fa4d0",
+   "979ed84c7fc87af6ad549a2fe896f66ceb99c6585dc2469b24e97a8a66812daf",
+   "bdab67a0eb5cd7f2ee0ae13c84d4fba551908dd65e071a3d9a44d50d1bec4dd4",
+   "007be0c750518e463f533a549841f040bc5a7250faff012005802ffd5eb9668e",
+   "4df7a567c9caf8b9c1ca39018c616a895d7525e42997fdf9bbc57d4a05c83fe7",
+   "86fc3b1f545785b853bd4966694121cbac9a21d520b3f8f9a183df66bd2766bd",
+   "3f781ae14ef6b918f57bc6e0cb1785940db5756036c66b854543b942981066d6",
+   "d9cbff1d93ef3835440c599164dc0911305eac613e3d21a35a11b7f5d5c51b3f",
+   "4bfc864ed8e548aa0c15353f1b35661bbdef7a06bbcceb35cac617657c347d5e",
+   "d80001a55a06d05ad7c97c0012515d645314dd7d75243069e6890eab009af3a9",
+   "8301bae084cfff5b067f0fe1db3a966f4e7c9caaf0480b6e4bf6a1f9e98efd51",
+   "8876116b8354b9cbbdfca3d99c613869aebf664f531a4dfce96235175e1c369c",
+   "0a5160b3ef093f14e82f7a8fd23a66c4c3a7d4f8fcb7782c779ca3cc03c88951"
+  ],
+  "stateHash": "5befc7f08c2c82c1e1f49157152914e9025c5fd9f795e42e5738b19f46d0b715",
+  "createdAt": "2026-10-01T23:55:53.945Z",
+  "author": "SuperInstance lane 63-a-r (cot-quilt run 2026-10-01-run1)"
+ },
+ "state": {
+  "schema": "quilt.organ.v1",
+  "cells": {
+   "N03": {
+    "point": "P3",
+    "title": "Single-cell rewind",
+    "content": "Rewind appends new receipt with before=tip.after, after=target.after; old receipts remain.",
+    "weight": 0.95,
+    "deps": [
+     "P1",
+     "P2"
+    ],
+    "stability": "core",
+    "origin": "flash-decompose",
+    "composers": [
+     "flash@0.2",
+     "flash@1.1",
+     "flash@0.7",
+     "typesafe@jev-1.13.0(dup)"
+    ]
+   },
+   "N04": {
+    "point": "P4",
+    "title": "Dependents stale on rewind",
+    "content": "Reverse deps index marks consumers of superseded receipts stale; they must re-evaluate or rewind.",
+    "weight": 0.85,
+    "deps": [
+     "P1",
+     "P3"
+    ],
+    "stability": "core",
+    "origin": "flash-decompose",
+    "composers": [
+     "flash@0.2",
+     "flash@1.1",
+     "flash@0.7",
+     "typesafe@jev-1.13.0(dup)"
+    ]
+   },
+   "N07": {
+    "point": "P7",
+    "title": "Nesting imported cell via adapter",
+    "content": "Host imports cell as boundary; writes import record; host inputs become receipts with cause host_input; nested chain stays authoritative.",
+    "weight": 0.8,
+    "deps": [
+     "P6",
+     "P5"
+    ],
+    "stability": "stable",
+    "origin": "flash-decompose",
+    "composers": [
+     "flash@0.2",
+     "flash@1.1",
+     "typesafe@jev-1.13.0(dup)"
+    ],
+    "faulty_note": "minor: Fails to mention that nested cell writes require namespacing to avoid ID collisions"
+   },
+   "N09": {
+    "point": "P9",
+    "title": "Organ rewind two-phase",
+    "content": "Intent row then member rewinds; commit only when all tips match target cut.",
+    "weight": 0.925,
+    "deps": [
+     "P3",
+     "P4",
+     "P8",
+     "P1",
+     "P2"
+    ],
+    "stability": "stable",
+    "origin": "flash-decompose",
+    "composers": [
+     "flash@0.2",
+     "flash@1.1",
+     "typesafe@jev-1.13.0(dup)"
+    ]
+   },
+   "N10": {
+    "point": "P10",
+    "title": "Organ snapshot causal cut",
+    "content": "Write barrier records member tip vector and causally closed dependency cut.",
+    "weight": 0.85,
+    "deps": [
+     "P5",
+     "P8"
+    ],
+    "stability": "stable",
+    "origin": "flash-decompose",
+    "composers": [
+     "flash@0.2",
+     "flash@0.7",
+     "typesafe@jev-1.13.0(dup)"
+    ]
+   },
+   "N11": {
+    "point": "P11",
+    "title": "Bootable organ drop-in",
+    "content": "Loader verifies all member chains and organ ledger hash; refuses boot on any mismatch.",
+    "weight": 0.85,
+    "deps": [
+     "P6",
+     "P8",
+     "P10",
+     "P9"
+    ],
+    "stability": "core",
+    "origin": "flash-decompose",
+    "composers": [
+     "flash@0.2",
+     "flash@1.1",
+     "flash@0.7",
+     "typesafe@jev-1.13.0(dup)"
+    ]
+   },
+   "N14": {
+    "point": "P14",
+    "title": "Hierarchical quilt rewind",
+    "content": "Every organ rewinds to prior cut; global commit only when all organs and cells match.",
+    "weight": 0.883,
+    "deps": [
+     "P9",
+     "P13",
+     "P10"
+    ],
+    "stability": "core",
+    "origin": "flash-decompose",
+    "composers": [
+     "flash@0.2",
+     "flash@1.1",
+     "flash@0.7",
+     "typesafe@jev-1.13.0(dup)"
+    ]
+   },
+   "N17": {
+    "point": "P17",
+    "title": "Nest whole quilt adapter",
+    "content": "Adapter exposes exports; parent pins child outputs by receipt hash in boundary ledger.",
+    "weight": 0.767,
+    "deps": [
+     "P12",
+     "P16",
+     "P15"
+    ],
+    "stability": "core",
+    "origin": "flash-decompose",
+    "composers": [
+     "flash@0.2",
+     "flash@1.1",
+     "flash@0.7",
+     "typesafe@jev-1.13.0(dup)"
+    ]
+   },
+   "N18": {
+    "point": "P19",
+    "title": "Rewind dependency ripple",
+    "content": "Producer rewind makes consumer pins superseded; append dep_rewound receipts or freeze.",
+    "weight": 0.75,
+    "deps": [
+     "P3",
+     "P4"
+    ],
+    "stability": "stable",
+    "origin": "flash-decompose",
+    "composers": [
+     "flash@0.2",
+     "flash@1.1",
+     "typesafe@jev-1.13.0(dup)"
+    ]
+   },
+   "N19": {
+    "point": "P21",
+    "title": "External dependencies pinned by content hash",
+    "content": "Bootable save records external_pins name, content_hash, version, URI. Loader checks hashes before wiring; mutable paths alone undetectable.",
+    "weight": 0.75,
+    "deps": [
+     "P6",
+     "P11",
+     "P16"
+    ],
+    "stability": "core",
+    "origin": "flash-decompose",
+    "composers": [
+     "flash@0.2",
+     "flash@1.1",
+     "flash@0.7",
+     "typesafe@jev-1.13.0(dup)"
+    ]
+   },
+   "N20": {
+    "point": "P24",
+    "title": "Hash and schema migration recorded as receipts",
+    "content": "Receipts carry hash_algo and schema tags. Migrations are new receipts or anchors with schema_migration cause; silent changes break chains.",
+    "weight": 0.6,
+    "deps": [
+     "P1",
+     "P22"
+    ],
+    "stability": "stable",
+    "origin": "flash-decompose",
+    "composers": [
+     "flash@0.2",
+     "flash@1.1",
+     "typesafe@jev-1.13.0(dup)"
+    ]
+   },
+   "N22": {
+    "point": "P26",
+    "title": "Namespacing prevents nested ID collisions",
+    "content": "Nested IDs rewritten as subquilt_id plus cell_id, and receipt hashes include namespaced ID. Unqualified IDs can collide and corrupt wiring.",
+    "weight": 0.7,
+    "deps": [
+     "P7",
+     "P12",
+     "P17"
+    ],
+    "stability": "core",
+    "origin": "flash-decompose",
+    "composers": [
+     "flash@0.2",
+     "flash@1.1",
+     "flash@0.7",
+     "typesafe@jev-1.13.0(dup)"
+    ]
+   },
+   "N23": {
+    "point": "P27",
+    "title": "Parent-child composite snapshot",
+    "content": "Parent records child manifest hash and cut; child verified before parent dependents wire.",
+    "weight": 0.75,
+    "deps": [
+     "P17",
+     "P21",
+     "P26"
+    ],
+    "stability": "core",
+    "origin": "flash-decompose",
+    "composers": [
+     "flash@0.2",
+     "flash@1.1",
+     "flash@0.7",
+     "typesafe@jev-1.13.0(dup)"
+    ]
+   },
+   "N24": {
+    "point": "P28",
+    "title": "Save nondeterministic runtime state explicitly",
+    "content": "RNG seeds, timers, queues, clocks are special cells or manifest fields. Omitting seed diverges post-boot receipts.",
+    "weight": 0.8,
+    "deps": [
+     "P16",
+     "P22"
+    ],
+    "stability": "stable",
+    "origin": "flash-decompose",
+    "composers": [
+     "flash@0.2",
+     "flash@1.1",
+     "typesafe@jev-1.13.0(dup)"
+    ]
+   },
+   "N25": {
+    "point": "P29",
+    "title": "Repeated core invariants",
+    "content": "Append-only hash chains, new receipts for changes, content-addressed cuts, atomic group commits, verified boot.",
+    "weight": 0.975,
+    "deps": [
+     "P1",
+     "P3",
+     "P5",
+     "P9",
+     "P14",
+     "P16",
+     "P20",
+     "P23",
+     "P25"
+    ],
+    "stability": "stable",
+    "origin": "flash-decompose",
+    "composers": [
+     "flash@0.2",
+     "flash@0.7",
+     "typesafe@jev-1.13.0(dup)"
+    ]
+   },
+   "N26": {
+    "point": "P30",
+    "title": "Receipts prove local history only",
+    "content": "Chains prove local history only; cross-cell consistency, access, liveness, availability need organ/global ledgers, intent logs, pins, verifiers, namespaces.",
+    "weight": 0.7,
+    "deps": [
+     "P29",
+     "P25"
+    ],
+    "stability": "stable",
+    "origin": "flash-decompose",
+    "composers": [
+     "flash@0.2",
+     "flash@1.1",
+     "typesafe@jev-1.13.0(dup)"
+    ]
+   },
+   "N30": {
+    "point": "P12",
+    "title": "Organ nested via namespace exports",
+    "content": "Sub-quilt imports organ under namespace prefix and maps only manifest exports. Host bypassing exports causes non-linearized cross-ledger writes.",
+    "weight": 0.633,
+    "deps": [
+     "P7",
+     "P11"
+    ],
+    "stability": "stable",
+    "origin": "flash-decompose",
+    "composers": [
+     "flash@1.1",
+     "flash@0.7",
+     "typesafe@jev-1.13.0"
+    ]
+   },
+   "N31": {
+    "point": "P13",
+    "title": "Quilt ledger global cut",
+    "content": "Hash-chained quilt_ledger rows carry global cut vector and monotonic global_epoch. Cut is one causal line, not wall-clock grouping.",
+    "weight": 0.825,
+    "deps": [
+     "P8",
+     "P9"
+    ],
+    "stability": "stable",
+    "origin": "flash-decompose",
+    "composers": [
+     "flash@1.1",
+     "flash@0.7"
+    ]
+   },
+   "N34": {
+    "point": "P20",
+    "title": "Crash atomic fsync order",
+    "content": "Fsync cell logs before organ commit, organ commits before global commit. Reversed order commits rows to unflushed tips.",
+    "weight": 0.75,
+    "deps": [
+     "P8",
+     "P9",
+     "P13",
+     "P14"
+    ],
+    "stability": "stable",
+    "origin": "flash-decompose",
+    "composers": [
+     "flash@1.1",
+     "flash@0.7",
+     "typesafe@jev-1.13.0(dup)"
+    ]
+   },
+   "N35": {
+    "point": "P22",
+    "title": "Canonical serialization stabilizes receipt hashes",
+    "content": "Canonical CBOR with sorted keys and schema version ensures identical logical state reproduces same hash. Non-determinism forks verification.",
+    "weight": 0.8,
+    "deps": [
+     "P1"
+    ],
+    "stability": "stable",
+    "origin": "flash-decompose",
+    "composers": [
+     "flash@1.1",
+     "flash@0.7",
+     "typesafe@jev-1.13.0(dup)"
+    ]
+   },
+   "N36": {
+    "point": "P23",
+    "title": "Concurrent snapshot linearization",
+    "content": "Per-cell mutexes and read leases produce a linearized cut; mutations block or fail. Unblocked mutations can mix tips never coexisting.",
+    "weight": 0.725,
+    "deps": [
+     "P5",
+     "P10",
+     "P15"
+    ],
+    "stability": "stable",
+    "origin": "flash-decompose",
+    "composers": [
+     "flash@1.1",
+     "flash@0.7",
+     "typesafe@jev-1.13.0(dup)"
+    ]
+   },
+   "N37": {
+    "point": "P25",
+    "title": "Partial commit reconciliation",
+    "content": "Multi-cell transactions start in intent log; recovery scans intents against cell tips and commits or compensates. No uncommitted intermediate tips.",
+    "weight": 0.75,
+    "deps": [
+     "P9",
+     "P14",
+     "P20"
+    ],
+    "stability": "stable",
+    "origin": "flash-decompose",
+    "composers": [
+     "flash@1.1",
+     "flash@0.7"
+    ]
+   },
+   "C01": {
+    "point": "P12",
+    "title": "Organ nested via namespace exports",
+    "content": "Sub-quilt imports organ under namespace prefix and maps only manifest exports. Host bypassing exports causes non-linearized cross-ledger writes.",
+    "weight": 0.506,
+    "deps": [],
+    "stability": "critique",
+    "origin": "adversarial-critique",
+    "composers": [
+     "judge@NousResearch/Hermes-3-Llama-3.1-405B"
+    ]
+   }
+  },
+  "edges": [
+   {
+    "from": "N03",
+    "to": "N04",
+    "weight": 0.25,
+    "asserted_by": [
+     "flash@0.2"
+    ]
+   },
+   {
+    "from": "N03",
+    "to": "N09",
+    "weight": 0.333,
+    "asserted_by": [
+     "flash@0.2"
+    ]
+   },
+   {
+    "from": "N04",
+    "to": "N09",
+    "weight": 0.333,
+    "asserted_by": [
+     "flash@0.2"
+    ]
+   },
+   {
+    "from": "N10",
+    "to": "N11",
+    "weight": 0.25,
+    "asserted_by": [
+     "flash@0.2"
+    ]
+   },
+   {
+    "from": "N09",
+    "to": "N11",
+    "weight": 0.25,
+    "asserted_by": [
+     "flash@0.2"
+    ]
+   },
+   {
+    "from": "N09",
+    "to": "N14",
+    "weight": 0.25,
+    "asserted_by": [
+     "flash@0.2"
+    ]
+   },
+   {
+    "from": "N31",
+    "to": "N14",
+    "weight": 0.25,
+    "asserted_by": [
+     "flash@0.2"
+    ]
+   },
+   {
+    "from": "N10",
+    "to": "N14",
+    "weight": 0.25,
+    "asserted_by": [
+     "flash@0.2"
+    ]
+   },
+   {
+    "from": "N03",
+    "to": "N18",
+    "weight": 0.333,
+    "asserted_by": [
+     "flash@0.2"
+    ]
+   },
+   {
+    "from": "N04",
+    "to": "N18",
+    "weight": 0.333,
+    "asserted_by": [
+     "flash@0.2"
+    ]
+   },
+   {
+    "from": "N11",
+    "to": "N19",
+    "weight": 0.25,
+    "asserted_by": [
+     "flash@0.2"
+    ]
+   },
+   {
+    "from": "N35",
+    "to": "N20",
+    "weight": 0.333,
+    "asserted_by": [
+     "flash@0.2"
+    ]
+   },
+   {
+    "from": "N07",
+    "to": "N22",
+    "weight": 0.25,
+    "asserted_by": [
+     "flash@0.2"
+    ]
+   },
+   {
+    "from": "N17",
+    "to": "N22",
+    "weight": 0.25,
+    "asserted_by": [
+     "flash@0.2"
+    ]
+   },
+   {
+    "from": "N17",
+    "to": "N23",
+    "weight": 0.25,
+    "asserted_by": [
+     "flash@0.2"
+    ]
+   },
+   {
+    "from": "N19",
+    "to": "N23",
+    "weight": 0.25,
+    "asserted_by": [
+     "flash@0.2"
+    ]
+   },
+   {
+    "from": "N22",
+    "to": "N23",
+    "weight": 0.25,
+    "asserted_by": [
+     "flash@0.2"
+    ]
+   },
+   {
+    "from": "N35",
+    "to": "N24",
+    "weight": 0.333,
+    "asserted_by": [
+     "flash@0.2"
+    ]
+   },
+   {
+    "from": "N03",
+    "to": "N25",
+    "weight": 0.333,
+    "asserted_by": [
+     "flash@0.2"
+    ]
+   },
+   {
+    "from": "N09",
+    "to": "N25",
+    "weight": 0.333,
+    "asserted_by": [
+     "flash@0.2"
+    ]
+   },
+   {
+    "from": "N14",
+    "to": "N25",
+    "weight": 0.333,
+    "asserted_by": [
+     "flash@0.2"
+    ]
+   },
+   {
+    "from": "N34",
+    "to": "N25",
+    "weight": 0.333,
+    "asserted_by": [
+     "flash@0.2"
+    ]
+   },
+   {
+    "from": "N36",
+    "to": "N25",
+    "weight": 0.333,
+    "asserted_by": [
+     "flash@0.2"
+    ]
+   },
+   {
+    "from": "N37",
+    "to": "N25",
+    "weight": 0.333,
+    "asserted_by": [
+     "flash@0.2"
+    ]
+   },
+   {
+    "from": "N25",
+    "to": "N26",
+    "weight": 0.333,
+    "asserted_by": [
+     "flash@0.2"
+    ]
+   },
+   {
+    "from": "N37",
+    "to": "N26",
+    "weight": 0.333,
+    "asserted_by": [
+     "flash@0.2"
+    ]
+   },
+   {
+    "from": "N07",
+    "to": "N30",
+    "weight": 0.333,
+    "asserted_by": [
+     "flash@1.1"
+    ]
+   },
+   {
+    "from": "N11",
+    "to": "N30",
+    "weight": 0.333,
+    "asserted_by": [
+     "flash@1.1"
+    ]
+   },
+   {
+    "from": "N09",
+    "to": "N31",
+    "weight": 0.5,
+    "asserted_by": [
+     "flash@1.1"
+    ]
+   },
+   {
+    "from": "N09",
+    "to": "N34",
+    "weight": 0.333,
+    "asserted_by": [
+     "flash@1.1"
+    ]
+   },
+   {
+    "from": "N31",
+    "to": "N34",
+    "weight": 0.333,
+    "asserted_by": [
+     "flash@1.1"
+    ]
+   },
+   {
+    "from": "N14",
+    "to": "N34",
+    "weight": 0.333,
+    "asserted_by": [
+     "flash@1.1"
+    ]
+   },
+   {
+    "from": "N10",
+    "to": "N36",
+    "weight": 0.333,
+    "asserted_by": [
+     "flash@1.1"
+    ]
+   },
+   {
+    "from": "N09",
+    "to": "N37",
+    "weight": 0.5,
+    "asserted_by": [
+     "flash@1.1"
+    ]
+   },
+   {
+    "from": "N14",
+    "to": "N37",
+    "weight": 0.5,
+    "asserted_by": [
+     "flash@1.1"
+    ]
+   },
+   {
+    "from": "N34",
+    "to": "N37",
+    "weight": 0.5,
+    "asserted_by": [
+     "flash@1.1"
+    ]
+   }
+  ],
+  "provenance": {
+   "question_id": "FLEET-Q-REWIND-ORGAN",
+   "source_repo": "SuperInstance/cot-quilt",
+   "run": "2026-10-01-run1",
+   "graph_sha256": "47f54fc4c8f6d15d0a27c66c7b42ff871a1a1d90333122e236e7f84fd05ca22e",
+   "cot_sha256": "7f0a25e01ae3226ac3844016ebad4314b0c68ac0a492343c3b230afb5fc610f6",
+   "ledger_sha256": "7b5e4cbb608e31530ed89645f38546176423a296e80c499cea97e9ea347d75a2",
+   "judges": {
+    "typesafe": {
+     "p_complete": {
+      "type": "noul",
+      "noul": 0.71
+     },
+     "p_implementable": {
+      "type": "noul",
+      "noul": 0.15
+     },
+     "p_missing_major": {
+      "type": "noul",
+      "noul": 0.24
+     },
+     "p_faulty": {
+      "type": "noul",
+      "noul": 0.27
+     }
+    },
+    "hermes": {
+     "pass": true,
+     "completeness": 0.95,
+     "rationale": "Graph covers key mechanisms but omits some failure modes like ID collisions when nesting. Overall quite thorough.",
+     "missing_count": 1,
+     "faulty_count": 1
+    }
+   },
+   "inclusion_rule": "core+stable flash-consensus nodes plus adversarial-critique cells (gaps the judges demanded)"
+  }
+ },
+ "receipts": [
+  {
+   "seq": 1,
+   "op": "SET",
+   "cell": "N03",
+   "prev": "genesis",
+   "payload": {
+    "title": "Single-cell rewind",
+    "content": "Rewind appends new receipt with before=tip.after, after=target.after; old receipts remain.",
+    "weight": 0.95,
+    "stability": "core"
+   },
+   "digest": "1b174f643850c89df23a373b22c7e6afa27a0ad03119edb1387f80c619e975e7"
+  },
+  {
+   "seq": 2,
+   "op": "SET",
+   "cell": "N04",
+   "prev": "1b174f643850c89df23a373b22c7e6afa27a0ad03119edb1387f80c619e975e7",
+   "payload": {
+    "title": "Dependents stale on rewind",
+    "content": "Reverse deps index marks consumers of superseded receipts stale; they must re-evaluate or rewind.",
+    "weight": 0.85,
+    "stability": "core"
+   },
+   "digest": "3b7ab3470b47d52aaead3048b82632a3bfe326c29602f20700cea878cf466739"
+  },
+  {
+   "seq": 3,
+   "op": "SET",
+   "cell": "N07",
+   "prev": "3b7ab3470b47d52aaead3048b82632a3bfe326c29602f20700cea878cf466739",
+   "payload": {
+    "title": "Nesting imported cell via adapter",
+    "content": "Host imports cell as boundary; writes import record; host inputs become receipts with cause host_input; nested chain stays authoritative.",
+    "weight": 0.8,
+    "stability": "stable"
+   },
+   "digest": "e9647148d6d2596fa9f1cd1551fc475f5b364fe2805c44fd24e56bf0f189cd03"
+  },
+  {
+   "seq": 4,
+   "op": "SET",
+   "cell": "N09",
+   "prev": "e9647148d6d2596fa9f1cd1551fc475f5b364fe2805c44fd24e56bf0f189cd03",
+   "payload": {
+    "title": "Organ rewind two-phase",
+    "content": "Intent row then member rewinds; commit only when all tips match target cut.",
+    "weight": 0.925,
+    "stability": "stable"
+   },
+   "digest": "4cdfa9c439f21e4fdc44c5b278883df8496c79f8ce16a19d3ffbb746a95adb43"
+  },
+  {
+   "seq": 5,
+   "op": "SET",
+   "cell": "N10",
+   "prev": "4cdfa9c439f21e4fdc44c5b278883df8496c79f8ce16a19d3ffbb746a95adb43",
+   "payload": {
+    "title": "Organ snapshot causal cut",
+    "content": "Write barrier records member tip vector and causally closed dependency cut.",
+    "weight": 0.85,
+    "stability": "stable"
+   },
+   "digest": "ebd193839693bb1d197541178be6a62920ed069d4493f1e6de885c3ddaad6cbf"
+  },
+  {
+   "seq": 6,
+   "op": "SET",
+   "cell": "N11",
+   "prev": "ebd193839693bb1d197541178be6a62920ed069d4493f1e6de885c3ddaad6cbf",
+   "payload": {
+    "title": "Bootable organ drop-in",
+    "content": "Loader verifies all member chains and organ ledger hash; refuses boot on any mismatch.",
+    "weight": 0.85,
+    "stability": "core"
+   },
+   "digest": "d391ebe155b4fd603423cab499606c779e7ba7c6eee5808b89199e054b70cca8"
+  },
+  {
+   "seq": 7,
+   "op": "SET",
+   "cell": "N14",
+   "prev": "d391ebe155b4fd603423cab499606c779e7ba7c6eee5808b89199e054b70cca8",
+   "payload": {
+    "title": "Hierarchical quilt rewind",
+    "content": "Every organ rewinds to prior cut; global commit only when all organs and cells match.",
+    "weight": 0.883,
+    "stability": "core"
+   },
+   "digest": "4a85c2a97ba591c541fa2c57315491fdad4d9e547cb06b073f18b358214ab4bd"
+  },
+  {
+   "seq": 8,
+   "op": "SET",
+   "cell": "N17",
+   "prev": "4a85c2a97ba591c541fa2c57315491fdad4d9e547cb06b073f18b358214ab4bd",
+   "payload": {
+    "title": "Nest whole quilt adapter",
+    "content": "Adapter exposes exports; parent pins child outputs by receipt hash in boundary ledger.",
+    "weight": 0.767,
+    "stability": "core"
+   },
+   "digest": "5f5772c43123a173f0b6988727aad93a700991eb43b5a42121824860c6733189"
+  },
+  {
+   "seq": 9,
+   "op": "SET",
+   "cell": "N18",
+   "prev": "5f5772c43123a173f0b6988727aad93a700991eb43b5a42121824860c6733189",
+   "payload": {
+    "title": "Rewind dependency ripple",
+    "content": "Producer rewind makes consumer pins superseded; append dep_rewound receipts or freeze.",
+    "weight": 0.75,
+    "stability": "stable"
+   },
+   "digest": "40e0db6e0180a9b7396eb548ac4d88ee76366d215d5ff183c6d897ed4420a7db"
+  },
+  {
+   "seq": 10,
+   "op": "SET",
+   "cell": "N19",
+   "prev": "40e0db6e0180a9b7396eb548ac4d88ee76366d215d5ff183c6d897ed4420a7db",
+   "payload": {
+    "title": "External dependencies pinned by content hash",
+    "content": "Bootable save records external_pins name, content_hash, version, URI. Loader checks hashes before wiring; mutable paths alone undetectable.",
+    "weight": 0.75,
+    "stability": "core"
+   },
+   "digest": "53c600a09db0295de26a1e8204e09e4f1cd99f7f116c7eb791c433f32fbbce03"
+  },
+  {
+   "seq": 11,
+   "op": "SET",
+   "cell": "N20",
+   "prev": "53c600a09db0295de26a1e8204e09e4f1cd99f7f116c7eb791c433f32fbbce03",
+   "payload": {
+    "title": "Hash and schema migration recorded as receipts",
+    "content": "Receipts carry hash_algo and schema tags. Migrations are new receipts or anchors with schema_migration cause; silent changes break chains.",
+    "weight": 0.6,
+    "stability": "stable"
+   },
+   "digest": "20aa4d7396a11c9a01bd95c0b650dcc2151761b8cb15c34e7e7879440d1fa4d0"
+  },
+  {
+   "seq": 12,
+   "op": "SET",
+   "cell": "N22",
+   "prev": "20aa4d7396a11c9a01bd95c0b650dcc2151761b8cb15c34e7e7879440d1fa4d0",
+   "payload": {
+    "title": "Namespacing prevents nested ID collisions",
+    "content": "Nested IDs rewritten as subquilt_id plus cell_id, and receipt hashes include namespaced ID. Unqualified IDs can collide and corrupt wiring.",
+    "weight": 0.7,
+    "stability": "core"
+   },
+   "digest": "979ed84c7fc87af6ad549a2fe896f66ceb99c6585dc2469b24e97a8a66812daf"
+  },
+  {
+   "seq": 13,
+   "op": "SET",
+   "cell": "N23",
+   "prev": "979ed84c7fc87af6ad549a2fe896f66ceb99c6585dc2469b24e97a8a66812daf",
+   "payload": {
+    "title": "Parent-child composite snapshot",
+    "content": "Parent records child manifest hash and cut; child verified before parent dependents wire.",
+    "weight": 0.75,
+    "stability": "core"
+   },
+   "digest": "bdab67a0eb5cd7f2ee0ae13c84d4fba551908dd65e071a3d9a44d50d1bec4dd4"
+  },
+  {
+   "seq": 14,
+   "op": "SET",
+   "cell": "N24",
+   "prev": "bdab67a0eb5cd7f2ee0ae13c84d4fba551908dd65e071a3d9a44d50d1bec4dd4",
+   "payload": {
+    "title": "Save nondeterministic runtime state explicitly",
+    "content": "RNG seeds, timers, queues, clocks are special cells or manifest fields. Omitting seed diverges post-boot receipts.",
+    "weight": 0.8,
+    "stability": "stable"
+   },
+   "digest": "007be0c750518e463f533a549841f040bc5a7250faff012005802ffd5eb9668e"
+  },
+  {
+   "seq": 15,
+   "op": "SET",
+   "cell": "N25",
+   "prev": "007be0c750518e463f533a549841f040bc5a7250faff012005802ffd5eb9668e",
+   "payload": {
+    "title": "Repeated core invariants",
+    "content": "Append-only hash chains, new receipts for changes, content-addressed cuts, atomic group commits, verified boot.",
+    "weight": 0.975,
+    "stability": "stable"
+   },
+   "digest": "4df7a567c9caf8b9c1ca39018c616a895d7525e42997fdf9bbc57d4a05c83fe7"
+  },
+  {
+   "seq": 16,
+   "op": "SET",
+   "cell": "N26",
+   "prev": "4df7a567c9caf8b9c1ca39018c616a895d7525e42997fdf9bbc57d4a05c83fe7",
+   "payload": {
+    "title": "Receipts prove local history only",
+    "content": "Chains prove local history only; cross-cell consistency, access, liveness, availability need organ/global ledgers, intent logs, pins, verifiers, namespaces.",
+    "weight": 0.7,
+    "stability": "stable"
+   },
+   "digest": "86fc3b1f545785b853bd4966694121cbac9a21d520b3f8f9a183df66bd2766bd"
+  },
+  {
+   "seq": 17,
+   "op": "SET",
+   "cell": "N30",
+   "prev": "86fc3b1f545785b853bd4966694121cbac9a21d520b3f8f9a183df66bd2766bd",
+   "payload": {
+    "title": "Organ nested via namespace exports",
+    "content": "Sub-quilt imports organ under namespace prefix and maps only manifest exports. Host bypassing exports causes non-linearized cross-ledger writes.",
+    "weight": 0.633,
+    "stability": "stable"
+   },
+   "digest": "3f781ae14ef6b918f57bc6e0cb1785940db5756036c66b854543b942981066d6"
+  },
+  {
+   "seq": 18,
+   "op": "SET",
+   "cell": "N31",
+   "prev": "3f781ae14ef6b918f57bc6e0cb1785940db5756036c66b854543b942981066d6",
+   "payload": {
+    "title": "Quilt ledger global cut",
+    "content": "Hash-chained quilt_ledger rows carry global cut vector and monotonic global_epoch. Cut is one causal line, not wall-clock grouping.",
+    "weight": 0.825,
+    "stability": "stable"
+   },
+   "digest": "d9cbff1d93ef3835440c599164dc0911305eac613e3d21a35a11b7f5d5c51b3f"
+  },
+  {
+   "seq": 19,
+   "op": "SET",
+   "cell": "N34",
+   "prev": "d9cbff1d93ef3835440c599164dc0911305eac613e3d21a35a11b7f5d5c51b3f",
+   "payload": {
+    "title": "Crash atomic fsync order",
+    "content": "Fsync cell logs before organ commit, organ commits before global commit. Reversed order commits rows to unflushed tips.",
+    "weight": 0.75,
+    "stability": "stable"
+   },
+   "digest": "4bfc864ed8e548aa0c15353f1b35661bbdef7a06bbcceb35cac617657c347d5e"
+  },
+  {
+   "seq": 20,
+   "op": "SET",
+   "cell": "N35",
+   "prev": "4bfc864ed8e548aa0c15353f1b35661bbdef7a06bbcceb35cac617657c347d5e",
+   "payload": {
+    "title": "Canonical serialization stabilizes receipt hashes",
+    "content": "Canonical CBOR with sorted keys and schema version ensures identical logical state reproduces same hash. Non-determinism forks verification.",
+    "weight": 0.8,
+    "stability": "stable"
+   },
+   "digest": "d80001a55a06d05ad7c97c0012515d645314dd7d75243069e6890eab009af3a9"
+  },
+  {
+   "seq": 21,
+   "op": "SET",
+   "cell": "N36",
+   "prev": "d80001a55a06d05ad7c97c0012515d645314dd7d75243069e6890eab009af3a9",
+   "payload": {
+    "title": "Concurrent snapshot linearization",
+    "content": "Per-cell mutexes and read leases produce a linearized cut; mutations block or fail. Unblocked mutations can mix tips never coexisting.",
+    "weight": 0.725,
+    "stability": "stable"
+   },
+   "digest": "8301bae084cfff5b067f0fe1db3a966f4e7c9caaf0480b6e4bf6a1f9e98efd51"
+  },
+  {
+   "seq": 22,
+   "op": "SET",
+   "cell": "N37",
+   "prev": "8301bae084cfff5b067f0fe1db3a966f4e7c9caaf0480b6e4bf6a1f9e98efd51",
+   "payload": {
+    "title": "Partial commit reconciliation",
+    "content": "Multi-cell transactions start in intent log; recovery scans intents against cell tips and commits or compensates. No uncommitted intermediate tips.",
+    "weight": 0.75,
+    "stability": "stable"
+   },
+   "digest": "8876116b8354b9cbbdfca3d99c613869aebf664f531a4dfce96235175e1c369c"
+  },
+  {
+   "seq": 23,
+   "op": "SET",
+   "cell": "C01",
+   "prev": "8876116b8354b9cbbdfca3d99c613869aebf664f531a4dfce96235175e1c369c",
+   "payload": {
+    "title": "Organ nested via namespace exports",
+    "content": "Sub-quilt imports organ under namespace prefix and maps only manifest exports. Host bypassing exports causes non-linearized cross-ledger writes.",
+    "weight": 0.506,
+    "stability": "critique"
+   },
+   "digest": "0a5160b3ef093f14e82f7a8fd23a66c4c3a7d4f8fcb7782c779ca3cc03c88951"
+  }
+ ]
+}
