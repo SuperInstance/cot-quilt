@@ -1,0 +1,1803 @@
+{
+ "run": "20261001T195410Z-503b10b9",
+ "prompt": "When should a cell in a quilted system ask the JEV oracle (an external judge) versus compute the answer locally from its neighbors? Design the decision rule, name its failure mode, and say how the ledger catches it.",
+ "started_utc": "20261001T195410Z",
+ "seed_ignore_finding": "deepseek endpoint ignores `seed` (probe receipted); diversity enforced via lenses; seeds are book-keeping",
+ "phases": {
+  "seeds": {
+   "seeds": [
+    {
+     "seed": 36807,
+     "bits16": "1000111111000111",
+     "source": "mothquantum/coin-toss-v1:1shot",
+     "entropy_bits_true": 16,
+     "job_ids": [
+      "0320cf4b-cc14-484d-936c-b39b9bbffffd",
+      "eaa12fc9-d0cc-49a6-a7f5-cd39f8b56475",
+      "e533d1c3-115c-492d-94e9-9d0bef61ab97",
+      "58fc0205-90ea-4b68-adc3-f8eae7eba394",
+      "fb3029c1-cdc6-4cd3-a419-71104817f425",
+      "6f811aa4-81e0-4960-afcc-18affe081b0b",
+      "78336cf6-0f81-4499-bfc5-db37212d84fb",
+      "ca5f9e10-a620-4162-a9d5-c0164e200012",
+      "64035cb7-10ad-454d-889e-82411bec1fd6",
+      "6e2657c9-1514-423f-b009-4fcd55b9a158",
+      "5ea92fa7-2743-43c4-9132-46361c15163d",
+      "bf9e8d46-d3e8-4249-acb5-f6e9449d171f",
+      "eef8ed7c-d529-401c-972b-308edef3768a",
+      "da042997-77c7-4209-bb12-b20920870d34",
+      "8d3e6fbb-ad2b-40c0-bdf1-2a71826f7a29",
+      "64bbfdb1-c4e4-4576-96a3-007eea3512d2"
+     ]
+    },
+    {
+     "seed": 17141,
+     "bits16": "0100001011110101",
+     "source": "mothquantum/coin-toss-v1:1shot",
+     "entropy_bits_true": 16,
+     "job_ids": [
+      "b00e3057-6226-4078-af41-fa7f7d025eb5",
+      "25580514-c4fe-4133-b565-5d9c67b6bfb9",
+      "3a45fa28-288b-412e-aee1-567d8cc18750",
+      "1fb99637-a5e3-4e95-921f-7449271264a5",
+      "b82d7bd1-7568-4f6e-aa86-5fb3ed9b68b1",
+      "66e5a4e2-cd0b-4328-93e5-f50e53e06f23",
+      "f5a6f8a8-79ea-4611-9fdf-2f1c4826880b",
+      "dcd0bd1d-dc39-4f97-937d-f999236178b8",
+      "0f3713c9-d263-4236-9bf0-9ffc3a0af6b5",
+      "dd736e37-c089-4889-8ddb-465f463ce494",
+      "5227af69-27d0-47a2-9720-5b2726a81670",
+      "918f8d2b-6bce-4d8c-8525-ed00918263a9",
+      "098b9139-db22-4b23-bd69-7bb4fbab95bf",
+      "d26dc770-ef73-49c0-ad0d-a6f2f03d8953",
+      "2ffe67c0-d0cf-4cda-8df7-29e13b001298",
+      "84eeb998-249f-40c1-8285-05ea85300f4c"
+     ]
+    },
+    {
+     "seed": 55843,
+     "bits16": "1101101000100011",
+     "source": "mothquantum/coin-toss-v1:1shot",
+     "entropy_bits_true": 16,
+     "job_ids": [
+      "2e42ad29-1b10-4c32-a9c8-4f7d3b47822f",
+      "c0785c59-5204-4934-84b6-0a898ee7d740",
+      "598418e5-8049-449f-9374-fcc09e9b608d",
+      "34fc223e-3207-4b03-bae1-256b40f84cff",
+      "5b9344ad-f7b4-4546-8dd9-a6f6874c0b03",
+      "1f817b62-5d70-44c6-9c38-768f2ff33fd0",
+      "f5a4a968-fd33-4804-9a16-c6b78a64652c",
+      "d765c29d-f7ce-4fca-b903-edae8f1a167a",
+      "08505885-b3db-44b3-a4ce-458a0f83dc03",
+      "e285e7b9-4ff1-456f-8f99-98998377aa41",
+      "4d16e956-8ba8-4390-8a7f-9eb39dfd144a",
+      "4544fe22-2bbc-44b9-b734-60ae5ed285ef",
+      "4b92ffab-9f32-4a74-a15a-5e12c545c29b",
+      "d70e3c5d-b877-44d2-9f3c-1e98d1e461f7",
+      "45e2537d-91c2-42c3-bb3c-08aaa723823f",
+      "8be1692f-f299-45f5-ae3c-31214446b084"
+     ]
+    }
+   ],
+   "degraded": false
+  },
+  "cot": [
+   {
+    "lens": "a skeptic who trusts only what can be checked against the stated premises",
+    "seed": {
+     "seed": 36807,
+     "bits16": "1000111111000111",
+     "source": "mothquantum/coin-toss-v1:1shot",
+     "entropy_bits_true": 16,
+     "job_ids": [
+      "0320cf4b-cc14-484d-936c-b39b9bbffffd",
+      "eaa12fc9-d0cc-49a6-a7f5-cd39f8b56475",
+      "e533d1c3-115c-492d-94e9-9d0bef61ab97",
+      "58fc0205-90ea-4b68-adc3-f8eae7eba394",
+      "fb3029c1-cdc6-4cd3-a419-71104817f425",
+      "6f811aa4-81e0-4960-afcc-18affe081b0b",
+      "78336cf6-0f81-4499-bfc5-db37212d84fb",
+      "ca5f9e10-a620-4162-a9d5-c0164e200012",
+      "64035cb7-10ad-454d-889e-82411bec1fd6",
+      "6e2657c9-1514-423f-b009-4fcd55b9a158",
+      "5ea92fa7-2743-43c4-9132-46361c15163d",
+      "bf9e8d46-d3e8-4249-acb5-f6e9449d171f",
+      "eef8ed7c-d529-401c-972b-308edef3768a",
+      "da042997-77c7-4209-bb12-b20920870d34",
+      "8d3e6fbb-ad2b-40c0-bdf1-2a71826f7a29",
+      "64bbfdb1-c4e4-4576-96a3-007eea3512d2"
+     ]
+    },
+    "usage": {
+     "prompt_tokens": 75,
+     "total_tokens": 2675,
+     "completion_tokens": 2600,
+     "estimated_cost": 0.007833749999999999,
+     "prompt_tokens_details": null
+    },
+    "finish": "stop",
+    "ms": 62146,
+    "source": "deepinfra",
+    "answer_sha1": "015d22be9167"
+   },
+   {
+    "lens": "an engineer who wants the smallest mechanism that could work",
+    "seed": {
+     "seed": 17141,
+     "bits16": "0100001011110101",
+     "source": "mothquantum/coin-toss-v1:1shot",
+     "entropy_bits_true": 16,
+     "job_ids": [
+      "b00e3057-6226-4078-af41-fa7f7d025eb5",
+      "25580514-c4fe-4133-b565-5d9c67b6bfb9",
+      "3a45fa28-288b-412e-aee1-567d8cc18750",
+      "1fb99637-a5e3-4e95-921f-7449271264a5",
+      "b82d7bd1-7568-4f6e-aa86-5fb3ed9b68b1",
+      "66e5a4e2-cd0b-4328-93e5-f50e53e06f23",
+      "f5a6f8a8-79ea-4611-9fdf-2f1c4826880b",
+      "dcd0bd1d-dc39-4f97-937d-f999236178b8",
+      "0f3713c9-d263-4236-9bf0-9ffc3a0af6b5",
+      "dd736e37-c089-4889-8ddb-465f463ce494",
+      "5227af69-27d0-47a2-9720-5b2726a81670",
+      "918f8d2b-6bce-4d8c-8525-ed00918263a9",
+      "098b9139-db22-4b23-bd69-7bb4fbab95bf",
+      "d26dc770-ef73-49c0-ad0d-a6f2f03d8953",
+      "2ffe67c0-d0cf-4cda-8df7-29e13b001298",
+      "84eeb998-249f-40c1-8285-05ea85300f4c"
+     ]
+    },
+    "usage": {
+     "prompt_tokens": 72,
+     "total_tokens": 3451,
+     "completion_tokens": 3379,
+     "estimated_cost": 0.010169399999999997,
+     "prompt_tokens_details": null
+    },
+    "finish": "stop",
+    "ms": 84393,
+    "source": "deepinfra",
+    "answer_sha1": "e133884929bf"
+   },
+   {
+    "lens": "a teacher who explains by building one small piece at a time",
+    "seed": {
+     "seed": 55843,
+     "bits16": "1101101000100011",
+     "source": "mothquantum/coin-toss-v1:1shot",
+     "entropy_bits_true": 16,
+     "job_ids": [
+      "2e42ad29-1b10-4c32-a9c8-4f7d3b47822f",
+      "c0785c59-5204-4934-84b6-0a898ee7d740",
+      "598418e5-8049-449f-9374-fcc09e9b608d",
+      "34fc223e-3207-4b03-bae1-256b40f84cff",
+      "5b9344ad-f7b4-4546-8dd9-a6f6874c0b03",
+      "1f817b62-5d70-44c6-9c38-768f2ff33fd0",
+      "f5a4a968-fd33-4804-9a16-c6b78a64652c",
+      "d765c29d-f7ce-4fca-b903-edae8f1a167a",
+      "08505885-b3db-44b3-a4ce-458a0f83dc03",
+      "e285e7b9-4ff1-456f-8f99-98998377aa41",
+      "4d16e956-8ba8-4390-8a7f-9eb39dfd144a",
+      "4544fe22-2bbc-44b9-b734-60ae5ed285ef",
+      "4b92ffab-9f32-4a74-a15a-5e12c545c29b",
+      "d70e3c5d-b877-44d2-9f3c-1e98d1e461f7",
+      "45e2537d-91c2-42c3-bb3c-08aaa723823f",
+      "8be1692f-f299-45f5-ae3c-31214446b084"
+     ]
+    },
+    "usage": {
+     "prompt_tokens": 74,
+     "total_tokens": 3352,
+     "completion_tokens": 3278,
+     "estimated_cost": 0.0098673,
+     "prompt_tokens_details": null
+    },
+    "finish": "stop",
+    "ms": 78889,
+    "source": "deepinfra",
+    "answer_sha1": "a3c0a05ffe8b"
+   }
+  ],
+  "split_wire": [
+   {
+    "sample": 0,
+    "n_steps": 7,
+    "ts_status": 200,
+    "ts_served": "jev-1.13.0",
+    "ts_ms": 266,
+    "steps": [
+     {
+      "id": "s1",
+      "kind": "PREMISE",
+      "text": "The quilted system consists of cells communicating with neighbors, a JEV oracle, and a public ledger."
+     },
+     {
+      "id": "s2",
+      "kind": "INFERENCE",
+      "text": "Each cell can compute a local confidence value C from signed neighbor messages and obtain the oracle’s authoritative value if requested."
+     },
+     {
+      "id": "s3",
+      "kind": "DECISION",
+      "text": "A cell must query the JEV only when C < T (a protocol‑defined threshold); otherwise it accepts the local value."
+     },
+     {
+      "id": "s4",
+      "kind": "CHECK",
+      "text": "C is verifiable because it is derived from signed messages; T is fixed in the protocol, preventing manipulation."
+     },
+     {
+      "id": "s5",
+      "kind": "INFERENCE",
+      "text": "If a cell claims C ≥ T while in fact C < T, it may avoid an oracle request for malicious gain."
+     },
+     {
+      "id": "s6",
+      "kind": "CHECK",
+      "text": "The ledger records the necessary neighbor signatures when C ≥ T; absence or invalid signatures on the ledger prove a false threshold claim."
+     },
+     {
+      "id": "s7",
+      "kind": "CONCLUSION",
+      "text": "Thus the ledger audit trail detects the false‑confidence failure, ensuring only legitimate oracle consultations occur."
+     }
+    ],
+    "graph": {
+     "nodes": [
+      {
+       "id": "s1",
+       "kind": "PREMISE",
+       "text": "The quilted system consists of cells communicating with neighbors, a JEV oracle, and a public ledger.",
+       "load_score": 2.39,
+       "load_expected": 2.39
+      },
+      {
+       "id": "s2",
+       "kind": "INFERENCE",
+       "text": "Each cell can compute a local confidence value C from signed neighbor messages and obtain the oracle’s authoritative value if requested.",
+       "load_score": 1.75,
+       "load_expected": 1.74
+      },
+      {
+       "id": "s3",
+       "kind": "DECISION",
+       "text": "A cell must query the JEV only when C < T (a protocol‑defined threshold); otherwise it accepts the local value.",
+       "load_score": 2.96,
+       "load_expected": 2.97
+      },
+      {
+       "id": "s4",
+       "kind": "CHECK",
+       "text": "C is verifiable because it is derived from signed messages; T is fixed in the protocol, preventing manipulation.",
+       "load_score": 2.6,
+       "load_expected": 2.58
+      },
+      {
+       "id": "s5",
+       "kind": "INFERENCE",
+       "text": "If a cell claims C ≥ T while in fact C < T, it may avoid an oracle request for malicious gain.",
+       "load_score": 2.77,
+       "load_expected": 2.79
+      },
+      {
+       "id": "s6",
+       "kind": "CHECK",
+       "text": "The ledger records the necessary neighbor signatures when C ≥ T; absence or invalid signatures on the ledger prove a false threshold claim.",
+       "load_score": 2.89,
+       "load_expected": 2.9
+      },
+      {
+       "id": "s7",
+       "kind": "CONCLUSION",
+       "text": "Thus the ledger audit trail detects the false‑confidence failure, ensuring only legitimate oracle consultations occur.",
+       "load_score": 2.51,
+       "load_expected": 2.52
+      }
+     ],
+     "edges": [
+      {
+       "from": "s1",
+       "to": "s2",
+       "p": 1.0
+      },
+      {
+       "from": "s2",
+       "to": "s3",
+       "p": 0.9
+      },
+      {
+       "from": "s2",
+       "to": "s4",
+       "p": 0.49
+      },
+      {
+       "from": "s3",
+       "to": "s5",
+       "p": 0.96
+      },
+      {
+       "from": "s4",
+       "to": "s6",
+       "p": 0.55
+      },
+      {
+       "from": "s6",
+       "to": "s7",
+       "p": 1.0
+      }
+     ]
+    },
+    "battery_error": null
+   },
+   {
+    "sample": 1,
+    "n_steps": 6,
+    "ts_status": 200,
+    "ts_served": "jev-1.13.0",
+    "ts_ms": 5290,
+    "steps": [
+     {
+      "id": "s1",
+      "kind": "PREMISE",
+      "text": "The engineer wants the minimal decision rule for oracle queries in a quilted system."
+     },
+     {
+      "id": "s2",
+      "kind": "INFERENCE",
+      "text": "Local computation is cheap, but if neighbors disagree, a local view may be unreliable."
+     },
+     {
+      "id": "s3",
+      "kind": "DECISION",
+      "text": "Rule: a cell queries the JEV oracle only when its local result differs from the majority of neighbor outputs."
+     },
+     {
+      "id": "s4",
+      "kind": "INFERENCE",
+      "text": "Failure mode: a colluding cluster of corrupt neighbors outputs the same false value so no disagreement occurs, called the Silent Cartel."
+     },
+     {
+      "id": "s5",
+      "kind": "CHECK",
+      "text": "The ledger cannot detect silent cartels by looking only at local consistency."
+     },
+     {
+      "id": "s6",
+      "kind": "CONCLUSION",
+      "text": "Catch: the ledger performs a deterministic random audit—using the current block hash to select a small fraction of cells to verify via JEV regardless of local agreement—breaking any silent cartel."
+     }
+    ],
+    "graph": {
+     "nodes": [
+      {
+       "id": "s1",
+       "kind": "PREMISE",
+       "text": "The engineer wants the minimal decision rule for oracle queries in a quilted system.",
+       "load_score": 2.57,
+       "load_expected": 2.56
+      },
+      {
+       "id": "s2",
+       "kind": "INFERENCE",
+       "text": "Local computation is cheap, but if neighbors disagree, a local view may be unreliable.",
+       "load_score": 2.84,
+       "load_expected": 2.85
+      },
+      {
+       "id": "s3",
+       "kind": "DECISION",
+       "text": "Rule: a cell queries the JEV oracle only when its local result differs from the majority of neighbor outputs.",
+       "load_score": 1.88,
+       "load_expected": 1.9
+      },
+      {
+       "id": "s4",
+       "kind": "INFERENCE",
+       "text": "Failure mode: a colluding cluster of corrupt neighbors outputs the same false value so no disagreement occurs, called the Silent Cartel.",
+       "load_score": 2.67,
+       "load_expected": 2.68
+      },
+      {
+       "id": "s5",
+       "kind": "CHECK",
+       "text": "The ledger cannot detect silent cartels by looking only at local consistency.",
+       "load_score": 2.65,
+       "load_expected": 2.66
+      },
+      {
+       "id": "s6",
+       "kind": "CONCLUSION",
+       "text": "Catch: the ledger performs a deterministic random audit—using the current block hash to select a small fraction of cells to verify via JEV regardless of local agreement—breaking any silent cartel.",
+       "load_score": 2.83,
+       "load_expected": 2.83
+      }
+     ],
+     "edges": [
+      {
+       "from": "s1",
+       "to": "s2",
+       "p": 1.0
+      },
+      {
+       "from": "s2",
+       "to": "s3",
+       "p": 0.93
+      },
+      {
+       "from": "s3",
+       "to": "s4",
+       "p": 0.46
+      },
+      {
+       "from": "s4",
+       "to": "s5",
+       "p": 1.0
+      },
+      {
+       "from": "s4",
+       "to": "s6",
+       "p": 0.8099999999999999
+      }
+     ]
+    },
+    "battery_error": null
+   },
+   {
+    "sample": 2,
+    "n_steps": 7,
+    "ts_status": 200,
+    "ts_served": "jev-1.13.0",
+    "ts_ms": 239,
+    "steps": [
+     {
+      "id": "s1",
+      "kind": "PREMISE",
+      "text": "A quilted system consists of many cells connected to their neighbors and an external JEV oracle that can be queried for ground truth."
+     },
+     {
+      "id": "s2",
+      "kind": "PREMISE",
+      "text": "In a distributed setting local computation (from neighbors) is cheap but may be misled by colluding neighbors, while oracle queries are costly but reliable."
+     },
+     {
+      "id": "s3",
+      "kind": "INFERENCE",
+      "text": "Thus a cell should only query the oracle when local evidence is ambiguous or insufficient to guarantee correctness."
+     },
+     {
+      "id": "s4",
+      "kind": "DECISION",
+      "text": "Rule: If the maximum disagreement between a cell’s neighbors exceeds threshold T or the cell cannot resolve a deterministic transition from its visible state, then ask the JEV oracle."
+     },
+     {
+      "id": "s5",
+      "kind": "CONCLUSION",
+      "text": "Failure mode: Colluding neighbors suppress neighbor disagreement so that cells avoid oracle queries, creating silent false consensus."
+     },
+     {
+      "id": "s6",
+      "kind": "CHECK",
+      "text": "Ledger catches this by requiring a signed proof of oracle query whenever a cell’s state diverges from the local majority; random audits trigger oracle queries to verify disputed cells."
+     },
+     {
+      "id": "s7",
+      "kind": "CONCLUSION",
+      "text": "This rule, failure naming, and ledger check together enforce correct local inference while penalizing oracle avoidance."
+     }
+    ],
+    "graph": {
+     "nodes": [
+      {
+       "id": "s1",
+       "kind": "PREMISE",
+       "text": "A quilted system consists of many cells connected to their neighbors and an external JEV oracle that can be queried for ground truth.",
+       "load_score": 2.3,
+       "load_expected": 2.29
+      },
+      {
+       "id": "s2",
+       "kind": "PREMISE",
+       "text": "In a distributed setting local computation (from neighbors) is cheap but may be misled by colluding neighbors, while oracle queries are costly but reliable.",
+       "load_score": 2.76,
+       "load_expected": 2.76
+      },
+      {
+       "id": "s3",
+       "kind": "INFERENCE",
+       "text": "Thus a cell should only query the oracle when local evidence is ambiguous or insufficient to guarantee correctness.",
+       "load_score": 2.47,
+       "load_expected": 2.45
+      },
+      {
+       "id": "s4",
+       "kind": "DECISION",
+       "text": "Rule: If the maximum disagreement between a cell’s neighbors exceeds threshold T or the cell cannot resolve a deterministic transition from its visible state, then ask the JEV oracle.",
+       "load_score": 1.65,
+       "load_expected": 1.66
+      },
+      {
+       "id": "s5",
+       "kind": "CONCLUSION",
+       "text": "Failure mode: Colluding neighbors suppress neighbor disagreement so that cells avoid oracle queries, creating silent false consensus.",
+       "load_score": 2.63,
+       "load_expected": 2.64
+      },
+      {
+       "id": "s6",
+       "kind": "CHECK",
+       "text": "Ledger catches this by requiring a signed proof of oracle query whenever a cell’s state diverges from the local majority; random audits trigger oracle queries to verify disputed cells.",
+       "load_score": 2.47,
+       "load_expected": 2.46
+      },
+      {
+       "id": "s7",
+       "kind": "CONCLUSION",
+       "text": "This rule, failure naming, and ledger check together enforce correct local inference while penalizing oracle avoidance.",
+       "load_score": 2.82,
+       "load_expected": 2.82
+      }
+     ],
+     "edges": [
+      {
+       "from": "s1",
+       "to": "s2",
+       "p": 1.0
+      },
+      {
+       "from": "s2",
+       "to": "s3",
+       "p": 0.97
+      },
+      {
+       "from": "s3",
+       "to": "s4",
+       "p": 0.77
+      },
+      {
+       "from": "s4",
+       "to": "s5",
+       "p": 0.46
+      },
+      {
+       "from": "s5",
+       "to": "s6",
+       "p": 0.6
+      },
+      {
+       "from": "s6",
+       "to": "s7",
+       "p": 0.52
+      }
+     ]
+    },
+    "battery_error": null
+   }
+  ],
+  "merge": {
+   "clusters": 5,
+   "divergent": 1,
+   "nodes": [
+    {
+     "label": "System Overview",
+     "text": "Describe the quilted system of cells, neighbors, and an external oracle.",
+     "samples": [
+      0,
+      1,
+      2
+     ],
+     "occurrence": 3,
+     "max_load": 2.76,
+     "members": [
+      {
+       "sample": 0,
+       "id": "s1"
+      },
+      {
+       "sample": 1,
+       "id": "s1"
+      },
+      {
+       "sample": 2,
+       "id": "s1"
+      },
+      {
+       "sample": 2,
+       "id": "s2"
+      }
+     ]
+    },
+    {
+     "label": "Local reliability inference",
+     "text": "Infer when local evidence is insufficient, so an oracle query might be necessary.",
+     "samples": [
+      0,
+      1,
+      2
+     ],
+     "occurrence": 3,
+     "max_load": 2.85,
+     "members": [
+      {
+       "sample": 0,
+       "id": "s2"
+      },
+      {
+       "sample": 1,
+       "id": "s2"
+      },
+      {
+       "sample": 2,
+       "id": "s3"
+      }
+     ]
+    },
+    {
+     "label": "Decision rule for oracle query",
+     "text": "Define the condition under which a cell queries the JEV oracle.",
+     "samples": [
+      0,
+      1,
+      2
+     ],
+     "occurrence": 3,
+     "max_load": 2.97,
+     "members": [
+      {
+       "sample": 0,
+       "id": "s3"
+      },
+      {
+       "sample": 1,
+       "id": "s3"
+      },
+      {
+       "sample": 2,
+       "id": "s4"
+      }
+     ]
+    },
+    {
+     "label": "Ledger verification",
+     "text": "Use the ledger and signatures to verify that oracle queries are justified.",
+     "samples": [
+      0,
+      1,
+      2
+     ],
+     "occurrence": 3,
+     "max_load": 2.9,
+     "members": [
+      {
+       "sample": 0,
+       "id": "s4"
+      },
+      {
+       "sample": 0,
+       "id": "s6"
+      },
+      {
+       "sample": 1,
+       "id": "s5"
+      },
+      {
+       "sample": 2,
+       "id": "s6"
+      }
+     ]
+    },
+    {
+     "label": "Conclusion statements",
+     "text": "Summarize that the system enforces correct oracle use and detects false claims.",
+     "samples": [
+      0,
+      1,
+      2
+     ],
+     "occurrence": 3,
+     "max_load": 2.83,
+     "members": [
+      {
+       "sample": 0,
+       "id": "s7"
+      },
+      {
+       "sample": 1,
+       "id": "s6"
+      },
+      {
+       "sample": 2,
+       "id": "s5"
+      },
+      {
+       "sample": 2,
+       "id": "s7"
+      }
+     ]
+    }
+   ],
+   "divergent_nodes": [
+    {
+     "label": "Silent Cartel risk",
+     "samples": [
+      1,
+      2
+     ],
+     "text": "Discuss colluding neighbors that suppress disagreement, requiring random audits to break silent cartels."
+    }
+   ],
+   "flash_ms": 15318
+  },
+  "judge": {
+   "score": 6,
+   "gaps": [
+    "Explicit naming of the failure mode",
+    "Specific ledger enforcement mechanism (e.g., fraud proofs)",
+    "Cost-benefit threshold calculation logic",
+    "Incentive alignment for honest reporting",
+    "Integration of Silent Cartel risk into main flow"
+   ],
+   "verdict": "The decomposition captures the high-level workflow but omits specific prompt requirements like naming the failure mode and detailing the ledger's enforcement mechanism.",
+   "judge_ms": 46614,
+   "judge_usage": {
+    "prompt_tokens": 560,
+    "total_tokens": 2462,
+    "completion_tokens": 1902,
+    "estimated_cost": 0.005958,
+    "prompt_tokens_details": null
+   }
+  },
+  "refine": {
+   "added": [
+    {
+     "id": "g1",
+     "kind": "INFERENCE",
+     "text": "Define explicit identifiers for all failure modes in the system design.",
+     "bridges": [
+      "System Overview"
+     ],
+     "origin": "critique"
+    },
+    {
+     "id": "g2",
+     "kind": "CHECK",
+     "text": "Verify that the ledger employs a fraud-proof or equivalent enforcement mechanism for each transaction.",
+     "bridges": [
+      "Ledger verification"
+     ],
+     "origin": "critique"
+    },
+    {
+     "id": "g3",
+     "kind": "DECISION",
+     "text": "Implement a cost‑benefit calculation to determine the threshold for querying oracles.",
+     "bridges": [
+      "Decision rule for oracle query"
+     ],
+     "origin": "critique"
+    },
+    {
+     "id": "g4",
+     "kind": "DECISION",
+     "text": "Design incentive alignment mechanisms that reward honest reporting from participants.",
+     "bridges": [
+      "Local reliability inference"
+     ],
+     "origin": "critique"
+    },
+    {
+     "id": "g5",
+     "kind": "DECISION",
+     "text": "Integrate the Silent Cartel risk assessment into the main security flow and concluding statements.",
+     "bridges": [
+      "System Overview",
+      "Conclusion statements"
+     ],
+     "origin": "critique"
+    }
+   ],
+   "refine_ms": 6914
+  }
+ },
+ "_g2_cache": {
+  "nodes": [
+   {
+    "label": "System Overview",
+    "text": "Describe the quilted system of cells, neighbors, and an external oracle.",
+    "samples": [
+     0,
+     1,
+     2
+    ],
+    "occurrence": 3,
+    "max_load": 2.76,
+    "members": [
+     {
+      "sample": 0,
+      "id": "s1"
+     },
+     {
+      "sample": 1,
+      "id": "s1"
+     },
+     {
+      "sample": 2,
+      "id": "s1"
+     },
+     {
+      "sample": 2,
+      "id": "s2"
+     }
+    ]
+   },
+   {
+    "label": "Local reliability inference",
+    "text": "Infer when local evidence is insufficient, so an oracle query might be necessary.",
+    "samples": [
+     0,
+     1,
+     2
+    ],
+    "occurrence": 3,
+    "max_load": 2.85,
+    "members": [
+     {
+      "sample": 0,
+      "id": "s2"
+     },
+     {
+      "sample": 1,
+      "id": "s2"
+     },
+     {
+      "sample": 2,
+      "id": "s3"
+     }
+    ]
+   },
+   {
+    "label": "Decision rule for oracle query",
+    "text": "Define the condition under which a cell queries the JEV oracle.",
+    "samples": [
+     0,
+     1,
+     2
+    ],
+    "occurrence": 3,
+    "max_load": 2.97,
+    "members": [
+     {
+      "sample": 0,
+      "id": "s3"
+     },
+     {
+      "sample": 1,
+      "id": "s3"
+     },
+     {
+      "sample": 2,
+      "id": "s4"
+     }
+    ]
+   },
+   {
+    "label": "Ledger verification",
+    "text": "Use the ledger and signatures to verify that oracle queries are justified.",
+    "samples": [
+     0,
+     1,
+     2
+    ],
+    "occurrence": 3,
+    "max_load": 2.9,
+    "members": [
+     {
+      "sample": 0,
+      "id": "s4"
+     },
+     {
+      "sample": 0,
+      "id": "s6"
+     },
+     {
+      "sample": 1,
+      "id": "s5"
+     },
+     {
+      "sample": 2,
+      "id": "s6"
+     }
+    ]
+   },
+   {
+    "label": "Conclusion statements",
+    "text": "Summarize that the system enforces correct oracle use and detects false claims.",
+    "samples": [
+     0,
+     1,
+     2
+    ],
+    "occurrence": 3,
+    "max_load": 2.83,
+    "members": [
+     {
+      "sample": 0,
+      "id": "s7"
+     },
+     {
+      "sample": 1,
+      "id": "s6"
+     },
+     {
+      "sample": 2,
+      "id": "s5"
+     },
+     {
+      "sample": 2,
+      "id": "s7"
+     }
+    ]
+   }
+  ],
+  "edges": [
+   {
+    "from": "s1",
+    "to": "s2",
+    "p": 1.0
+   },
+   {
+    "from": "s2",
+    "to": "s3",
+    "p": 0.9
+   },
+   {
+    "from": "s2",
+    "to": "s4",
+    "p": 0.49
+   },
+   {
+    "from": "s3",
+    "to": "s5",
+    "p": 0.96
+   },
+   {
+    "from": "s4",
+    "to": "s6",
+    "p": 0.55
+   },
+   {
+    "from": "s6",
+    "to": "s7",
+    "p": 1.0
+   },
+   {
+    "from": "s1",
+    "to": "s2",
+    "p": 1.0
+   },
+   {
+    "from": "s2",
+    "to": "s3",
+    "p": 0.93
+   },
+   {
+    "from": "s3",
+    "to": "s4",
+    "p": 0.46
+   },
+   {
+    "from": "s4",
+    "to": "s5",
+    "p": 1.0
+   },
+   {
+    "from": "s4",
+    "to": "s6",
+    "p": 0.8099999999999999
+   },
+   {
+    "from": "s1",
+    "to": "s2",
+    "p": 1.0
+   },
+   {
+    "from": "s2",
+    "to": "s3",
+    "p": 0.97
+   },
+   {
+    "from": "s3",
+    "to": "s4",
+    "p": 0.77
+   },
+   {
+    "from": "s4",
+    "to": "s5",
+    "p": 0.46
+   },
+   {
+    "from": "s5",
+    "to": "s6",
+    "p": 0.6
+   },
+   {
+    "from": "s6",
+    "to": "s7",
+    "p": 0.52
+   }
+  ],
+  "clusters": [
+   {
+    "label": "System Overview",
+    "members": [
+     {
+      "sample": 0,
+      "id": "s1"
+     },
+     {
+      "sample": 1,
+      "id": "s1"
+     },
+     {
+      "sample": 2,
+      "id": "s1"
+     },
+     {
+      "sample": 2,
+      "id": "s2"
+     }
+    ],
+    "text": "Describe the quilted system of cells, neighbors, and an external oracle."
+   },
+   {
+    "label": "Local reliability inference",
+    "members": [
+     {
+      "sample": 0,
+      "id": "s2"
+     },
+     {
+      "sample": 1,
+      "id": "s2"
+     },
+     {
+      "sample": 2,
+      "id": "s3"
+     }
+    ],
+    "text": "Infer when local evidence is insufficient, so an oracle query might be necessary."
+   },
+   {
+    "label": "Decision rule for oracle query",
+    "members": [
+     {
+      "sample": 0,
+      "id": "s3"
+     },
+     {
+      "sample": 1,
+      "id": "s3"
+     },
+     {
+      "sample": 2,
+      "id": "s4"
+     }
+    ],
+    "text": "Define the condition under which a cell queries the JEV oracle."
+   },
+   {
+    "label": "Ledger verification",
+    "members": [
+     {
+      "sample": 0,
+      "id": "s4"
+     },
+     {
+      "sample": 0,
+      "id": "s6"
+     },
+     {
+      "sample": 1,
+      "id": "s5"
+     },
+     {
+      "sample": 2,
+      "id": "s6"
+     }
+    ],
+    "text": "Use the ledger and signatures to verify that oracle queries are justified."
+   },
+   {
+    "label": "Conclusion statements",
+    "members": [
+     {
+      "sample": 0,
+      "id": "s7"
+     },
+     {
+      "sample": 1,
+      "id": "s6"
+     },
+     {
+      "sample": 2,
+      "id": "s5"
+     },
+     {
+      "sample": 2,
+      "id": "s7"
+     }
+    ],
+    "text": "Summarize that the system enforces correct oracle use and detects false claims."
+   }
+  ],
+  "divergent": [
+   {
+    "label": "Silent Cartel risk",
+    "samples": [
+     1,
+     2
+    ],
+    "text": "Discuss colluding neighbors that suppress disagreement, requiring random audits to break silent cartels."
+   }
+  ]
+ },
+ "_judge_out": {
+  "score": 6,
+  "gaps": [
+   "Explicit naming of the failure mode",
+   "Specific ledger enforcement mechanism (e.g., fraud proofs)",
+   "Cost-benefit threshold calculation logic",
+   "Incentive alignment for honest reporting",
+   "Integration of Silent Cartel risk into main flow"
+  ],
+  "verdict": "The decomposition captures the high-level workflow but omits specific prompt requirements like naming the failure mode and detailing the ledger's enforcement mechanism."
+ },
+ "graph_v1": [
+  {
+   "nodes": [
+    {
+     "id": "s1",
+     "kind": "PREMISE",
+     "text": "The quilted system consists of cells communicating with neighbors, a JEV oracle, and a public ledger.",
+     "load_score": 2.39,
+     "load_expected": 2.39
+    },
+    {
+     "id": "s2",
+     "kind": "INFERENCE",
+     "text": "Each cell can compute a local confidence value C from signed neighbor messages and obtain the oracle’s authoritative value if requested.",
+     "load_score": 1.75,
+     "load_expected": 1.74
+    },
+    {
+     "id": "s3",
+     "kind": "DECISION",
+     "text": "A cell must query the JEV only when C < T (a protocol‑defined threshold); otherwise it accepts the local value.",
+     "load_score": 2.96,
+     "load_expected": 2.97
+    },
+    {
+     "id": "s4",
+     "kind": "CHECK",
+     "text": "C is verifiable because it is derived from signed messages; T is fixed in the protocol, preventing manipulation.",
+     "load_score": 2.6,
+     "load_expected": 2.58
+    },
+    {
+     "id": "s5",
+     "kind": "INFERENCE",
+     "text": "If a cell claims C ≥ T while in fact C < T, it may avoid an oracle request for malicious gain.",
+     "load_score": 2.77,
+     "load_expected": 2.79
+    },
+    {
+     "id": "s6",
+     "kind": "CHECK",
+     "text": "The ledger records the necessary neighbor signatures when C ≥ T; absence or invalid signatures on the ledger prove a false threshold claim.",
+     "load_score": 2.89,
+     "load_expected": 2.9
+    },
+    {
+     "id": "s7",
+     "kind": "CONCLUSION",
+     "text": "Thus the ledger audit trail detects the false‑confidence failure, ensuring only legitimate oracle consultations occur.",
+     "load_score": 2.51,
+     "load_expected": 2.52
+    }
+   ],
+   "edges": [
+    {
+     "from": "s1",
+     "to": "s2",
+     "p": 1.0
+    },
+    {
+     "from": "s2",
+     "to": "s3",
+     "p": 0.9
+    },
+    {
+     "from": "s2",
+     "to": "s4",
+     "p": 0.49
+    },
+    {
+     "from": "s3",
+     "to": "s5",
+     "p": 0.96
+    },
+    {
+     "from": "s4",
+     "to": "s6",
+     "p": 0.55
+    },
+    {
+     "from": "s6",
+     "to": "s7",
+     "p": 1.0
+    }
+   ]
+  },
+  {
+   "nodes": [
+    {
+     "id": "s1",
+     "kind": "PREMISE",
+     "text": "The engineer wants the minimal decision rule for oracle queries in a quilted system.",
+     "load_score": 2.57,
+     "load_expected": 2.56
+    },
+    {
+     "id": "s2",
+     "kind": "INFERENCE",
+     "text": "Local computation is cheap, but if neighbors disagree, a local view may be unreliable.",
+     "load_score": 2.84,
+     "load_expected": 2.85
+    },
+    {
+     "id": "s3",
+     "kind": "DECISION",
+     "text": "Rule: a cell queries the JEV oracle only when its local result differs from the majority of neighbor outputs.",
+     "load_score": 1.88,
+     "load_expected": 1.9
+    },
+    {
+     "id": "s4",
+     "kind": "INFERENCE",
+     "text": "Failure mode: a colluding cluster of corrupt neighbors outputs the same false value so no disagreement occurs, called the Silent Cartel.",
+     "load_score": 2.67,
+     "load_expected": 2.68
+    },
+    {
+     "id": "s5",
+     "kind": "CHECK",
+     "text": "The ledger cannot detect silent cartels by looking only at local consistency.",
+     "load_score": 2.65,
+     "load_expected": 2.66
+    },
+    {
+     "id": "s6",
+     "kind": "CONCLUSION",
+     "text": "Catch: the ledger performs a deterministic random audit—using the current block hash to select a small fraction of cells to verify via JEV regardless of local agreement—breaking any silent cartel.",
+     "load_score": 2.83,
+     "load_expected": 2.83
+    }
+   ],
+   "edges": [
+    {
+     "from": "s1",
+     "to": "s2",
+     "p": 1.0
+    },
+    {
+     "from": "s2",
+     "to": "s3",
+     "p": 0.93
+    },
+    {
+     "from": "s3",
+     "to": "s4",
+     "p": 0.46
+    },
+    {
+     "from": "s4",
+     "to": "s5",
+     "p": 1.0
+    },
+    {
+     "from": "s4",
+     "to": "s6",
+     "p": 0.8099999999999999
+    }
+   ]
+  },
+  {
+   "nodes": [
+    {
+     "id": "s1",
+     "kind": "PREMISE",
+     "text": "A quilted system consists of many cells connected to their neighbors and an external JEV oracle that can be queried for ground truth.",
+     "load_score": 2.3,
+     "load_expected": 2.29
+    },
+    {
+     "id": "s2",
+     "kind": "PREMISE",
+     "text": "In a distributed setting local computation (from neighbors) is cheap but may be misled by colluding neighbors, while oracle queries are costly but reliable.",
+     "load_score": 2.76,
+     "load_expected": 2.76
+    },
+    {
+     "id": "s3",
+     "kind": "INFERENCE",
+     "text": "Thus a cell should only query the oracle when local evidence is ambiguous or insufficient to guarantee correctness.",
+     "load_score": 2.47,
+     "load_expected": 2.45
+    },
+    {
+     "id": "s4",
+     "kind": "DECISION",
+     "text": "Rule: If the maximum disagreement between a cell’s neighbors exceeds threshold T or the cell cannot resolve a deterministic transition from its visible state, then ask the JEV oracle.",
+     "load_score": 1.65,
+     "load_expected": 1.66
+    },
+    {
+     "id": "s5",
+     "kind": "CONCLUSION",
+     "text": "Failure mode: Colluding neighbors suppress neighbor disagreement so that cells avoid oracle queries, creating silent false consensus.",
+     "load_score": 2.63,
+     "load_expected": 2.64
+    },
+    {
+     "id": "s6",
+     "kind": "CHECK",
+     "text": "Ledger catches this by requiring a signed proof of oracle query whenever a cell’s state diverges from the local majority; random audits trigger oracle queries to verify disputed cells.",
+     "load_score": 2.47,
+     "load_expected": 2.46
+    },
+    {
+     "id": "s7",
+     "kind": "CONCLUSION",
+     "text": "This rule, failure naming, and ledger check together enforce correct local inference while penalizing oracle avoidance.",
+     "load_score": 2.82,
+     "load_expected": 2.82
+    }
+   ],
+   "edges": [
+    {
+     "from": "s1",
+     "to": "s2",
+     "p": 1.0
+    },
+    {
+     "from": "s2",
+     "to": "s3",
+     "p": 0.97
+    },
+    {
+     "from": "s3",
+     "to": "s4",
+     "p": 0.77
+    },
+    {
+     "from": "s4",
+     "to": "s5",
+     "p": 0.46
+    },
+    {
+     "from": "s5",
+     "to": "s6",
+     "p": 0.6
+    },
+    {
+     "from": "s6",
+     "to": "s7",
+     "p": 0.52
+    }
+   ]
+  }
+ ],
+ "graph_v2": {
+  "nodes": [
+   {
+    "label": "System Overview",
+    "text": "Describe the quilted system of cells, neighbors, and an external oracle.",
+    "samples": [
+     0,
+     1,
+     2
+    ],
+    "occurrence": 3,
+    "max_load": 2.76,
+    "members": [
+     {
+      "sample": 0,
+      "id": "s1"
+     },
+     {
+      "sample": 1,
+      "id": "s1"
+     },
+     {
+      "sample": 2,
+      "id": "s1"
+     },
+     {
+      "sample": 2,
+      "id": "s2"
+     }
+    ]
+   },
+   {
+    "label": "Local reliability inference",
+    "text": "Infer when local evidence is insufficient, so an oracle query might be necessary.",
+    "samples": [
+     0,
+     1,
+     2
+    ],
+    "occurrence": 3,
+    "max_load": 2.85,
+    "members": [
+     {
+      "sample": 0,
+      "id": "s2"
+     },
+     {
+      "sample": 1,
+      "id": "s2"
+     },
+     {
+      "sample": 2,
+      "id": "s3"
+     }
+    ]
+   },
+   {
+    "label": "Decision rule for oracle query",
+    "text": "Define the condition under which a cell queries the JEV oracle.",
+    "samples": [
+     0,
+     1,
+     2
+    ],
+    "occurrence": 3,
+    "max_load": 2.97,
+    "members": [
+     {
+      "sample": 0,
+      "id": "s3"
+     },
+     {
+      "sample": 1,
+      "id": "s3"
+     },
+     {
+      "sample": 2,
+      "id": "s4"
+     }
+    ]
+   },
+   {
+    "label": "Ledger verification",
+    "text": "Use the ledger and signatures to verify that oracle queries are justified.",
+    "samples": [
+     0,
+     1,
+     2
+    ],
+    "occurrence": 3,
+    "max_load": 2.9,
+    "members": [
+     {
+      "sample": 0,
+      "id": "s4"
+     },
+     {
+      "sample": 0,
+      "id": "s6"
+     },
+     {
+      "sample": 1,
+      "id": "s5"
+     },
+     {
+      "sample": 2,
+      "id": "s6"
+     }
+    ]
+   },
+   {
+    "label": "Conclusion statements",
+    "text": "Summarize that the system enforces correct oracle use and detects false claims.",
+    "samples": [
+     0,
+     1,
+     2
+    ],
+    "occurrence": 3,
+    "max_load": 2.83,
+    "members": [
+     {
+      "sample": 0,
+      "id": "s7"
+     },
+     {
+      "sample": 1,
+      "id": "s6"
+     },
+     {
+      "sample": 2,
+      "id": "s5"
+     },
+     {
+      "sample": 2,
+      "id": "s7"
+     }
+    ]
+   },
+   {
+    "id": "g1",
+    "kind": "INFERENCE",
+    "text": "Define explicit identifiers for all failure modes in the system design.",
+    "bridges": [
+     "System Overview"
+    ],
+    "origin": "critique"
+   },
+   {
+    "id": "g2",
+    "kind": "CHECK",
+    "text": "Verify that the ledger employs a fraud-proof or equivalent enforcement mechanism for each transaction.",
+    "bridges": [
+     "Ledger verification"
+    ],
+    "origin": "critique"
+   },
+   {
+    "id": "g3",
+    "kind": "DECISION",
+    "text": "Implement a cost‑benefit calculation to determine the threshold for querying oracles.",
+    "bridges": [
+     "Decision rule for oracle query"
+    ],
+    "origin": "critique"
+   },
+   {
+    "id": "g4",
+    "kind": "DECISION",
+    "text": "Design incentive alignment mechanisms that reward honest reporting from participants.",
+    "bridges": [
+     "Local reliability inference"
+    ],
+    "origin": "critique"
+   },
+   {
+    "id": "g5",
+    "kind": "DECISION",
+    "text": "Integrate the Silent Cartel risk assessment into the main security flow and concluding statements.",
+    "bridges": [
+     "System Overview",
+     "Conclusion statements"
+    ],
+    "origin": "critique"
+   }
+  ],
+  "edges": [
+   {
+    "from": "s1",
+    "to": "s2",
+    "p": 1.0
+   },
+   {
+    "from": "s2",
+    "to": "s3",
+    "p": 0.9
+   },
+   {
+    "from": "s2",
+    "to": "s4",
+    "p": 0.49
+   },
+   {
+    "from": "s3",
+    "to": "s5",
+    "p": 0.96
+   },
+   {
+    "from": "s4",
+    "to": "s6",
+    "p": 0.55
+   },
+   {
+    "from": "s6",
+    "to": "s7",
+    "p": 1.0
+   },
+   {
+    "from": "s1",
+    "to": "s2",
+    "p": 1.0
+   },
+   {
+    "from": "s2",
+    "to": "s3",
+    "p": 0.93
+   },
+   {
+    "from": "s3",
+    "to": "s4",
+    "p": 0.46
+   },
+   {
+    "from": "s4",
+    "to": "s5",
+    "p": 1.0
+   },
+   {
+    "from": "s4",
+    "to": "s6",
+    "p": 0.8099999999999999
+   },
+   {
+    "from": "s1",
+    "to": "s2",
+    "p": 1.0
+   },
+   {
+    "from": "s2",
+    "to": "s3",
+    "p": 0.97
+   },
+   {
+    "from": "s3",
+    "to": "s4",
+    "p": 0.77
+   },
+   {
+    "from": "s4",
+    "to": "s5",
+    "p": 0.46
+   },
+   {
+    "from": "s5",
+    "to": "s6",
+    "p": 0.6
+   },
+   {
+    "from": "s6",
+    "to": "s7",
+    "p": 0.52
+   }
+  ],
+  "clusters": [
+   {
+    "label": "System Overview",
+    "members": [
+     {
+      "sample": 0,
+      "id": "s1"
+     },
+     {
+      "sample": 1,
+      "id": "s1"
+     },
+     {
+      "sample": 2,
+      "id": "s1"
+     },
+     {
+      "sample": 2,
+      "id": "s2"
+     }
+    ],
+    "text": "Describe the quilted system of cells, neighbors, and an external oracle."
+   },
+   {
+    "label": "Local reliability inference",
+    "members": [
+     {
+      "sample": 0,
+      "id": "s2"
+     },
+     {
+      "sample": 1,
+      "id": "s2"
+     },
+     {
+      "sample": 2,
+      "id": "s3"
+     }
+    ],
+    "text": "Infer when local evidence is insufficient, so an oracle query might be necessary."
+   },
+   {
+    "label": "Decision rule for oracle query",
+    "members": [
+     {
+      "sample": 0,
+      "id": "s3"
+     },
+     {
+      "sample": 1,
+      "id": "s3"
+     },
+     {
+      "sample": 2,
+      "id": "s4"
+     }
+    ],
+    "text": "Define the condition under which a cell queries the JEV oracle."
+   },
+   {
+    "label": "Ledger verification",
+    "members": [
+     {
+      "sample": 0,
+      "id": "s4"
+     },
+     {
+      "sample": 0,
+      "id": "s6"
+     },
+     {
+      "sample": 1,
+      "id": "s5"
+     },
+     {
+      "sample": 2,
+      "id": "s6"
+     }
+    ],
+    "text": "Use the ledger and signatures to verify that oracle queries are justified."
+   },
+   {
+    "label": "Conclusion statements",
+    "members": [
+     {
+      "sample": 0,
+      "id": "s7"
+     },
+     {
+      "sample": 1,
+      "id": "s6"
+     },
+     {
+      "sample": 2,
+      "id": "s5"
+     },
+     {
+      "sample": 2,
+      "id": "s7"
+     }
+    ],
+    "text": "Summarize that the system enforces correct oracle use and detects false claims."
+   }
+  ],
+  "divergent": [
+   {
+    "label": "Silent Cartel risk",
+    "samples": [
+     1,
+     2
+    ],
+    "text": "Discuss colluding neighbors that suppress disagreement, requiring random audits to break silent cartels."
+   }
+  ],
+  "receipt": {
+   "ms": 15318,
+   "source": "openai/gpt-oss-20b",
+   "fallback_reason": "ValueError: unknown url type: 'sk-abdc3f50d13641f09cf706839719d4d3'"
+  }
+ },
+ "judge": {
+  "score": 6,
+  "gaps": [
+   "Explicit naming of the failure mode",
+   "Specific ledger enforcement mechanism (e.g., fraud proofs)",
+   "Cost-benefit threshold calculation logic",
+   "Incentive alignment for honest reporting",
+   "Integration of Silent Cartel risk into main flow"
+  ],
+  "verdict": "The decomposition captures the high-level workflow but omits specific prompt requirements like naming the failure mode and detailing the ledger's enforcement mechanism."
+ },
+ "finished_utc": "20261001T210038Z"
+}

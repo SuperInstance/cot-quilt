@@ -179,20 +179,47 @@ def _parse_json_loose(text):
         return None
 
 
-def deepseek_json(model, sys_p, usr_p, max_tokens=2000):
-    """flash call that MUST return JSON: response_format + loose parse + one repair retry."""
-    r = deepseek(model, [{'role': 'system', 'content': sys_p + ' Respond with a single JSON object.'},
-                         {'role': 'user', 'content': usr_p}], max_tokens=max_tokens)
-    j = _parse_json_loose(r.get('content'))
-    if j is None and r.get('content'):
-        r2 = deepseek(model, [{'role': 'system', 'content': sys_p},
-                              {'role': 'user', 'content': usr_p + '\n\nYour previous reply was not parseable JSON. Return ONLY the JSON object, nothing else.'}],
-                      max_tokens=max_tokens)
-        j = _parse_json_loose(r2.get('content'))
-        if j is not None:
-            r = r2
-            r['repaired_json'] = True
-    return j, r
+def deepseek_json(model, sys_p, usr_p, max_tokens=2000, deadline_s=75):
+    """JSON-mode call: deepseek-flash under HARD deadline, then deepinfra fallback
+    (receipted 2026-10-01: deepseek API-wide slow-drip made even 50-token calls take >120s).
+    Loose parse + one repair retry either way."""
+    def attempt(url, key, sysp, usrp, mt):
+        body = {'model': url, 'messages': [{'role': 'system', 'content': sysp + ' Respond with a single JSON object.'},
+                                           {'role': 'user', 'content': usrp}], 'max_tokens': mt}
+        r = post_json_deadline(key, key, body, deadline_s=deadline_s)
+        return r
+
+    r = attempt('deepseek-flash', DS_KEY, sys_p, usr_p, max_tokens)
+    content = (r.get('data') or {}).get('choices', [{}])[0].get('message', {}).get('content') if 'data' in r else None
+    rec = {'ms': r.get('ms', 0), 'source': 'deepseek-flash' if content else None}
+    if content is None:
+        first_err = r.get('error') or ('hard deadline' if r.get('timeout') else 'unknown')
+        for fb in ['openai/gpt-oss-20b', 'ByteDance/Seed-2.0-mini', 'ibm-granite/granite-4.2-3b']:
+            rr = deepinfra_chat(fb, [{'role': 'system', 'content': sys_p + ' Respond with a single JSON object.'},
+                                     {'role': 'user', 'content': usr_p}], max_tokens=max_tokens)
+            if rr.get('content'):
+                rec = {'ms': rr['ms'], 'source': fb, 'fallback_reason': first_err}
+                content = rr['content']
+                break
+    j = _parse_json_loose(content)
+    if j is None and content:
+        r2 = attempt('deepseek-flash', DS_KEY, sys_p, usr_p + '\n\nYour previous reply was not parseable JSON. Return ONLY the JSON object, nothing else.', max_tokens)
+        content2 = (r2.get('data') or {}).get('choices', [{}])[0].get('message', {}).get('content') if 'data' in r2 else None
+        if content2 is None:
+            for fb in ['openai/gpt-oss-20b', 'ByteDance/Seed-2.0-mini', 'ibm-granite/granite-4.2-3b']:
+                rr = deepinfra_chat(fb, [{'role': 'system', 'content': sys_p},
+                                         {'role': 'user', 'content': usr_p + '\n\nReturn ONLY the JSON object.'}], max_tokens=max_tokens)
+                if rr.get('content'):
+                    content2 = rr['content']
+                    rec['source'] = fb + '(repair)'
+                    break
+        j = _parse_json_loose(content2)
+        if j is not None and content2:
+            content = content2
+            rec['repaired_json'] = True
+    out_rec = dict(rec)
+    out_rec['content'] = content
+    return j, out_rec
 
 
 def split_cot(cot, lens):
@@ -249,16 +276,12 @@ def merge(graphs, lens_answers):
              '{"clusters":[{"label":"short concept name","members":[{"sample":0,"id":"s1"}],"text":"one line merging the members"}],'
              '"divergent":[{"label":"alternate route only in some samples","samples":[0,2],"text":"one line"}]}. '
              'Cluster steps that express the same logical move. Keep genuinely different routes as divergent entries.')
-    r = deepseek('deepseek-flash', [{'role': 'system', 'content': sys_p},
-                                    {'role': 'user', 'content': json.dumps(lst, ensure_ascii=False)[:12000]}], max_tokens=2000)
+    r = deepseek_json('deepseek-flash', sys_p, json.dumps(lst, ensure_ascii=False)[:12000], max_tokens=2000, deadline_s=90)
     merged = {'nodes': [], 'edges': [], 'clusters': [], 'divergent': []}
-    if r['content']:
-        try:
-            j = json.loads(r['content'][r['content'].find('{'):r['content'].rfind('}') + 1])
-            merged['clusters'] = j.get('clusters', [])
-            merged['divergent'] = j.get('divergent', [])
-        except Exception:
-            pass
+    j = r[0] or {}
+    merged['clusters'] = j.get('clusters', [])
+    merged['divergent'] = j.get('divergent', [])
+    merged['receipt'] = {'ms': r[1].get('ms'), 'source': r[1].get('source'), 'fallback_reason': r[1].get('fallback_reason')}
     # weight = how many samples contain the cluster; carry max typesafe load score upward
     for c in merged['clusters']:
         mem = c.get('members') or []
@@ -274,7 +297,6 @@ def merge(graphs, lens_answers):
                                 'occurrence': len(samples), 'max_load': max(scores) if scores else None,
                                 'members': mem})
     merged['edges'] = [{'from': e['from'], 'to': e['to'], 'p': e['p']} for g in graphs for e in g['edges']]
-    merged['receipt'] = r
     return merged
 
 
@@ -287,7 +309,7 @@ def judge(prompt, answers, g2):
     usr = (f'Original prompt: {prompt}\n\nYour three answers: {json.dumps(answers)[:600]}\n\n'
            f'Decomposed graph: {json.dumps(compact, ensure_ascii=False)[:6000]}\nAlternate routes: {json.dumps(divs, ensure_ascii=False)[:1500]}\n'
            'What logical moves of your actual reasoning does this graph miss?')
-    r = deepseek('deepseek-reasoner', [{'role': 'system', 'content': sys_p}, {'role': 'user', 'content': usr}], max_tokens=4000, seed=int.from_bytes(os.urandom(2), 'big'))
+    r = cot_sample_judge(sys_p, usr)
     out = {'receipt': r, 'score': None, 'gaps': [], 'verdict': None}
     if r['content']:
         try:
@@ -306,18 +328,114 @@ def refine(prompt, g2, judge_out):
              '{"added":[{"id":"g1","kind":"INFERENCE|CHECK|DECISION","text":"one line","bridges":["label of cluster it connects to"]}]}.')
     usr = (f'Existing clusters: {json.dumps([n["label"] for n in g2["nodes"]])}\n'
            f'Judge gaps: {json.dumps(judge_out["gaps"])}')
-    r = deepseek('deepseek-flash', [{'role': 'system', 'content': sys_p}, {'role': 'user', 'content': usr}], max_tokens=1200)
+    r = deepseek_json('deepseek-flash', sys_p, usr, max_tokens=1200, deadline_s=75)
     added = []
-    if r['content']:
-        try:
-            j = json.loads(r['content'][r['content'].find('{'):r['content'].rfind('}') + 1])
-            added = [{'id': a.get('id'), 'kind': a.get('kind', 'INFERENCE'), 'text': a.get('text'), 'bridges': a.get('bridges', []), 'origin': 'critique'} for a in (j.get('added') or [])]
-        except Exception:
-            pass
+    j = r[0] or {}
+    added = [{'id': a.get('id'), 'kind': a.get('kind', 'INFERENCE'), 'text': a.get('text'), 'bridges': a.get('bridges', []), 'origin': 'critique'} for a in (j.get('added') or [])]
+    refine_rec = {'ms': r[1].get('ms'), 'source': r[1].get('source'), 'fallback_reason': r[1].get('fallback_reason')}
     g3 = dict(g2)
     g3['nodes'] = g2['nodes'] + added
-    g3['refine_receipt'] = r
+    g3['refine_receipt'] = refine_rec
     return g3
+
+
+def deepinfra_chat(model, messages, max_tokens=8000):
+    """deepinfra OpenAI-compatible call; returns same shape as deepseek().
+    Burn-guard: deepinfra models are largely REASONERS now (receipted) — if the whole
+    budget burns on reasoning (finish=length, no content), retry at 3×."""
+    out = None
+    mt = max_tokens
+    for attempt_i in range(2):
+        r = http('https://api.deepinfra.com/v1/openai/chat/completions', KEYS['DEEPINFRA_API_KEY'],
+                 {'model': model, 'messages': messages, 'max_tokens': mt}, timeout=420)
+        out = {'model_requested': model, 'model_served': None, 'ms': r['ms'], 'status': r['status'],
+               'usage': r['body'].get('usage'), 'finish': None, 'content': None, 'cot': None, 'source': 'deepinfra'}
+        if r['status'] == 200 and r['body'].get('choices'):
+            ch = r['body']['choices'][0]['message']
+            out.update({'model_served': r['body'].get('model'), 'finish': r['body']['choices'][0].get('finish_reason'),
+                        'content': ch.get('content'), 'cot': ch.get('reasoning_content')})
+            if out['content'] or out['finish'] != 'length':
+                return out
+            mt = max(mt * 3, 12000)  # burn-guard: retry bigger
+            out['burn_guard_retry'] = True
+        else:
+            out['error'] = json.dumps(r['body'])[:300]
+            return out
+    return out
+
+
+FALLBACK_MODELS = ['Qwen/Qwen3.5-397B-A17B', 'XiaomiMiMo/MiMo-V2.6-Pro']
+
+
+def post_json_deadline(url, key, body, deadline_s, token=None):
+    """HARD deadline POST: urllib's timeout is per-socket-op, not total (receipted:
+    a slow-drip reasoner response waited >150s past 'timeout'). Worker thread + join."""
+    import threading
+    result = {}
+
+    def worker():
+        try:
+            t0 = time.time()
+            req = urllib.request.Request(url, data=json.dumps(body).encode(), method='POST',
+                                         headers={'Authorization': f'Bearer {token or key}',
+                                                  'Content-Type': 'application/json',
+                                                  'User-Agent': 'cot-quilt/0.2'})
+            with urllib.request.urlopen(req, timeout=30) as r:
+                result['data'] = json.load(r)
+            result['ms'] = int((time.time() - t0) * 1000)
+        except Exception as e:
+            result['error'] = f'{type(e).__name__}: {str(e)[:150]}'
+
+    th = threading.Thread(target=worker, daemon=True)
+    th.start()
+    th.join(deadline_s)
+    if th.is_alive():
+        return {'timeout': True, 'ms': int(deadline_s * 1000)}
+    return result
+
+
+def cot_sample(prompt_text, seed):
+    """v4-pro first (HARD 150s deadline — receipted 2026-10-01: endpoint sometimes
+    slow-drips past socket-op timeouts); then deepinfra roster fallback;
+    source + fallback_reason recorded per sample."""
+    body = {'model': 'deepseek-reasoner', 'messages': [{'role': 'user', 'content': prompt_text}],
+            'max_tokens': 8000, 'seed': seed}
+    t0 = time.time()
+    r = post_json_deadline(DS_URL, DS_KEY, body, deadline_s=150)
+    if not r.get('timeout') and 'data' in r and r['data'].get('choices'):
+        d = r['data']
+        ch = d['choices'][0]['message']
+        return {'model_requested': 'deepseek-reasoner', 'model_served': d.get('model'), 'ms': r.get('ms', 0),
+                'status': 200, 'usage': d.get('usage'), 'finish': d['choices'][0].get('finish_reason'),
+                'content': ch.get('content'), 'cot': ch.get('reasoning_content'), 'source': 'deepseek-v4-pro'}
+    first_err = r.get('error') or ('hard deadline 150s exceeded' if r.get('timeout') else 'unknown')
+    for fb in FALLBACK_MODELS:
+        out = deepinfra_chat(fb, [{'role': 'user', 'content': prompt_text}], max_tokens=8000)
+        out['fallback_reason'] = first_err
+        if out.get('content'):
+            return out
+    return {'model_requested': 'deepseek-reasoner', 'status': -1, 'error': first_err,
+            'content': None, 'cot': None, 'finish': None, 'usage': None,
+            'ms': int((time.time() - t0) * 1000), 'source': 'failed'}
+
+
+def cot_sample_judge(sys_p, usr):
+    """Judge = the LARGE model acting as input-output simulator; v4-pro first (hard deadline),
+    then Qwen3.5-397B (the architect dog-food)."""
+    body = {'model': 'deepseek-reasoner',
+            'messages': [{'role': 'system', 'content': sys_p}, {'role': 'user', 'content': usr}],
+            'max_tokens': 4000, 'seed': int.from_bytes(os.urandom(2), 'big')}
+    r = post_json_deadline(DS_URL, DS_KEY, body, deadline_s=150)
+    if not r.get('timeout') and 'data' in r and r['data'].get('choices'):
+        d = r['data']
+        ch = d['choices'][0]['message']
+        return {'model_requested': 'deepseek-reasoner', 'ms': r.get('ms', 0), 'status': 200, 'usage': d.get('usage'),
+                'finish': d['choices'][0].get('finish_reason'), 'content': ch.get('content'),
+                'cot': ch.get('reasoning_content'), 'source': 'deepseek-v4-pro'}
+    out = deepinfra_chat('Qwen/Qwen3.5-397B-A17B',
+                         [{'role': 'system', 'content': sys_p}, {'role': 'user', 'content': usr}], max_tokens=4000)
+    out['fallback_reason'] = r.get('error') or ('hard deadline 150s exceeded' if r.get('timeout') else 'unknown')
+    return out
 
 
 def _save(rdir, rec):
@@ -361,6 +479,7 @@ def run(prompt, n_seeds=3, lenses=None, outdir=None):
         _save(rdir, rec)
     seeds = rec['phases']['seeds']['seeds']
     degraded = rec['phases']['seeds']['degraded']
+    print(f'[cot-quilt] seeds done, degraded={degraded}', flush=True)
 
     # PHASE cot samples (per-sample resume via sample-i-cot.md)
     samples = []
@@ -375,16 +494,17 @@ def run(prompt, n_seeds=3, lenses=None, outdir=None):
             meta = rec['phases']['cot'][i]
             samples.append({'lens': lens, 'seed_requested': meta['seed'], 'receipt': {'ms': meta['ms'], 'usage': meta['usage'], 'finish': meta['finish']}, 'answer': ans, 'cot': cot})
         else:
-            r = deepseek('deepseek-reasoner', [{'role': 'user', 'content': f'Lens: you are {lens}.\n\n{prompt}'}],
-                         max_tokens=12000, seed=seeds[i]['seed'])
-            samples.append({'lens': lens, 'seed_requested': seeds[i], 'receipt': r, 'answer': r['content'], 'cot': r['cot']})
+            r = cot_sample(f'Lens: you are {lens}.\n\n{prompt}', seeds[i]['seed'])
+            samples.append({'lens': lens, 'seed_requested': seeds[i], 'receipt': r, 'answer': r['content'], 'cot': r['cot'], 'source': r.get('source')})
             with open(f_i, 'w') as f:
-                f.write(f"# sample {i} — lens: {lens}\n\n## seed_requested\n{json.dumps(seeds[i])}\n\n## chain-of-thought\n\n{(r['cot'] or '')}\n\n## answer\n\n{(r['content'] or '')}\n")
+                f.write(f"# sample {i} — lens: {lens}\n\n## seed_requested\n{json.dumps(seeds[i])}\n\n## source\n{r.get('source')} ({r.get('fallback_reason', '')})\n\n## chain-of-thought\n\n{(r['cot'] or '')}\n\n## answer\n\n{(r['content'] or '')}\n")
             entry = {'lens': lens, 'seed': seeds[i], 'usage': r['usage'], 'finish': r['finish'], 'ms': r['ms'],
+                     'source': r.get('source'),
                      'answer_sha1': hashlib.sha1((r['content'] or '').encode()).hexdigest()[:12]}
             rec['phases'].setdefault('cot', [])
             rec['phases']['cot'] = (rec['phases']['cot'] + [entry])[:i + 1]
             _save(rdir, rec)
+            print(f'[cot-quilt] sample {i} done: finish={r["finish"]} cot_chars={len(r["cot"] or "")}', flush=True)
     for i, s in enumerate(samples):
         pass  # degeneracy flag computed below at write-out
 
@@ -404,6 +524,7 @@ def run(prompt, n_seeds=3, lenses=None, outdir=None):
                                                            'ts_ms': bat.get('ms'), 'steps': sp['steps'],
                                                            'graph': g, 'battery_error': bat.get('error')})
         _save(rdir, rec)
+        print(f'[cot-quilt] wire {i} done: {len(sp["steps"])} steps', flush=True)
 
     # PHASE merge
     if 'merge' not in rec['phases'] or rec['phases']['merge'] is None:
@@ -414,6 +535,7 @@ def run(prompt, n_seeds=3, lenses=None, outdir=None):
         rec['_g2_cache'] = {'nodes': g2['nodes'], 'edges': g2['edges'], 'clusters': g2['clusters'],
                             'divergent': g2['divergent']}
         _save(rdir, rec)
+        print(f'[cot-quilt] merge done: {len(g2["clusters"])} clusters, {len(g2["divergent"])} divergent', flush=True)
     else:
         g2 = rec['_g2_cache']
 
@@ -424,6 +546,7 @@ def run(prompt, n_seeds=3, lenses=None, outdir=None):
                                   'judge_ms': j['receipt']['ms'], 'judge_usage': j['receipt']['usage']}
         rec['_judge_out'] = {'score': j['score'], 'gaps': j['gaps'], 'verdict': j['verdict']}
         _save(rdir, rec)
+        print(f'[cot-quilt] judge done: {j["score"]}/10, {len(j["gaps"])} gaps', flush=True)
     else:
         j = rec['_judge_out']
 

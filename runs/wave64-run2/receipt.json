@@ -1,0 +1,85 @@
+{
+ "run": "20261001T194430Z-503b10b9",
+ "prompt": "When should a cell in a quilted system ask the JEV oracle (an external judge) versus compute the answer locally from its neighbors? Design the decision rule, name its failure mode, and say how the ledger catches it.",
+ "started_utc": "20261001T194430Z",
+ "seed_ignore_finding": "deepseek endpoint ignores `seed` (probe receipted); diversity enforced via lenses; seeds are book-keeping",
+ "phases": {
+  "seeds": {
+   "seeds": [
+    {
+     "seed": 16609,
+     "bits16": "0100000011100001",
+     "source": "mothquantum/coin-toss-v1:1shot",
+     "entropy_bits_true": 16,
+     "job_ids": [
+      "9c2ff553-2dde-4513-affb-adfe7bfec9c2",
+      "8fc84809-e072-48b5-84e3-2a44f614c5d7",
+      "009377e4-4acb-4978-bff2-d45d9c07684b",
+      "5507ee9b-ba99-4de3-a00f-c382568ac8c8",
+      "2ddee2c7-1f1b-4870-aeab-b420ee25cff9",
+      "05c0e69b-b924-4d5d-a63f-db39b8b3bb97",
+      "8f40259d-abab-41f9-a71c-ff126df4bdb7",
+      "5c632bb7-415c-4ec7-993c-8f454a2c1f95",
+      "bfa6e176-05bc-4a29-a42c-284cf7cdb4ae",
+      "60191c60-5afc-40f0-ab40-1aad0f2ca63a",
+      "2c0c28ce-821d-4dc8-8c62-4a97f1884122",
+      "b1367a42-468b-47ba-83a9-46eac544fdd4",
+      "9d04d0ce-80b7-4ae2-a87c-731f370447cb",
+      "5621993e-9e47-464b-a539-824a607fb42b",
+      "055d6027-d7d3-4bfb-8a97-55f11597ec99",
+      "8cad2ab3-8d38-4f81-b4b0-be125d54d4ec"
+     ]
+    },
+    {
+     "seed": 46544,
+     "bits16": "1011010111010000",
+     "source": "mothquantum/coin-toss-v1:1shot",
+     "entropy_bits_true": 16,
+     "job_ids": [
+      "75cd58e8-6004-4bdb-940b-e7241acf13a0",
+      "485953da-7a73-4ff3-aa95-bd6056b91728",
+      "ea3d1a17-10bc-4f64-a09d-deb95ae97136",
+      "32928f4f-53e4-4b26-9214-b709b824993f",
+      "86d3ab04-0a48-426c-b0b1-703d92c9ae7d",
+      "63d97d2b-01c3-45da-aa51-7905d92364b9",
+      "d5141cce-1e21-4e4b-ab5a-28bc393c965d",
+      "602c12e1-34c9-4cec-88d2-affc5cffa094",
+      "c2a91614-bca7-476b-85f9-91f02dc76316",
+      "7f4b930d-568a-47a9-87e8-4cb9b498d48f",
+      "d4d602ae-5e31-4aa4-ad25-d385bc6c0c89",
+      "5c699c78-e53b-42bf-bfa9-9139d38c432b",
+      "2a572d3c-1323-40ab-96a8-80ede359a7d8",
+      "193ab9f4-0850-4ce7-9750-7f3af7fe01ba",
+      "3a431e00-3438-4856-910b-9ceea5608e2b",
+      "4c9298df-0d36-41ea-abb8-1dbea2c5cdfe"
+     ]
+    },
+    {
+     "seed": 37542,
+     "bits16": "1001001010100110",
+     "source": "mothquantum/coin-toss-v1:1shot",
+     "entropy_bits_true": 16,
+     "job_ids": [
+      "e890963a-1ab6-4d11-840c-7261132dafaf",
+      "a9ad2544-7d9a-4b4a-bf59-6bc36a35cdbe",
+      "25531a64-3f7c-4913-9150-a667d76f3369",
+      "f227c622-3bd1-422b-95e4-112b9bf4c237",
+      "a38e2b57-cb87-4902-9b3c-d75fd456e782",
+      "7bff9ec4-44d2-4b28-b1e9-a0cd6e60542f",
+      "d6c8ee07-7ca6-4d46-98d1-d0fb8b6f27d4",
+      "c4b87827-a2df-4f4b-a5cb-2427fa13559e",
+      "d19bffc0-18e5-4995-bc3e-7f1aabbfe6a5",
+      "63da46fb-61af-4e53-8105-0791d3ec9967",
+      "aada57c2-4dc2-4dc1-a88f-9fdc9ed11411",
+      "138964a5-d776-429a-85f8-1dd876bbfe2d",
+      "b9f7e8c0-5ab9-4fb4-a78c-92e0afd81da9",
+      "8764dd4b-592b-4513-8850-bea30139be92",
+      "3eb0fe1c-4201-4ea7-a963-8b21ee46658a",
+      "59f2f937-8765-414a-b1cb-374f62eaa4c6"
+     ]
+    }
+   ],
+   "degraded": false
+  }
+ }
+}
