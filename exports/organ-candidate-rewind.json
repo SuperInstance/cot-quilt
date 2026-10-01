@@ -1,11 +1,11 @@
 {
  "organ_candidate": "cell-rewind-organ",
- "exported_at_utc": "2026-10-01T23:36:21.088Z",
+ "exported_at_utc": "2026-10-01T23:48:38.871Z",
  "source": {
   "repo": "SuperInstance/cot-quilt",
   "run": "2026-10-01-run1",
   "question_id": "FLEET-Q-REWIND-ORGAN",
-  "graph_sha256": "fb5a2555c63ee3003184ca34d3a6506ffaacda46db51919dc0da462d24a30963"
+  "graph_sha256": "f2f40c82084dc18ec05e25c214d651b51460220f8e9c94d76bb5edd1545def5c"
  },
  "consumer_lane": "63-c",
  "drop_in_contract": {
@@ -19,17 +19,24 @@
    "point": "P3",
    "title": "Single-cell rewind",
    "content": "Rewind appends new receipt with before=tip.after, after=target.after; old receipts remain.",
-   "weight": 0.975,
-   "seed_votes": 2,
+   "weight": 0.95,
+   "deps": [
+    "P1",
+    "P2"
+   ],
+   "seed_votes": 3,
    "seeds": [
     0.2,
-    1.1
+    1.1,
+    0.7
    ],
    "composers": [
     "flash@0.2",
-    "flash@1.1"
+    "flash@1.1",
+    "flash@0.7",
+    "typesafe@jev-1.13.0(dup)"
    ],
-   "stability": "stable",
+   "stability": "core",
    "origin": "flash-decompose",
    "status": "active"
   },
@@ -38,17 +45,24 @@
    "point": "P4",
    "title": "Dependents stale on rewind",
    "content": "Reverse deps index marks consumers of superseded receipts stale; they must re-evaluate or rewind.",
-   "weight": 0.875,
-   "seed_votes": 2,
+   "weight": 0.85,
+   "deps": [
+    "P1",
+    "P3"
+   ],
+   "seed_votes": 3,
    "seeds": [
     0.2,
-    1.1
+    1.1,
+    0.7
    ],
    "composers": [
     "flash@0.2",
-    "flash@1.1"
+    "flash@1.1",
+    "flash@0.7",
+    "typesafe@jev-1.13.0(dup)"
    ],
-   "stability": "stable",
+   "stability": "core",
    "origin": "flash-decompose",
    "status": "active"
   },
@@ -58,6 +72,10 @@
    "title": "Nesting imported cell via adapter",
    "content": "Host imports cell as boundary; writes import record; host inputs become receipts with cause host_input; nested chain stays authoritative.",
    "weight": 0.8,
+   "deps": [
+    "P6",
+    "P5"
+   ],
    "seed_votes": 2,
    "seeds": [
     0.2,
@@ -65,12 +83,13 @@
    ],
    "composers": [
     "flash@0.2",
-    "flash@1.1"
+    "flash@1.1",
+    "typesafe@jev-1.13.0(dup)"
    ],
    "stability": "stable",
    "origin": "flash-decompose",
    "status": "active",
-   "faulty_note": "minor: Missing key details about nested cell imports and host interaction"
+   "faulty_note": "minor: Fails to mention that nested cell writes require namespacing to avoid ID collisions"
   },
   {
    "id": "N09",
@@ -78,6 +97,13 @@
    "title": "Organ rewind two-phase",
    "content": "Intent row then member rewinds; commit only when all tips match target cut.",
    "weight": 0.925,
+   "deps": [
+    "P3",
+    "P4",
+    "P8",
+    "P1",
+    "P2"
+   ],
    "seed_votes": 2,
    "seeds": [
     0.2,
@@ -85,7 +111,32 @@
    ],
    "composers": [
     "flash@0.2",
-    "flash@1.1"
+    "flash@1.1",
+    "typesafe@jev-1.13.0(dup)"
+   ],
+   "stability": "stable",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N10",
+   "point": "P10",
+   "title": "Organ snapshot causal cut",
+   "content": "Write barrier records member tip vector and causally closed dependency cut.",
+   "weight": 0.85,
+   "deps": [
+    "P5",
+    "P8"
+   ],
+   "seed_votes": 2,
+   "seeds": [
+    0.2,
+    0.7
+   ],
+   "composers": [
+    "flash@0.2",
+    "flash@0.7",
+    "typesafe@jev-1.13.0(dup)"
    ],
    "stability": "stable",
    "origin": "flash-decompose",
@@ -97,16 +148,25 @@
    "title": "Bootable organ drop-in",
    "content": "Loader verifies all member chains and organ ledger hash; refuses boot on any mismatch.",
    "weight": 0.85,
-   "seed_votes": 2,
+   "deps": [
+    "P6",
+    "P8",
+    "P10",
+    "P9"
+   ],
+   "seed_votes": 3,
    "seeds": [
     0.2,
-    1.1
+    1.1,
+    0.7
    ],
    "composers": [
     "flash@0.2",
-    "flash@1.1"
+    "flash@1.1",
+    "flash@0.7",
+    "typesafe@jev-1.13.0(dup)"
    ],
-   "stability": "stable",
+   "stability": "core",
    "origin": "flash-decompose",
    "status": "active"
   },
@@ -115,17 +175,25 @@
    "point": "P14",
    "title": "Hierarchical quilt rewind",
    "content": "Every organ rewinds to prior cut; global commit only when all organs and cells match.",
-   "weight": 0.9,
-   "seed_votes": 2,
+   "weight": 0.883,
+   "deps": [
+    "P9",
+    "P13",
+    "P10"
+   ],
+   "seed_votes": 3,
    "seeds": [
     0.2,
-    1.1
+    1.1,
+    0.7
    ],
    "composers": [
     "flash@0.2",
-    "flash@1.1"
+    "flash@1.1",
+    "flash@0.7",
+    "typesafe@jev-1.13.0(dup)"
    ],
-   "stability": "stable",
+   "stability": "core",
    "origin": "flash-decompose",
    "status": "active"
   },
@@ -134,17 +202,25 @@
    "point": "P17",
    "title": "Nest whole quilt adapter",
    "content": "Adapter exposes exports; parent pins child outputs by receipt hash in boundary ledger.",
-   "weight": 0.775,
-   "seed_votes": 2,
+   "weight": 0.767,
+   "deps": [
+    "P12",
+    "P16",
+    "P15"
+   ],
+   "seed_votes": 3,
    "seeds": [
     0.2,
-    1.1
+    1.1,
+    0.7
    ],
    "composers": [
     "flash@0.2",
-    "flash@1.1"
+    "flash@1.1",
+    "flash@0.7",
+    "typesafe@jev-1.13.0(dup)"
    ],
-   "stability": "stable",
+   "stability": "core",
    "origin": "flash-decompose",
    "status": "active"
   },
@@ -154,6 +230,10 @@
    "title": "Rewind dependency ripple",
    "content": "Producer rewind makes consumer pins superseded; append dep_rewound receipts or freeze.",
    "weight": 0.75,
+   "deps": [
+    "P3",
+    "P4"
+   ],
    "seed_votes": 2,
    "seeds": [
     0.2,
@@ -161,7 +241,8 @@
    ],
    "composers": [
     "flash@0.2",
-    "flash@1.1"
+    "flash@1.1",
+    "typesafe@jev-1.13.0(dup)"
    ],
    "stability": "stable",
    "origin": "flash-decompose",
@@ -173,16 +254,24 @@
    "title": "External dependencies pinned by content hash",
    "content": "Bootable save records external_pins name, content_hash, version, URI. Loader checks hashes before wiring; mutable paths alone undetectable.",
    "weight": 0.75,
-   "seed_votes": 2,
+   "deps": [
+    "P6",
+    "P11",
+    "P16"
+   ],
+   "seed_votes": 3,
    "seeds": [
     0.2,
-    1.1
+    1.1,
+    0.7
    ],
    "composers": [
     "flash@0.2",
-    "flash@1.1"
+    "flash@1.1",
+    "flash@0.7",
+    "typesafe@jev-1.13.0(dup)"
    ],
-   "stability": "stable",
+   "stability": "core",
    "origin": "flash-decompose",
    "status": "active"
   },
@@ -192,6 +281,10 @@
    "title": "Hash and schema migration recorded as receipts",
    "content": "Receipts carry hash_algo and schema tags. Migrations are new receipts or anchors with schema_migration cause; silent changes break chains.",
    "weight": 0.6,
+   "deps": [
+    "P1",
+    "P22"
+   ],
    "seed_votes": 2,
    "seeds": [
     0.2,
@@ -199,7 +292,8 @@
    ],
    "composers": [
     "flash@0.2",
-    "flash@1.1"
+    "flash@1.1",
+    "typesafe@jev-1.13.0(dup)"
    ],
    "stability": "stable",
    "origin": "flash-decompose",
@@ -211,16 +305,24 @@
    "title": "Namespacing prevents nested ID collisions",
    "content": "Nested IDs rewritten as subquilt_id plus cell_id, and receipt hashes include namespaced ID. Unqualified IDs can collide and corrupt wiring.",
    "weight": 0.7,
-   "seed_votes": 2,
+   "deps": [
+    "P7",
+    "P12",
+    "P17"
+   ],
+   "seed_votes": 3,
    "seeds": [
     0.2,
-    1.1
+    1.1,
+    0.7
    ],
    "composers": [
     "flash@0.2",
-    "flash@1.1"
+    "flash@1.1",
+    "flash@0.7",
+    "typesafe@jev-1.13.0(dup)"
    ],
-   "stability": "stable",
+   "stability": "core",
    "origin": "flash-decompose",
    "status": "active"
   },
@@ -230,16 +332,24 @@
    "title": "Parent-child composite snapshot",
    "content": "Parent records child manifest hash and cut; child verified before parent dependents wire.",
    "weight": 0.75,
-   "seed_votes": 2,
+   "deps": [
+    "P17",
+    "P21",
+    "P26"
+   ],
+   "seed_votes": 3,
    "seeds": [
     0.2,
-    1.1
+    1.1,
+    0.7
    ],
    "composers": [
     "flash@0.2",
-    "flash@1.1"
+    "flash@1.1",
+    "flash@0.7",
+    "typesafe@jev-1.13.0(dup)"
    ],
-   "stability": "stable",
+   "stability": "core",
    "origin": "flash-decompose",
    "status": "active"
   },
@@ -249,6 +359,10 @@
    "title": "Save nondeterministic runtime state explicitly",
    "content": "RNG seeds, timers, queues, clocks are special cells or manifest fields. Omitting seed diverges post-boot receipts.",
    "weight": 0.8,
+   "deps": [
+    "P16",
+    "P22"
+   ],
    "seed_votes": 2,
    "seeds": [
     0.2,
@@ -256,7 +370,39 @@
    ],
    "composers": [
     "flash@0.2",
-    "flash@1.1"
+    "flash@1.1",
+    "typesafe@jev-1.13.0(dup)"
+   ],
+   "stability": "stable",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N25",
+   "point": "P29",
+   "title": "Repeated core invariants",
+   "content": "Append-only hash chains, new receipts for changes, content-addressed cuts, atomic group commits, verified boot.",
+   "weight": 0.975,
+   "deps": [
+    "P1",
+    "P3",
+    "P5",
+    "P9",
+    "P14",
+    "P16",
+    "P20",
+    "P23",
+    "P25"
+   ],
+   "seed_votes": 2,
+   "seeds": [
+    0.2,
+    0.7
+   ],
+   "composers": [
+    "flash@0.2",
+    "flash@0.7",
+    "typesafe@jev-1.13.0(dup)"
    ],
    "stability": "stable",
    "origin": "flash-decompose",
@@ -268,6 +414,10 @@
    "title": "Receipts prove local history only",
    "content": "Chains prove local history only; cross-cell consistency, access, liveness, availability need organ/global ledgers, intent logs, pins, verifiers, namespaces.",
    "weight": 0.7,
+   "deps": [
+    "P29",
+    "P25"
+   ],
    "seed_votes": 2,
    "seeds": [
     0.2,
@@ -275,7 +425,154 @@
    ],
    "composers": [
     "flash@0.2",
-    "flash@1.1"
+    "flash@1.1",
+    "typesafe@jev-1.13.0(dup)"
+   ],
+   "stability": "stable",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N30",
+   "point": "P12",
+   "title": "Organ nested via namespace exports",
+   "content": "Sub-quilt imports organ under namespace prefix and maps only manifest exports. Host bypassing exports causes non-linearized cross-ledger writes.",
+   "weight": 0.633,
+   "deps": [
+    "P7",
+    "P11"
+   ],
+   "seed_votes": 2,
+   "seeds": [
+    1.1,
+    0.7
+   ],
+   "composers": [
+    "flash@1.1",
+    "flash@0.7",
+    "typesafe@jev-1.13.0"
+   ],
+   "stability": "stable",
+   "origin": "flash-decompose",
+   "status": "active",
+   "ts_load": 0.54
+  },
+  {
+   "id": "N31",
+   "point": "P13",
+   "title": "Quilt ledger global cut",
+   "content": "Hash-chained quilt_ledger rows carry global cut vector and monotonic global_epoch. Cut is one causal line, not wall-clock grouping.",
+   "weight": 0.825,
+   "deps": [
+    "P8",
+    "P9"
+   ],
+   "seed_votes": 2,
+   "seeds": [
+    1.1,
+    0.7
+   ],
+   "composers": [
+    "flash@1.1",
+    "flash@0.7"
+   ],
+   "stability": "stable",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N34",
+   "point": "P20",
+   "title": "Crash atomic fsync order",
+   "content": "Fsync cell logs before organ commit, organ commits before global commit. Reversed order commits rows to unflushed tips.",
+   "weight": 0.75,
+   "deps": [
+    "P8",
+    "P9",
+    "P13",
+    "P14"
+   ],
+   "seed_votes": 2,
+   "seeds": [
+    1.1,
+    0.7
+   ],
+   "composers": [
+    "flash@1.1",
+    "flash@0.7",
+    "typesafe@jev-1.13.0(dup)"
+   ],
+   "stability": "stable",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N35",
+   "point": "P22",
+   "title": "Canonical serialization stabilizes receipt hashes",
+   "content": "Canonical CBOR with sorted keys and schema version ensures identical logical state reproduces same hash. Non-determinism forks verification.",
+   "weight": 0.8,
+   "deps": [
+    "P1"
+   ],
+   "seed_votes": 2,
+   "seeds": [
+    1.1,
+    0.7
+   ],
+   "composers": [
+    "flash@1.1",
+    "flash@0.7",
+    "typesafe@jev-1.13.0(dup)"
+   ],
+   "stability": "stable",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N36",
+   "point": "P23",
+   "title": "Concurrent snapshot linearization",
+   "content": "Per-cell mutexes and read leases produce a linearized cut; mutations block or fail. Unblocked mutations can mix tips never coexisting.",
+   "weight": 0.725,
+   "deps": [
+    "P5",
+    "P10",
+    "P15"
+   ],
+   "seed_votes": 2,
+   "seeds": [
+    1.1,
+    0.7
+   ],
+   "composers": [
+    "flash@1.1",
+    "flash@0.7",
+    "typesafe@jev-1.13.0(dup)"
+   ],
+   "stability": "stable",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N37",
+   "point": "P25",
+   "title": "Partial commit reconciliation",
+   "content": "Multi-cell transactions start in intent log; recovery scans intents against cell tips and commits or compensates. No uncommitted intermediate tips.",
+   "weight": 0.75,
+   "deps": [
+    "P9",
+    "P14",
+    "P20"
+   ],
+   "seed_votes": 2,
+   "seeds": [
+    1.1,
+    0.7
+   ],
+   "composers": [
+    "flash@1.1",
+    "flash@0.7"
    ],
    "stability": "stable",
    "origin": "flash-decompose",
@@ -284,9 +581,9 @@
   {
    "id": "C01",
    "point": "P12",
-   "title": "Nested organ exports",
+   "title": "Organ nested via namespace exports",
    "content": "Sub-quilt imports organ under namespace prefix and maps only manifest exports. Host bypassing exports causes non-linearized cross-ledger writes.",
-   "weight": 0.516,
+   "weight": 0.506,
    "deps": [],
    "seed_votes": 0,
    "seeds": [],
@@ -298,7 +595,296 @@
    "status": "active"
   }
  ],
- "edges": [],
+ "edges": [
+  {
+   "from": "N03",
+   "to": "N04",
+   "asserted_by": [
+    "flash@0.2"
+   ],
+   "weight": 0.25
+  },
+  {
+   "from": "N03",
+   "to": "N09",
+   "asserted_by": [
+    "flash@0.2"
+   ],
+   "weight": 0.333
+  },
+  {
+   "from": "N04",
+   "to": "N09",
+   "asserted_by": [
+    "flash@0.2"
+   ],
+   "weight": 0.333
+  },
+  {
+   "from": "N10",
+   "to": "N11",
+   "asserted_by": [
+    "flash@0.2"
+   ],
+   "weight": 0.25
+  },
+  {
+   "from": "N09",
+   "to": "N11",
+   "asserted_by": [
+    "flash@0.2"
+   ],
+   "weight": 0.25
+  },
+  {
+   "from": "N09",
+   "to": "N14",
+   "asserted_by": [
+    "flash@0.2"
+   ],
+   "weight": 0.25
+  },
+  {
+   "from": "N31",
+   "to": "N14",
+   "asserted_by": [
+    "flash@0.2"
+   ],
+   "weight": 0.25
+  },
+  {
+   "from": "N10",
+   "to": "N14",
+   "asserted_by": [
+    "flash@0.2"
+   ],
+   "weight": 0.25
+  },
+  {
+   "from": "N03",
+   "to": "N18",
+   "asserted_by": [
+    "flash@0.2"
+   ],
+   "weight": 0.333
+  },
+  {
+   "from": "N04",
+   "to": "N18",
+   "asserted_by": [
+    "flash@0.2"
+   ],
+   "weight": 0.333
+  },
+  {
+   "from": "N11",
+   "to": "N19",
+   "asserted_by": [
+    "flash@0.2"
+   ],
+   "weight": 0.25
+  },
+  {
+   "from": "N35",
+   "to": "N20",
+   "asserted_by": [
+    "flash@0.2"
+   ],
+   "weight": 0.333
+  },
+  {
+   "from": "N07",
+   "to": "N22",
+   "asserted_by": [
+    "flash@0.2"
+   ],
+   "weight": 0.25
+  },
+  {
+   "from": "N17",
+   "to": "N22",
+   "asserted_by": [
+    "flash@0.2"
+   ],
+   "weight": 0.25
+  },
+  {
+   "from": "N17",
+   "to": "N23",
+   "asserted_by": [
+    "flash@0.2"
+   ],
+   "weight": 0.25
+  },
+  {
+   "from": "N19",
+   "to": "N23",
+   "asserted_by": [
+    "flash@0.2"
+   ],
+   "weight": 0.25
+  },
+  {
+   "from": "N22",
+   "to": "N23",
+   "asserted_by": [
+    "flash@0.2"
+   ],
+   "weight": 0.25
+  },
+  {
+   "from": "N35",
+   "to": "N24",
+   "asserted_by": [
+    "flash@0.2"
+   ],
+   "weight": 0.333
+  },
+  {
+   "from": "N03",
+   "to": "N25",
+   "asserted_by": [
+    "flash@0.2"
+   ],
+   "weight": 0.333
+  },
+  {
+   "from": "N09",
+   "to": "N25",
+   "asserted_by": [
+    "flash@0.2"
+   ],
+   "weight": 0.333
+  },
+  {
+   "from": "N14",
+   "to": "N25",
+   "asserted_by": [
+    "flash@0.2"
+   ],
+   "weight": 0.333
+  },
+  {
+   "from": "N34",
+   "to": "N25",
+   "asserted_by": [
+    "flash@0.2"
+   ],
+   "weight": 0.333
+  },
+  {
+   "from": "N36",
+   "to": "N25",
+   "asserted_by": [
+    "flash@0.2"
+   ],
+   "weight": 0.333
+  },
+  {
+   "from": "N37",
+   "to": "N25",
+   "asserted_by": [
+    "flash@0.2"
+   ],
+   "weight": 0.333
+  },
+  {
+   "from": "N25",
+   "to": "N26",
+   "asserted_by": [
+    "flash@0.2"
+   ],
+   "weight": 0.333
+  },
+  {
+   "from": "N37",
+   "to": "N26",
+   "asserted_by": [
+    "flash@0.2"
+   ],
+   "weight": 0.333
+  },
+  {
+   "from": "N07",
+   "to": "N30",
+   "asserted_by": [
+    "flash@1.1"
+   ],
+   "weight": 0.333
+  },
+  {
+   "from": "N11",
+   "to": "N30",
+   "asserted_by": [
+    "flash@1.1"
+   ],
+   "weight": 0.333
+  },
+  {
+   "from": "N09",
+   "to": "N31",
+   "asserted_by": [
+    "flash@1.1"
+   ],
+   "weight": 0.5
+  },
+  {
+   "from": "N09",
+   "to": "N34",
+   "asserted_by": [
+    "flash@1.1"
+   ],
+   "weight": 0.333
+  },
+  {
+   "from": "N31",
+   "to": "N34",
+   "asserted_by": [
+    "flash@1.1"
+   ],
+   "weight": 0.333
+  },
+  {
+   "from": "N14",
+   "to": "N34",
+   "asserted_by": [
+    "flash@1.1"
+   ],
+   "weight": 0.333
+  },
+  {
+   "from": "N10",
+   "to": "N36",
+   "asserted_by": [
+    "flash@1.1"
+   ],
+   "weight": 0.333
+  },
+  {
+   "from": "N09",
+   "to": "N37",
+   "asserted_by": [
+    "flash@1.1"
+   ],
+   "weight": 0.5
+  },
+  {
+   "from": "N14",
+   "to": "N37",
+   "asserted_by": [
+    "flash@1.1"
+   ],
+   "weight": 0.5
+  },
+  {
+   "from": "N34",
+   "to": "N37",
+   "asserted_by": [
+    "flash@1.1"
+   ],
+   "weight": 0.5
+  }
+ ],
  "judges": {
   "typesafe": {
    "p_complete": {
@@ -307,21 +893,21 @@
    },
    "p_implementable": {
     "type": "noul",
-    "noul": 0.16
+    "noul": 0.15
    },
    "p_missing_major": {
     "type": "noul",
-    "noul": 0.29
+    "noul": 0.24
    },
    "p_faulty": {
     "type": "noul",
-    "noul": 0.37
+    "noul": 0.27
    }
   },
   "hermes": {
    "pass": true,
-   "completeness": 0.98,
-   "rationale": "The graph covers the key points of the CoT well, with only a minor omission around nested organ exports. The overall structure and invariants are represented accurately.",
+   "completeness": 0.95,
+   "rationale": "Graph covers key mechanisms but omits some failure modes like ID collisions when nesting. Overall quite thorough.",
    "missing_count": 1,
    "faulty_count": 1
   }

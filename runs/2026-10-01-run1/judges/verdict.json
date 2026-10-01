@@ -13,19 +13,19 @@
    },
    "p_implementable": {
     "type": "noul",
-    "noul": 0.16
+    "noul": 0.15
    },
    "p_missing_major": {
     "type": "noul",
-    "noul": 0.29
+    "noul": 0.24
    },
    "p_faulty": {
     "type": "noul",
-    "noul": 0.37
+    "noul": 0.27
    }
   },
   "usage": {
-   "input_tokens": 6680,
+   "input_tokens": 5631,
    "output_tokens": 78
   }
  },
@@ -33,30 +33,30 @@
   "missing": [
    {
     "point": "P12",
-    "title": "Nested organ exports",
+    "title": "Organ nested via namespace exports",
     "content": "Sub-quilt imports organ under namespace prefix and maps only manifest exports. Host bypassing exports causes non-linearized cross-ledger writes.",
-    "weight": 0.645
+    "weight": 0.633
    }
   ],
   "faulty": [
    {
     "id": "N07",
-    "problem": "Missing key details about nested cell imports and host interaction",
+    "problem": "Fails to mention that nested cell writes require namespacing to avoid ID collisions",
     "severity": "minor"
    }
   ],
   "verdict": {
    "pass": true,
-   "completeness": 0.98,
-   "rationale": "The graph covers the key points of the CoT well, with only a minor omission around nested organ exports. The overall structure and invariants are represented accurately."
+   "completeness": 0.95,
+   "rationale": "Graph covers key mechanisms but omits some failure modes like ID collisions when nesting. Overall quite thorough."
   }
  },
  "numbers": {
   "p_complete": 0.71,
-  "p_implementable": 0.16,
-  "p_missing_major": 0.29,
-  "p_faulty": 0.37,
+  "p_implementable": 0.15,
+  "p_missing_major": 0.24,
+  "p_faulty": 0.27,
   "hermes_pass": true,
-  "hermes_completeness": 0.98
+  "hermes_completeness": 0.95
  }
 }

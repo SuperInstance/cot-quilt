@@ -6,14 +6,12 @@
    "title": "Receipt row and canonical hash",
    "content": "Each cell appends rows with before/after, cause, deps, prev hash; canonical encoding gives stable SHA-256.",
    "weight": 1,
-   "deps": [],
    "seed_votes": 1,
    "seeds": [
     0.2
    ],
    "composers": [
-    "flash@0.2",
-    "typesafe@jev-1.13.0(dup)"
+    "flash@0.2"
    ],
    "stability": "volatile",
    "origin": "flash-decompose",
@@ -25,16 +23,12 @@
    "title": "Verified tip and pruning",
    "content": "Boot rebuilds tip by verifying chain from anchor; pruning keeps checkpoint chain to live tip.",
    "weight": 1,
-   "deps": [
-    "P1"
-   ],
    "seed_votes": 1,
    "seeds": [
     0.2
    ],
    "composers": [
-    "flash@0.2",
-    "typesafe@jev-1.13.0(dup)"
+    "flash@0.2"
    ],
    "stability": "volatile",
    "origin": "flash-decompose",
@@ -45,24 +39,17 @@
    "point": "P3",
    "title": "Single-cell rewind",
    "content": "Rewind appends new receipt with before=tip.after, after=target.after; old receipts remain.",
-   "weight": 0.95,
-   "deps": [
-    "P1",
-    "P2"
-   ],
-   "seed_votes": 3,
+   "weight": 0.975,
+   "seed_votes": 2,
    "seeds": [
     0.2,
-    1.1,
-    0.7
+    1.1
    ],
    "composers": [
     "flash@0.2",
-    "flash@1.1",
-    "flash@0.7",
-    "typesafe@jev-1.13.0(dup)"
+    "flash@1.1"
    ],
-   "stability": "core",
+   "stability": "stable",
    "origin": "flash-decompose",
    "status": "active"
   },
@@ -71,24 +58,17 @@
    "point": "P4",
    "title": "Dependents stale on rewind",
    "content": "Reverse deps index marks consumers of superseded receipts stale; they must re-evaluate or rewind.",
-   "weight": 0.85,
-   "deps": [
-    "P1",
-    "P3"
-   ],
-   "seed_votes": 3,
+   "weight": 0.875,
+   "seed_votes": 2,
    "seeds": [
     0.2,
-    1.1,
-    0.7
+    1.1
    ],
    "composers": [
     "flash@0.2",
-    "flash@1.1",
-    "flash@0.7",
-    "typesafe@jev-1.13.0(dup)"
+    "flash@1.1"
    ],
-   "stability": "core",
+   "stability": "stable",
    "origin": "flash-decompose",
    "status": "active"
   },
@@ -98,16 +78,12 @@
    "title": "Snapshot under lease",
    "content": "Snapshot pins tip seq/hash and after-image under mutex or read lease; MVCC can avoid stop.",
    "weight": 1,
-   "deps": [
-    "P2"
-   ],
    "seed_votes": 1,
    "seeds": [
     0.2
    ],
    "composers": [
-    "flash@0.2",
-    "typesafe@jev-1.13.0(dup)"
+    "flash@0.2"
    ],
    "stability": "volatile",
    "origin": "flash-decompose",
@@ -119,17 +95,12 @@
    "title": "Bootable cell drop-in",
    "content": "Package snapshot, receipt log, schema, API manifest; loader verifies chain before instantiating.",
    "weight": 1,
-   "deps": [
-    "P2",
-    "P5"
-   ],
    "seed_votes": 1,
    "seeds": [
     0.2
    ],
    "composers": [
-    "flash@0.2",
-    "typesafe@jev-1.13.0(dup)"
+    "flash@0.2"
    ],
    "stability": "volatile",
    "origin": "flash-decompose",
@@ -141,10 +112,6 @@
    "title": "Nesting imported cell via adapter",
    "content": "Host imports cell as boundary; writes import record; host inputs become receipts with cause host_input; nested chain stays authoritative.",
    "weight": 0.8,
-   "deps": [
-    "P6",
-    "P5"
-   ],
    "seed_votes": 2,
    "seeds": [
     0.2,
@@ -152,8 +119,7 @@
    ],
    "composers": [
     "flash@0.2",
-    "flash@1.1",
-    "typesafe@jev-1.13.0(dup)"
+    "flash@1.1"
    ],
    "stability": "stable",
    "origin": "flash-decompose",
@@ -165,16 +131,12 @@
    "title": "Organ ledger durability",
    "content": "Organ manifest lists member tips; ledger hashes cut; fsync cell logs before organ commit.",
    "weight": 0.9,
-   "deps": [
-    "P2"
-   ],
    "seed_votes": 1,
    "seeds": [
     0.2
    ],
    "composers": [
-    "flash@0.2",
-    "typesafe@jev-1.13.0(dup)"
+    "flash@0.2"
    ],
    "stability": "volatile",
    "origin": "flash-decompose",
@@ -186,13 +148,6 @@
    "title": "Organ rewind two-phase",
    "content": "Intent row then member rewinds; commit only when all tips match target cut.",
    "weight": 0.925,
-   "deps": [
-    "P3",
-    "P4",
-    "P8",
-    "P1",
-    "P2"
-   ],
    "seed_votes": 2,
    "seeds": [
     0.2,
@@ -200,8 +155,7 @@
    ],
    "composers": [
     "flash@0.2",
-    "flash@1.1",
-    "typesafe@jev-1.13.0(dup)"
+    "flash@1.1"
    ],
    "stability": "stable",
    "origin": "flash-decompose",
@@ -212,22 +166,15 @@
    "point": "P10",
    "title": "Organ snapshot causal cut",
    "content": "Write barrier records member tip vector and causally closed dependency cut.",
-   "weight": 0.85,
-   "deps": [
-    "P5",
-    "P8"
-   ],
-   "seed_votes": 2,
+   "weight": 0.9,
+   "seed_votes": 1,
    "seeds": [
-    0.2,
-    0.7
+    0.2
    ],
    "composers": [
-    "flash@0.2",
-    "flash@0.7",
-    "typesafe@jev-1.13.0(dup)"
+    "flash@0.2"
    ],
-   "stability": "stable",
+   "stability": "volatile",
    "origin": "flash-decompose",
    "status": "active"
   },
@@ -237,25 +184,16 @@
    "title": "Bootable organ drop-in",
    "content": "Loader verifies all member chains and organ ledger hash; refuses boot on any mismatch.",
    "weight": 0.85,
-   "deps": [
-    "P6",
-    "P8",
-    "P10",
-    "P9"
-   ],
-   "seed_votes": 3,
+   "seed_votes": 2,
    "seeds": [
     0.2,
-    1.1,
-    0.7
+    1.1
    ],
    "composers": [
     "flash@0.2",
-    "flash@1.1",
-    "flash@0.7",
-    "typesafe@jev-1.13.0(dup)"
+    "flash@1.1"
    ],
-   "stability": "core",
+   "stability": "stable",
    "origin": "flash-decompose",
    "status": "active"
   },
@@ -265,10 +203,6 @@
    "title": "Nest organ sub-quilt",
    "content": "Host namespaces member IDs and maps only exports; boundary inputs are receipts inside sub-quilt.",
    "weight": 0.8,
-   "deps": [
-    "P7",
-    "P11"
-   ],
    "seed_votes": 1,
    "seeds": [
     0.2
@@ -286,16 +220,12 @@
    "title": "Quilt global ledger",
    "content": "Global ledger rows chain global cut vectors across all cells and organs.",
    "weight": 0.9,
-   "deps": [
-    "P8"
-   ],
    "seed_votes": 1,
    "seeds": [
     0.2
    ],
    "composers": [
-    "flash@0.2",
-    "typesafe@jev-1.13.0(dup)"
+    "flash@0.2"
    ],
    "stability": "volatile",
    "origin": "flash-decompose",
@@ -306,25 +236,17 @@
    "point": "P14",
    "title": "Hierarchical quilt rewind",
    "content": "Every organ rewinds to prior cut; global commit only when all organs and cells match.",
-   "weight": 0.883,
-   "deps": [
-    "P9",
-    "P13",
-    "P10"
-   ],
-   "seed_votes": 3,
+   "weight": 0.9,
+   "seed_votes": 2,
    "seeds": [
     0.2,
-    1.1,
-    0.7
+    1.1
    ],
    "composers": [
     "flash@0.2",
-    "flash@1.1",
-    "flash@0.7",
-    "typesafe@jev-1.13.0(dup)"
+    "flash@1.1"
    ],
-   "stability": "core",
+   "stability": "stable",
    "origin": "flash-decompose",
    "status": "active"
   },
@@ -334,17 +256,12 @@
    "title": "Epoch-barrier quilt snapshot",
    "content": "Increment epoch, barrier in-flight receipts, record single causal global cut.",
    "weight": 0.9,
-   "deps": [
-    "P10",
-    "P13"
-   ],
    "seed_votes": 1,
    "seeds": [
     0.2
    ],
    "composers": [
-    "flash@0.2",
-    "typesafe@jev-1.13.0(dup)"
+    "flash@0.2"
    ],
    "stability": "volatile",
    "origin": "flash-decompose",
@@ -356,18 +273,12 @@
    "title": "Bootable quilt drop-in",
    "content": "Loader verifies all chains, ledgers, wires deps, starts scheduler after verification.",
    "weight": 1,
-   "deps": [
-    "P11",
-    "P13",
-    "P15"
-   ],
    "seed_votes": 1,
    "seeds": [
     0.2
    ],
    "composers": [
-    "flash@0.2",
-    "typesafe@jev-1.13.0(dup)"
+    "flash@0.2"
    ],
    "stability": "volatile",
    "origin": "flash-decompose",
@@ -378,25 +289,17 @@
    "point": "P17",
    "title": "Nest whole quilt adapter",
    "content": "Adapter exposes exports; parent pins child outputs by receipt hash in boundary ledger.",
-   "weight": 0.767,
-   "deps": [
-    "P12",
-    "P16",
-    "P15"
-   ],
-   "seed_votes": 3,
+   "weight": 0.775,
+   "seed_votes": 2,
    "seeds": [
     0.2,
-    1.1,
-    0.7
+    1.1
    ],
    "composers": [
     "flash@0.2",
-    "flash@1.1",
-    "flash@0.7",
-    "typesafe@jev-1.13.0(dup)"
+    "flash@1.1"
    ],
-   "stability": "core",
+   "stability": "stable",
    "origin": "flash-decompose",
    "status": "active"
   },
@@ -406,10 +309,6 @@
    "title": "Rewind dependency ripple",
    "content": "Producer rewind makes consumer pins superseded; append dep_rewound receipts or freeze.",
    "weight": 0.75,
-   "deps": [
-    "P3",
-    "P4"
-   ],
    "seed_votes": 2,
    "seeds": [
     0.2,
@@ -417,8 +316,7 @@
    ],
    "composers": [
     "flash@0.2",
-    "flash@1.1",
-    "typesafe@jev-1.13.0(dup)"
+    "flash@1.1"
    ],
    "stability": "stable",
    "origin": "flash-decompose",
@@ -430,24 +328,16 @@
    "title": "External dependencies pinned by content hash",
    "content": "Bootable save records external_pins name, content_hash, version, URI. Loader checks hashes before wiring; mutable paths alone undetectable.",
    "weight": 0.75,
-   "deps": [
-    "P6",
-    "P11",
-    "P16"
-   ],
-   "seed_votes": 3,
+   "seed_votes": 2,
    "seeds": [
     0.2,
-    1.1,
-    0.7
+    1.1
    ],
    "composers": [
     "flash@0.2",
-    "flash@1.1",
-    "flash@0.7",
-    "typesafe@jev-1.13.0(dup)"
+    "flash@1.1"
    ],
-   "stability": "core",
+   "stability": "stable",
    "origin": "flash-decompose",
    "status": "active"
   },
@@ -457,10 +347,6 @@
    "title": "Hash and schema migration recorded as receipts",
    "content": "Receipts carry hash_algo and schema tags. Migrations are new receipts or anchors with schema_migration cause; silent changes break chains.",
    "weight": 0.6,
-   "deps": [
-    "P1",
-    "P22"
-   ],
    "seed_votes": 2,
    "seeds": [
     0.2,
@@ -468,8 +354,7 @@
    ],
    "composers": [
     "flash@0.2",
-    "flash@1.1",
-    "typesafe@jev-1.13.0(dup)"
+    "flash@1.1"
    ],
    "stability": "stable",
    "origin": "flash-decompose",
@@ -481,18 +366,12 @@
    "title": "Reconcile partial commits",
    "content": "Intent logs scanned against tips to commit or compensate, ensuring one terminal row.",
    "weight": 0.8,
-   "deps": [
-    "P9",
-    "P14",
-    "P20"
-   ],
    "seed_votes": 1,
    "seeds": [
     0.2
    ],
    "composers": [
-    "flash@0.2",
-    "typesafe@jev-1.13.0(dup)"
+    "flash@0.2"
    ],
    "stability": "volatile",
    "origin": "flash-decompose",
@@ -504,24 +383,16 @@
    "title": "Namespacing prevents nested ID collisions",
    "content": "Nested IDs rewritten as subquilt_id plus cell_id, and receipt hashes include namespaced ID. Unqualified IDs can collide and corrupt wiring.",
    "weight": 0.7,
-   "deps": [
-    "P7",
-    "P12",
-    "P17"
-   ],
-   "seed_votes": 3,
+   "seed_votes": 2,
    "seeds": [
     0.2,
-    1.1,
-    0.7
+    1.1
    ],
    "composers": [
     "flash@0.2",
-    "flash@1.1",
-    "flash@0.7",
-    "typesafe@jev-1.13.0(dup)"
+    "flash@1.1"
    ],
-   "stability": "core",
+   "stability": "stable",
    "origin": "flash-decompose",
    "status": "active"
   },
@@ -531,24 +402,16 @@
    "title": "Parent-child composite snapshot",
    "content": "Parent records child manifest hash and cut; child verified before parent dependents wire.",
    "weight": 0.75,
-   "deps": [
-    "P17",
-    "P21",
-    "P26"
-   ],
-   "seed_votes": 3,
+   "seed_votes": 2,
    "seeds": [
     0.2,
-    1.1,
-    0.7
+    1.1
    ],
    "composers": [
     "flash@0.2",
-    "flash@1.1",
-    "flash@0.7",
-    "typesafe@jev-1.13.0(dup)"
+    "flash@1.1"
    ],
-   "stability": "core",
+   "stability": "stable",
    "origin": "flash-decompose",
    "status": "active"
   },
@@ -558,10 +421,6 @@
    "title": "Save nondeterministic runtime state explicitly",
    "content": "RNG seeds, timers, queues, clocks are special cells or manifest fields. Omitting seed diverges post-boot receipts.",
    "weight": 0.8,
-   "deps": [
-    "P16",
-    "P22"
-   ],
    "seed_votes": 2,
    "seeds": [
     0.2,
@@ -569,8 +428,7 @@
    ],
    "composers": [
     "flash@0.2",
-    "flash@1.1",
-    "typesafe@jev-1.13.0(dup)"
+    "flash@1.1"
    ],
    "stability": "stable",
    "origin": "flash-decompose",
@@ -581,29 +439,15 @@
    "point": "P29",
    "title": "Repeated core invariants",
    "content": "Append-only hash chains, new receipts for changes, content-addressed cuts, atomic group commits, verified boot.",
-   "weight": 0.975,
-   "deps": [
-    "P1",
-    "P3",
-    "P5",
-    "P9",
-    "P14",
-    "P16",
-    "P20",
-    "P23",
-    "P25"
-   ],
-   "seed_votes": 2,
+   "weight": 1,
+   "seed_votes": 1,
    "seeds": [
-    0.2,
-    0.7
+    0.2
    ],
    "composers": [
-    "flash@0.2",
-    "flash@0.7",
-    "typesafe@jev-1.13.0(dup)"
+    "flash@0.2"
    ],
-   "stability": "stable",
+   "stability": "volatile",
    "origin": "flash-decompose",
    "status": "active"
   },
@@ -613,10 +457,6 @@
    "title": "Receipts prove local history only",
    "content": "Chains prove local history only; cross-cell consistency, access, liveness, availability need organ/global ledgers, intent logs, pins, verifiers, namespaces.",
    "weight": 0.7,
-   "deps": [
-    "P29",
-    "P25"
-   ],
    "seed_votes": 2,
    "seeds": [
     0.2,
@@ -624,8 +464,7 @@
    ],
    "composers": [
     "flash@0.2",
-    "flash@1.1",
-    "typesafe@jev-1.13.0(dup)"
+    "flash@1.1"
    ],
    "stability": "stable",
    "origin": "flash-decompose",
@@ -634,16 +473,15 @@
   {
    "id": "N27",
    "point": "P1",
-   "title": "Receipt row and tip verification",
-   "content": "Receipt row stores before/after images, cause_ref, deps_map; hash covers canonical fields. Boot verifies hash links to anchor, quarantines gaps.",
-   "weight": 0.9,
-   "deps": [],
+   "title": "Define Goal",
+   "content": "Clarify purpose, scope, and success criteria for the project.",
+   "weight": 1,
    "seed_votes": 1,
    "seeds": [
-    1.1
+    0.7
    ],
    "composers": [
-    "flash@1.1"
+    "flash@0.7"
    ],
    "stability": "volatile",
    "origin": "flash-decompose",
@@ -651,20 +489,16 @@
   },
   {
    "id": "N28",
-   "point": "P5",
-   "title": "Single-cell snapshot and drop-in",
-   "content": "Snapshot exports immutable tip_hash, after_image, chain proof under lease. Drop-in packages snapshot, receipt log, schema, manifest; loader verifies before instantiating.",
-   "weight": 0.9,
-   "deps": [
-    "P1",
-    "P2"
-   ],
+   "point": "P2",
+   "title": "Identify Stakeholders",
+   "content": "List people, groups, and approvals needed for decisions.",
+   "weight": 1,
    "seed_votes": 1,
    "seeds": [
-    1.1
+    0.7
    ],
    "composers": [
-    "flash@1.1"
+    "flash@0.7"
    ],
    "stability": "volatile",
    "origin": "flash-decompose",
@@ -672,21 +506,16 @@
   },
   {
    "id": "N29",
-   "point": "P10",
-   "title": "Organ snapshot acquires write barrier",
-   "content": "Organ snapshot archives manifest, member snapshots, logs, external pins, ledger slice. Write barrier freezes members; cut must be causally closed.",
-   "weight": 0.8,
-   "deps": [
-    "P6",
-    "P8",
-    "P9"
-   ],
+   "point": "P3",
+   "title": "Gather Requirements",
+   "content": "Collect needs, constraints, and desired outcomes from stakeholders.",
+   "weight": 1,
    "seed_votes": 1,
    "seeds": [
-    1.1
+    0.7
    ],
    "composers": [
-    "flash@1.1"
+    "flash@0.7"
    ],
    "stability": "volatile",
    "origin": "flash-decompose",
@@ -694,68 +523,50 @@
   },
   {
    "id": "N30",
-   "point": "P12",
-   "title": "Organ nested via namespace exports",
-   "content": "Sub-quilt imports organ under namespace prefix and maps only manifest exports. Host bypassing exports causes non-linearized cross-ledger writes.",
-   "weight": 0.633,
-   "deps": [
-    "P7",
-    "P11"
-   ],
-   "seed_votes": 2,
+   "point": "P4",
+   "title": "Assess Resources",
+   "content": "Review budget, time, tools, and available skills.",
+   "weight": 1,
+   "seed_votes": 1,
    "seeds": [
-    1.1,
     0.7
    ],
    "composers": [
-    "flash@1.1",
-    "flash@0.7",
-    "typesafe@jev-1.13.0"
+    "flash@0.7"
    ],
-   "stability": "stable",
+   "stability": "volatile",
    "origin": "flash-decompose",
-   "status": "active",
-   "ts_load": 0.54
+   "status": "active"
   },
   {
    "id": "N31",
-   "point": "P13",
-   "title": "Quilt ledger global cut",
-   "content": "Hash-chained quilt_ledger rows carry global cut vector and monotonic global_epoch. Cut is one causal line, not wall-clock grouping.",
-   "weight": 0.825,
-   "deps": [
-    "P8",
-    "P9"
-   ],
-   "seed_votes": 2,
+   "point": "P5",
+   "title": "Map Risks",
+   "content": "Identify major risks, assumptions, and mitigation options.",
+   "weight": 1,
+   "seed_votes": 1,
    "seeds": [
-    1.1,
     0.7
    ],
    "composers": [
-    "flash@1.1",
     "flash@0.7"
    ],
-   "stability": "stable",
+   "stability": "volatile",
    "origin": "flash-decompose",
    "status": "active"
   },
   {
    "id": "N32",
-   "point": "P15",
-   "title": "Quilt snapshot and bootable drop-in",
-   "content": "Quilt snapshot increments epoch, waits, records one global cut. Drop-in verifies all chains and ledgers before scheduler.",
-   "weight": 0.9,
-   "deps": [
-    "P13",
-    "P14"
-   ],
+   "point": "P6",
+   "title": "Define Scope",
+   "content": "Document included work, exclusions, and acceptance criteria.",
+   "weight": 1,
    "seed_votes": 1,
    "seeds": [
-    1.1
+    0.7
    ],
    "composers": [
-    "flash@1.1"
+    "flash@0.7"
    ],
    "stability": "volatile",
    "origin": "flash-decompose",
@@ -763,21 +574,16 @@
   },
   {
    "id": "N33",
-   "point": "P18",
-   "title": "Pruning trades rewind depth for storage",
-   "content": "Cells keep log tail plus checkpoint; old receipts go cold. Missing checkpoint blocks deep rewind and audit.",
-   "weight": 0.6,
-   "deps": [
-    "P5",
-    "P6"
-   ],
+   "point": "P7",
+   "title": "Create Timeline",
+   "content": "Build milestones, deadlines, and dependency schedule.",
+   "weight": 1,
    "seed_votes": 1,
    "seeds": [
-    1.1
+    0.7
    ],
    "composers": [
-    "flash@1.1",
-    "typesafe@jev-1.13.0(dup)"
+    "flash@0.7"
    ],
    "stability": "volatile",
    "origin": "flash-decompose",
@@ -785,122 +591,84 @@
   },
   {
    "id": "N34",
-   "point": "P20",
-   "title": "Crash atomic fsync order",
-   "content": "Fsync cell logs before organ commit, organ commits before global commit. Reversed order commits rows to unflushed tips.",
-   "weight": 0.75,
-   "deps": [
-    "P8",
-    "P9",
-    "P13",
-    "P14"
-   ],
-   "seed_votes": 2,
+   "point": "P8",
+   "title": "Assign Owners",
+   "content": "Name responsible people for each workstream and task.",
+   "weight": 1,
+   "seed_votes": 1,
    "seeds": [
-    1.1,
     0.7
    ],
    "composers": [
-    "flash@1.1",
-    "flash@0.7",
-    "typesafe@jev-1.13.0(dup)"
+    "flash@0.7"
    ],
-   "stability": "stable",
+   "stability": "volatile",
    "origin": "flash-decompose",
    "status": "active"
   },
   {
    "id": "N35",
-   "point": "P22",
-   "title": "Canonical serialization stabilizes receipt hashes",
-   "content": "Canonical CBOR with sorted keys and schema version ensures identical logical state reproduces same hash. Non-determinism forks verification.",
-   "weight": 0.8,
-   "deps": [
-    "P1"
-   ],
-   "seed_votes": 2,
+   "point": "P9",
+   "title": "Draft Budget",
+   "content": "Estimate costs, funding sources, and contingency reserve.",
+   "weight": 1,
+   "seed_votes": 1,
    "seeds": [
-    1.1,
     0.7
    ],
    "composers": [
-    "flash@1.1",
-    "flash@0.7",
-    "typesafe@jev-1.13.0(dup)"
+    "flash@0.7"
    ],
-   "stability": "stable",
+   "stability": "volatile",
    "origin": "flash-decompose",
    "status": "active"
   },
   {
    "id": "N36",
-   "point": "P23",
-   "title": "Concurrent snapshot linearization",
-   "content": "Per-cell mutexes and read leases produce a linearized cut; mutations block or fail. Unblocked mutations can mix tips never coexisting.",
-   "weight": 0.725,
-   "deps": [
-    "P5",
-    "P10",
-    "P15"
-   ],
-   "seed_votes": 2,
+   "point": "P10",
+   "title": "Set Communication Plan",
+   "content": "Define updates, meetings, channels, and escalation paths.",
+   "weight": 1,
+   "seed_votes": 1,
    "seeds": [
-    1.1,
     0.7
    ],
    "composers": [
-    "flash@1.1",
-    "flash@0.7",
-    "typesafe@jev-1.13.0(dup)"
+    "flash@0.7"
    ],
-   "stability": "stable",
+   "stability": "volatile",
    "origin": "flash-decompose",
    "status": "active"
   },
   {
    "id": "N37",
-   "point": "P25",
-   "title": "Partial commit reconciliation",
-   "content": "Multi-cell transactions start in intent log; recovery scans intents against cell tips and commits or compensates. No uncommitted intermediate tips.",
-   "weight": 0.75,
-   "deps": [
-    "P9",
-    "P14",
-    "P20"
-   ],
-   "seed_votes": 2,
+   "point": "P11",
+   "title": "Prepare Materials",
+   "content": "Create templates, checklists, and shared workspace structure.",
+   "weight": 1,
+   "seed_votes": 1,
    "seeds": [
-    1.1,
     0.7
    ],
    "composers": [
-    "flash@1.1",
     "flash@0.7"
    ],
-   "stability": "stable",
+   "stability": "volatile",
    "origin": "flash-decompose",
    "status": "active"
   },
   {
    "id": "N38",
-   "point": "P29",
-   "title": "Invariants repeat at every granularity",
-   "content": "Chains append-only; every change new receipt; snapshots content-addressed; group commits atomic; dependencies hash-pinned; boot verifies before instantiate. Breaks quarantine level.",
-   "weight": 0.9,
-   "deps": [
-    "P1",
-    "P3",
-    "P5",
-    "P8",
-    "P13",
-    "P16"
-   ],
+   "point": "P12",
+   "title": "Validate Plan",
+   "content": "Review plan with stakeholders and resolve gaps.",
+   "weight": 1,
    "seed_votes": 1,
    "seeds": [
-    1.1
+    0.7
    ],
    "composers": [
-    "flash@1.1"
+    "flash@0.7"
    ],
    "stability": "volatile",
    "origin": "flash-decompose",
@@ -908,11 +676,10 @@
   },
   {
    "id": "N39",
-   "point": "P1",
-   "title": "Receipt row double entry",
-   "content": "Per-cell append-only row stores before, after, cause, deps, prev_hash, and SHA-256 over canonical fields; images grow logs without deltas.",
-   "weight": 0.9,
-   "deps": [],
+   "point": "P13",
+   "title": "Launch Kickoff",
+   "content": "Start project, confirm roles, and publish first tasks.",
+   "weight": 1,
    "seed_votes": 1,
    "seeds": [
     0.7
@@ -926,13 +693,10 @@
   },
   {
    "id": "N40",
-   "point": "P2",
-   "title": "Tip boot verification quarantine",
-   "content": "Committed tip is highest verified after_image; boot checks prev_hash links from anchor. Gaps quarantine cell, forbidding suspect tail boot.",
-   "weight": 0.9,
-   "deps": [
-    "P1"
-   ],
+   "point": "P14",
+   "title": "Execute Tasks",
+   "content": "Complete planned work and track progress against milestones.",
+   "weight": 1,
    "seed_votes": 1,
    "seeds": [
     0.7
@@ -946,13 +710,10 @@
   },
   {
    "id": "N41",
-   "point": "P5",
-   "title": "Single cell snapshot lease",
-   "content": "Snapshot is content-addressed record with tip_seq, tip_hash, after_image, and chain proof. Per-cell lease prevents torn tip-image mismatch.",
-   "weight": 0.85,
-   "deps": [
-    "P2"
-   ],
+   "point": "P15",
+   "title": "Monitor Progress",
+   "content": "Review status, blockers, and schedule variance regularly.",
+   "weight": 1,
    "seed_votes": 1,
    "seeds": [
     0.7
@@ -966,13 +727,10 @@
   },
   {
    "id": "N42",
-   "point": "P6",
-   "title": "Single cell drop in",
-   "content": "Drop-in packages snapshot, receipt log, schema, and pins. Loader verifies log and tip_hash before instantiation; redaction is signed receipt variant.",
-   "weight": 0.9,
-   "deps": [
-    "P5"
-   ],
+   "point": "P16",
+   "title": "Manage Changes",
+   "content": "Assess change requests and update scope or timeline.",
+   "weight": 1,
    "seed_votes": 1,
    "seeds": [
     0.7
@@ -986,13 +744,10 @@
   },
   {
    "id": "N43",
-   "point": "P7",
-   "title": "Cell nesting import record",
-   "content": "Host imports cell as boundary, journals imported tip_hash, and writes host inputs as nested receipts. Concurrent writers serialize on prev_hash.",
-   "weight": 0.75,
-   "deps": [
-    "P6"
-   ],
+   "point": "P17",
+   "title": "Control Quality",
+   "content": "Check deliverables against acceptance criteria and standards.",
+   "weight": 1,
    "seed_votes": 1,
    "seeds": [
     0.7
@@ -1006,13 +761,10 @@
   },
   {
    "id": "N44",
-   "point": "P8",
-   "title": "Organ manifest ledger",
-   "content": "Organ manifest pins member tips and ledger hash. Append-only organ_ledger rows carry cut_vector; tampering any member tip breaks organ hash.",
-   "weight": 0.85,
-   "deps": [
-    "P3"
-   ],
+   "point": "P18",
+   "title": "Manage Risks",
+   "content": "Track risks and activate mitigation plans when needed.",
+   "weight": 1,
    "seed_votes": 1,
    "seeds": [
     0.7
@@ -1026,13 +778,10 @@
   },
   {
    "id": "N45",
-   "point": "P9",
-   "title": "Organ rewind two phase",
-   "content": "Intent row prepares group rewind; members append in order, commit records new cut. Crash leaves partial; recovery completes or compensates.",
-   "weight": 0.85,
-   "deps": [
-    "P8"
-   ],
+   "point": "P19",
+   "title": "Report Status",
+   "content": "Share concise updates with stakeholders and sponsors.",
+   "weight": 1,
    "seed_votes": 1,
    "seeds": [
     0.7
@@ -1046,13 +795,10 @@
   },
   {
    "id": "N46",
-   "point": "P15",
-   "title": "Quilt snapshot epoch barrier",
-   "content": "Snapshot increments global_epoch, waits for in-flight receipts, records global cut. MVCC reads old tips while new writes continue past cut.",
-   "weight": 0.8,
-   "deps": [
-    "P13"
-   ],
+   "point": "P20",
+   "title": "Closeout Review",
+   "content": "Confirm deliverables, approvals, and outstanding issues.",
+   "weight": 1,
    "seed_votes": 1,
    "seeds": [
     0.7
@@ -1066,13 +812,10 @@
   },
   {
    "id": "N47",
-   "point": "P16",
-   "title": "Quilt drop in nondeterminism",
-   "content": "Quilt drop-in loader verifies all chains and ledgers before scheduler. Saved RNG seeds, timers, and clocks prevent post-boot divergence.",
-   "weight": 0.9,
-   "deps": [
-    "P15"
-   ],
+   "point": "P21",
+   "title": "Document Lessons",
+   "content": "Capture what worked, what failed, and recommendations.",
+   "weight": 1,
    "seed_votes": 1,
    "seeds": [
     0.7
@@ -1086,13 +829,10 @@
   },
   {
    "id": "N48",
-   "point": "P18",
-   "title": "Pruning checkpoint cold storage",
-   "content": "Live tip chains to last checkpoint hash; old receipts move to cold storage. Corrupt checkpoint disables deep rewind and audit.",
-   "weight": 0.6,
-   "deps": [
-    "P2"
-   ],
+   "point": "P22",
+   "title": "Archive Project",
+   "content": "Store final files, decisions, and access records.",
+   "weight": 1,
    "seed_votes": 1,
    "seeds": [
     0.7
@@ -1103,843 +843,213 @@
    "stability": "volatile",
    "origin": "flash-decompose",
    "status": "active"
-  }
- ],
- "edges": [
-  {
-   "from": "N01",
-   "to": "N02",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.5
-  },
-  {
-   "from": "N01",
-   "to": "N03",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.25
-  },
-  {
-   "from": "N02",
-   "to": "N03",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.25
-  },
-  {
-   "from": "N01",
-   "to": "N04",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.25
-  },
-  {
-   "from": "N03",
-   "to": "N04",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.25
-  },
-  {
-   "from": "N02",
-   "to": "N05",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.5
-  },
-  {
-   "from": "N02",
-   "to": "N06",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.5
-  },
-  {
-   "from": "N05",
-   "to": "N06",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.5
-  },
-  {
-   "from": "N06",
-   "to": "N07",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.333
-  },
-  {
-   "from": "N05",
-   "to": "N07",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.333
-  },
-  {
-   "from": "N02",
-   "to": "N08",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.5
-  },
-  {
-   "from": "N03",
-   "to": "N09",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.333
-  },
-  {
-   "from": "N04",
-   "to": "N09",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.333
-  },
-  {
-   "from": "N08",
-   "to": "N09",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.333
-  },
-  {
-   "from": "N01",
-   "to": "N09",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.333
-  },
-  {
-   "from": "N02",
-   "to": "N09",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.333
-  },
-  {
-   "from": "N05",
-   "to": "N10",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.333
-  },
-  {
-   "from": "N08",
-   "to": "N10",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.333
-  },
-  {
-   "from": "N06",
-   "to": "N11",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.25
-  },
-  {
-   "from": "N08",
-   "to": "N11",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.25
-  },
-  {
-   "from": "N10",
-   "to": "N11",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.25
-  },
-  {
-   "from": "N09",
-   "to": "N11",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.25
-  },
-  {
-   "from": "N07",
-   "to": "N12",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 1
-  },
-  {
-   "from": "N11",
-   "to": "N12",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 1
-  },
-  {
-   "from": "N08",
-   "to": "N13",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.5
-  },
-  {
-   "from": "N09",
-   "to": "N14",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.25
-  },
-  {
-   "from": "N31",
-   "to": "N14",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.25
-  },
-  {
-   "from": "N10",
-   "to": "N14",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.25
-  },
-  {
-   "from": "N10",
-   "to": "N15",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.5
-  },
-  {
-   "from": "N31",
-   "to": "N15",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.5
-  },
-  {
-   "from": "N11",
-   "to": "N16",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.5
-  },
-  {
-   "from": "N31",
-   "to": "N16",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.5
-  },
-  {
-   "from": "N15",
-   "to": "N16",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.5
-  },
-  {
-   "from": "N12",
-   "to": "N17",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.25
-  },
-  {
-   "from": "N16",
-   "to": "N17",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.25
-  },
-  {
-   "from": "N15",
-   "to": "N17",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.25
-  },
-  {
-   "from": "N03",
-   "to": "N18",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.333
-  },
-  {
-   "from": "N04",
-   "to": "N18",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.333
-  },
-  {
-   "from": "N06",
-   "to": "N19",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.25
-  },
-  {
-   "from": "N11",
-   "to": "N19",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.25
-  },
-  {
-   "from": "N16",
-   "to": "N19",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.25
-  },
-  {
-   "from": "N01",
-   "to": "N20",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.333
-  },
-  {
-   "from": "N35",
-   "to": "N20",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.333
-  },
-  {
-   "from": "N09",
-   "to": "N21",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.5
-  },
-  {
-   "from": "N14",
-   "to": "N21",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.5
-  },
-  {
-   "from": "N34",
-   "to": "N21",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.5
-  },
-  {
-   "from": "N07",
-   "to": "N22",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.25
-  },
-  {
-   "from": "N12",
-   "to": "N22",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.25
-  },
-  {
-   "from": "N17",
-   "to": "N22",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.25
-  },
-  {
-   "from": "N17",
-   "to": "N23",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.25
-  },
-  {
-   "from": "N19",
-   "to": "N23",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.25
-  },
-  {
-   "from": "N22",
-   "to": "N23",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.25
-  },
-  {
-   "from": "N16",
-   "to": "N24",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.333
-  },
-  {
-   "from": "N35",
-   "to": "N24",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.333
-  },
-  {
-   "from": "N01",
-   "to": "N25",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.333
-  },
-  {
-   "from": "N03",
-   "to": "N25",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.333
-  },
-  {
-   "from": "N05",
-   "to": "N25",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.333
-  },
-  {
-   "from": "N09",
-   "to": "N25",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.333
-  },
-  {
-   "from": "N14",
-   "to": "N25",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.333
-  },
-  {
-   "from": "N16",
-   "to": "N25",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.333
-  },
-  {
-   "from": "N34",
-   "to": "N25",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.333
-  },
-  {
-   "from": "N36",
-   "to": "N25",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.333
-  },
-  {
-   "from": "N37",
-   "to": "N25",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.333
-  },
-  {
-   "from": "N25",
-   "to": "N26",
-   "asserted_by": [
-    "flash@0.2"
-   ],
-   "weight": 0.333
   },
   {
-   "from": "N37",
-   "to": "N26",
-   "asserted_by": [
-    "flash@0.2"
+   "id": "N49",
+   "point": "P1",
+   "title": "Receipt row and tip verification",
+   "content": "Receipt row stores before/after images, cause_ref, deps_map; hash covers canonical fields. Boot verifies hash links to anchor, quarantines gaps.",
+   "weight": 0.9,
+   "seed_votes": 1,
+   "seeds": [
+    1.1
    ],
-   "weight": 0.333
-  },
-  {
-   "from": "N01",
-   "to": "N28",
-   "asserted_by": [
+   "composers": [
     "flash@1.1"
    ],
-   "weight": 1
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
   },
   {
-   "from": "N02",
-   "to": "N28",
-   "asserted_by": [
+   "id": "N50",
+   "point": "P5",
+   "title": "Single-cell snapshot and drop-in",
+   "content": "Snapshot exports immutable tip_hash, after_image, chain proof under lease. Drop-in packages snapshot, receipt log, schema, manifest; loader verifies before instantiating.",
+   "weight": 0.9,
+   "seed_votes": 1,
+   "seeds": [
+    1.1
+   ],
+   "composers": [
     "flash@1.1"
    ],
-   "weight": 1
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
   },
   {
-   "from": "N06",
-   "to": "N29",
-   "asserted_by": [
+   "id": "N51",
+   "point": "P10",
+   "title": "Organ snapshot acquires write barrier",
+   "content": "Organ snapshot archives manifest, member snapshots, logs, external pins, ledger slice. Write barrier freezes members; cut must be causally closed.",
+   "weight": 0.8,
+   "seed_votes": 1,
+   "seeds": [
+    1.1
+   ],
+   "composers": [
     "flash@1.1"
    ],
-   "weight": 1
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
   },
   {
-   "from": "N08",
-   "to": "N29",
-   "asserted_by": [
+   "id": "N52",
+   "point": "P12",
+   "title": "Organ nested via namespace exports",
+   "content": "Sub-quilt imports organ under namespace prefix and maps only manifest exports. Host bypassing exports causes non-linearized cross-ledger writes.",
+   "weight": 0.645,
+   "seed_votes": 1,
+   "seeds": [
+    1.1
+   ],
+   "composers": [
+    "flash@1.1",
+    "typesafe@jev-1.13.0"
+   ],
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active",
+   "ts_load": 0.54
+  },
+  {
+   "id": "N53",
+   "point": "P13",
+   "title": "Quilt ledger defines causal global cut",
+   "content": "quilt_ledger hash-chains rows with global_cut_vector, organ_cut_vectors, and monotonic global_epoch. Cut is one causal line, not wall-clock grouping.",
+   "weight": 0.8,
+   "seed_votes": 1,
+   "seeds": [
+    1.1
+   ],
+   "composers": [
     "flash@1.1"
    ],
-   "weight": 1
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
   },
   {
-   "from": "N09",
-   "to": "N29",
-   "asserted_by": [
+   "id": "N54",
+   "point": "P15",
+   "title": "Quilt snapshot and bootable drop-in",
+   "content": "Quilt snapshot increments epoch, waits, records one global cut. Drop-in verifies all chains and ledgers before scheduler.",
+   "weight": 0.9,
+   "seed_votes": 1,
+   "seeds": [
+    1.1
+   ],
+   "composers": [
     "flash@1.1"
    ],
-   "weight": 1
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
   },
   {
-   "from": "N07",
-   "to": "N30",
-   "asserted_by": [
+   "id": "N55",
+   "point": "P18",
+   "title": "Pruning trades rewind depth for storage",
+   "content": "Cells keep log tail plus checkpoint; old receipts go cold. Missing checkpoint blocks deep rewind and audit.",
+   "weight": 0.6,
+   "seed_votes": 1,
+   "seeds": [
+    1.1
+   ],
+   "composers": [
     "flash@1.1"
    ],
-   "weight": 0.333
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
   },
   {
-   "from": "N11",
-   "to": "N30",
-   "asserted_by": [
+   "id": "N56",
+   "point": "P20",
+   "title": "Fsync order preserves commit atomicity",
+   "content": "Fsync cell logs before organ commit, organ before global. Reversed order commits rows pointing to unflushed tips.",
+   "weight": 0.7,
+   "seed_votes": 1,
+   "seeds": [
+    1.1
+   ],
+   "composers": [
     "flash@1.1"
    ],
-   "weight": 0.333
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
   },
   {
-   "from": "N08",
-   "to": "N31",
-   "asserted_by": [
+   "id": "N57",
+   "point": "P22",
+   "title": "Canonical serialization stabilizes receipt hashes",
+   "content": "Canonical CBOR with sorted keys and schema version ensures identical logical state reproduces same hash. Non-determinism forks verification.",
+   "weight": 0.8,
+   "seed_votes": 1,
+   "seeds": [
+    1.1
+   ],
+   "composers": [
     "flash@1.1"
    ],
-   "weight": 0.5
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
   },
   {
-   "from": "N09",
-   "to": "N31",
-   "asserted_by": [
+   "id": "N58",
+   "point": "P23",
+   "title": "Leases linearize concurrent snapshots and writes",
+   "content": "Snapshot takes read leases on members for linearized cut; mutations block or fail. Otherwise snapshot mixes tips never coexisting.",
+   "weight": 0.7,
+   "seed_votes": 1,
+   "seeds": [
+    1.1
+   ],
+   "composers": [
     "flash@1.1"
    ],
-   "weight": 0.5
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
   },
   {
-   "from": "N31",
-   "to": "N32",
-   "asserted_by": [
+   "id": "N59",
+   "point": "P25",
+   "title": "Intent log reconciles partial commits",
+   "content": "Organ/global transactions write intent logs. Recovery scans intents against tips and commits or compensates; no uncommitted intermediate tips remain.",
+   "weight": 0.7,
+   "seed_votes": 1,
+   "seeds": [
+    1.1
+   ],
+   "composers": [
     "flash@1.1"
    ],
-   "weight": 1
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
   },
   {
-   "from": "N14",
-   "to": "N32",
-   "asserted_by": [
+   "id": "N60",
+   "point": "P29",
+   "title": "Invariants repeat at every granularity",
+   "content": "Chains append-only; every change new receipt; snapshots content-addressed; group commits atomic; dependencies hash-pinned; boot verifies before instantiate. Breaks quarantine level.",
+   "weight": 0.9,
+   "seed_votes": 1,
+   "seeds": [
+    1.1
+   ],
+   "composers": [
     "flash@1.1"
    ],
-   "weight": 1
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
   },
-  {
-   "from": "N05",
-   "to": "N33",
-   "asserted_by": [
-    "flash@1.1"
-   ],
-   "weight": 0.5
-  },
-  {
-   "from": "N06",
-   "to": "N33",
-   "asserted_by": [
-    "flash@1.1"
-   ],
-   "weight": 0.5
-  },
-  {
-   "from": "N08",
-   "to": "N34",
-   "asserted_by": [
-    "flash@1.1"
-   ],
-   "weight": 0.333
-  },
-  {
-   "from": "N09",
-   "to": "N34",
-   "asserted_by": [
-    "flash@1.1"
-   ],
-   "weight": 0.333
-  },
-  {
-   "from": "N31",
-   "to": "N34",
-   "asserted_by": [
-    "flash@1.1"
-   ],
-   "weight": 0.333
-  },
-  {
-   "from": "N14",
-   "to": "N34",
-   "asserted_by": [
-    "flash@1.1"
-   ],
-   "weight": 0.333
-  },
-  {
-   "from": "N01",
-   "to": "N35",
-   "asserted_by": [
-    "flash@1.1"
-   ],
-   "weight": 0.333
-  },
-  {
-   "from": "N05",
-   "to": "N36",
-   "asserted_by": [
-    "flash@1.1"
-   ],
-   "weight": 0.333
-  },
-  {
-   "from": "N10",
-   "to": "N36",
-   "asserted_by": [
-    "flash@1.1"
-   ],
-   "weight": 0.333
-  },
-  {
-   "from": "N15",
-   "to": "N36",
-   "asserted_by": [
-    "flash@1.1"
-   ],
-   "weight": 0.333
-  },
-  {
-   "from": "N09",
-   "to": "N37",
-   "asserted_by": [
-    "flash@1.1"
-   ],
-   "weight": 0.5
-  },
-  {
-   "from": "N14",
-   "to": "N37",
-   "asserted_by": [
-    "flash@1.1"
-   ],
-   "weight": 0.5
-  },
-  {
-   "from": "N34",
-   "to": "N37",
-   "asserted_by": [
-    "flash@1.1"
-   ],
-   "weight": 0.5
-  },
-  {
-   "from": "N01",
-   "to": "N38",
-   "asserted_by": [
-    "flash@1.1"
-   ],
-   "weight": 1
-  },
-  {
-   "from": "N03",
-   "to": "N38",
-   "asserted_by": [
-    "flash@1.1"
-   ],
-   "weight": 1
-  },
-  {
-   "from": "N05",
-   "to": "N38",
-   "asserted_by": [
-    "flash@1.1"
-   ],
-   "weight": 1
-  },
-  {
-   "from": "N08",
-   "to": "N38",
-   "asserted_by": [
-    "flash@1.1"
-   ],
-   "weight": 1
-  },
-  {
-   "from": "N31",
-   "to": "N38",
-   "asserted_by": [
-    "flash@1.1"
-   ],
-   "weight": 1
-  },
-  {
-   "from": "N16",
-   "to": "N38",
-   "asserted_by": [
-    "flash@1.1"
-   ],
-   "weight": 1
-  },
-  {
-   "from": "N01",
-   "to": "N40",
-   "asserted_by": [
-    "flash@0.7"
-   ],
-   "weight": 1
-  },
-  {
-   "from": "N02",
-   "to": "N41",
-   "asserted_by": [
-    "flash@0.7"
-   ],
-   "weight": 1
-  },
-  {
-   "from": "N05",
-   "to": "N42",
-   "asserted_by": [
-    "flash@0.7"
-   ],
-   "weight": 1
-  },
-  {
-   "from": "N06",
-   "to": "N43",
-   "asserted_by": [
-    "flash@0.7"
-   ],
-   "weight": 1
-  },
-  {
-   "from": "N03",
-   "to": "N44",
-   "asserted_by": [
-    "flash@0.7"
-   ],
-   "weight": 1
-  },
-  {
-   "from": "N08",
-   "to": "N45",
-   "asserted_by": [
-    "flash@0.7"
-   ],
-   "weight": 1
-  },
-  {
-   "from": "N31",
-   "to": "N46",
-   "asserted_by": [
-    "flash@0.7"
-   ],
-   "weight": 1
-  },
-  {
-   "from": "N15",
-   "to": "N47",
-   "asserted_by": [
-    "flash@0.7"
-   ],
-   "weight": 1
-  },
-  {
-   "from": "N02",
-   "to": "N48",
-   "asserted_by": [
-    "flash@0.7"
-   ],
-   "weight": 1
-  }
- ],
- "rejected": [
   {
    "id": "TS-P1",
    "point": "P1",
@@ -1954,8 +1064,7 @@
    ],
    "stability": "typesafe-only",
    "origin": "typesafe-decompose",
-   "status": "dropped-duplicate",
-   "duplicate_of": "N01"
+   "status": "active"
   },
   {
    "id": "TS-P2",
@@ -1971,8 +1080,7 @@
    ],
    "stability": "typesafe-only",
    "origin": "typesafe-decompose",
-   "status": "dropped-duplicate",
-   "duplicate_of": "N02"
+   "status": "active"
   },
   {
    "id": "TS-P3",
@@ -1988,8 +1096,7 @@
    ],
    "stability": "typesafe-only",
    "origin": "typesafe-decompose",
-   "status": "dropped-duplicate",
-   "duplicate_of": "N03"
+   "status": "active"
   },
   {
    "id": "TS-P4",
@@ -2005,8 +1112,7 @@
    ],
    "stability": "typesafe-only",
    "origin": "typesafe-decompose",
-   "status": "dropped-duplicate",
-   "duplicate_of": "N04"
+   "status": "active"
   },
   {
    "id": "TS-P5",
@@ -2022,8 +1128,7 @@
    ],
    "stability": "typesafe-only",
    "origin": "typesafe-decompose",
-   "status": "dropped-duplicate",
-   "duplicate_of": "N05"
+   "status": "active"
   },
   {
    "id": "TS-P6",
@@ -2039,8 +1144,7 @@
    ],
    "stability": "typesafe-only",
    "origin": "typesafe-decompose",
-   "status": "dropped-duplicate",
-   "duplicate_of": "N06"
+   "status": "active"
   },
   {
    "id": "TS-P7",
@@ -2056,8 +1160,7 @@
    ],
    "stability": "typesafe-only",
    "origin": "typesafe-decompose",
-   "status": "dropped-duplicate",
-   "duplicate_of": "N07"
+   "status": "active"
   },
   {
    "id": "TS-P8",
@@ -2073,8 +1176,7 @@
    ],
    "stability": "typesafe-only",
    "origin": "typesafe-decompose",
-   "status": "dropped-duplicate",
-   "duplicate_of": "N08"
+   "status": "active"
   },
   {
    "id": "TS-P9",
@@ -2090,8 +1192,7 @@
    ],
    "stability": "typesafe-only",
    "origin": "typesafe-decompose",
-   "status": "dropped-duplicate",
-   "duplicate_of": "N09"
+   "status": "active"
   },
   {
    "id": "TS-P10",
@@ -2107,8 +1208,7 @@
    ],
    "stability": "typesafe-only",
    "origin": "typesafe-decompose",
-   "status": "dropped-duplicate",
-   "duplicate_of": "N10"
+   "status": "active"
   },
   {
    "id": "TS-P11",
@@ -2124,8 +1224,7 @@
    ],
    "stability": "typesafe-only",
    "origin": "typesafe-decompose",
-   "status": "dropped-duplicate",
-   "duplicate_of": "N11"
+   "status": "active"
   },
   {
    "id": "TS-P13",
@@ -2141,8 +1240,7 @@
    ],
    "stability": "typesafe-only",
    "origin": "typesafe-decompose",
-   "status": "dropped-duplicate",
-   "duplicate_of": "N13"
+   "status": "active"
   },
   {
    "id": "TS-P14",
@@ -2158,8 +1256,7 @@
    ],
    "stability": "typesafe-only",
    "origin": "typesafe-decompose",
-   "status": "dropped-duplicate",
-   "duplicate_of": "N14"
+   "status": "active"
   },
   {
    "id": "TS-P15",
@@ -2175,8 +1272,7 @@
    ],
    "stability": "typesafe-only",
    "origin": "typesafe-decompose",
-   "status": "dropped-duplicate",
-   "duplicate_of": "N15"
+   "status": "active"
   },
   {
    "id": "TS-P16",
@@ -2192,8 +1288,7 @@
    ],
    "stability": "typesafe-only",
    "origin": "typesafe-decompose",
-   "status": "dropped-duplicate",
-   "duplicate_of": "N16"
+   "status": "active"
   },
   {
    "id": "TS-P17",
@@ -2209,8 +1304,7 @@
    ],
    "stability": "typesafe-only",
    "origin": "typesafe-decompose",
-   "status": "dropped-duplicate",
-   "duplicate_of": "N17"
+   "status": "active"
   },
   {
    "id": "TS-P18",
@@ -2226,8 +1320,7 @@
    ],
    "stability": "typesafe-only",
    "origin": "typesafe-decompose",
-   "status": "dropped-duplicate",
-   "duplicate_of": "N33"
+   "status": "active"
   },
   {
    "id": "TS-P19",
@@ -2243,8 +1336,7 @@
    ],
    "stability": "typesafe-only",
    "origin": "typesafe-decompose",
-   "status": "dropped-duplicate",
-   "duplicate_of": "N18"
+   "status": "active"
   },
   {
    "id": "TS-P20",
@@ -2260,8 +1352,7 @@
    ],
    "stability": "typesafe-only",
    "origin": "typesafe-decompose",
-   "status": "dropped-duplicate",
-   "duplicate_of": "N34"
+   "status": "active"
   },
   {
    "id": "TS-P21",
@@ -2277,8 +1368,7 @@
    ],
    "stability": "typesafe-only",
    "origin": "typesafe-decompose",
-   "status": "dropped-duplicate",
-   "duplicate_of": "N19"
+   "status": "active"
   },
   {
    "id": "TS-P22",
@@ -2294,8 +1384,7 @@
    ],
    "stability": "typesafe-only",
    "origin": "typesafe-decompose",
-   "status": "dropped-duplicate",
-   "duplicate_of": "N35"
+   "status": "active"
   },
   {
    "id": "TS-P23",
@@ -2311,8 +1400,7 @@
    ],
    "stability": "typesafe-only",
    "origin": "typesafe-decompose",
-   "status": "dropped-duplicate",
-   "duplicate_of": "N36"
+   "status": "active"
   },
   {
    "id": "TS-P24",
@@ -2328,8 +1416,7 @@
    ],
    "stability": "typesafe-only",
    "origin": "typesafe-decompose",
-   "status": "dropped-duplicate",
-   "duplicate_of": "N20"
+   "status": "active"
   },
   {
    "id": "TS-P25",
@@ -2345,8 +1432,7 @@
    ],
    "stability": "typesafe-only",
    "origin": "typesafe-decompose",
-   "status": "dropped-duplicate",
-   "duplicate_of": "N21"
+   "status": "active"
   },
   {
    "id": "TS-P26",
@@ -2362,8 +1448,7 @@
    ],
    "stability": "typesafe-only",
    "origin": "typesafe-decompose",
-   "status": "dropped-duplicate",
-   "duplicate_of": "N22"
+   "status": "active"
   },
   {
    "id": "TS-P27",
@@ -2379,8 +1464,7 @@
    ],
    "stability": "typesafe-only",
    "origin": "typesafe-decompose",
-   "status": "dropped-duplicate",
-   "duplicate_of": "N23"
+   "status": "active"
   },
   {
    "id": "TS-P28",
@@ -2396,8 +1480,7 @@
    ],
    "stability": "typesafe-only",
    "origin": "typesafe-decompose",
-   "status": "dropped-duplicate",
-   "duplicate_of": "N24"
+   "status": "active"
   },
   {
    "id": "TS-P29",
@@ -2413,8 +1496,7 @@
    ],
    "stability": "typesafe-only",
    "origin": "typesafe-decompose",
-   "status": "dropped-duplicate",
-   "duplicate_of": "N25"
+   "status": "active"
   },
   {
    "id": "TS-P30",
@@ -2430,159 +1512,16 @@
    ],
    "stability": "typesafe-only",
    "origin": "typesafe-decompose",
-   "status": "dropped-duplicate",
-   "duplicate_of": "N26"
+   "status": "active"
   }
  ],
- "notes": [],
+ "edges": [],
+ "rejected": [],
+ "notes": [
+  "xreview parse failed (no JSON array found) — candidates kept with status 'unadjudicated'"
+ ],
  "xreview": {
-  "verdicts": [
-   {
-    "id": "TS-P1",
-    "verdict": "duplicate",
-    "duplicate_of": "N01"
-   },
-   {
-    "id": "TS-P2",
-    "verdict": "duplicate",
-    "duplicate_of": "N02"
-   },
-   {
-    "id": "TS-P3",
-    "verdict": "duplicate",
-    "duplicate_of": "N03"
-   },
-   {
-    "id": "TS-P4",
-    "verdict": "duplicate",
-    "duplicate_of": "N04"
-   },
-   {
-    "id": "TS-P5",
-    "verdict": "duplicate",
-    "duplicate_of": "N05"
-   },
-   {
-    "id": "TS-P6",
-    "verdict": "duplicate",
-    "duplicate_of": "N06"
-   },
-   {
-    "id": "TS-P7",
-    "verdict": "duplicate",
-    "duplicate_of": "N07"
-   },
-   {
-    "id": "TS-P8",
-    "verdict": "duplicate",
-    "duplicate_of": "N08"
-   },
-   {
-    "id": "TS-P9",
-    "verdict": "duplicate",
-    "duplicate_of": "N09"
-   },
-   {
-    "id": "TS-P10",
-    "verdict": "duplicate",
-    "duplicate_of": "N10"
-   },
-   {
-    "id": "TS-P11",
-    "verdict": "duplicate",
-    "duplicate_of": "N11"
-   },
-   {
-    "id": "TS-P13",
-    "verdict": "duplicate",
-    "duplicate_of": "N13"
-   },
-   {
-    "id": "TS-P14",
-    "verdict": "duplicate",
-    "duplicate_of": "N14"
-   },
-   {
-    "id": "TS-P15",
-    "verdict": "duplicate",
-    "duplicate_of": "N15"
-   },
-   {
-    "id": "TS-P16",
-    "verdict": "duplicate",
-    "duplicate_of": "N16"
-   },
-   {
-    "id": "TS-P17",
-    "verdict": "duplicate",
-    "duplicate_of": "N17"
-   },
-   {
-    "id": "TS-P18",
-    "verdict": "duplicate",
-    "duplicate_of": "N33"
-   },
-   {
-    "id": "TS-P19",
-    "verdict": "duplicate",
-    "duplicate_of": "N18"
-   },
-   {
-    "id": "TS-P20",
-    "verdict": "duplicate",
-    "duplicate_of": "N34"
-   },
-   {
-    "id": "TS-P21",
-    "verdict": "duplicate",
-    "duplicate_of": "N19"
-   },
-   {
-    "id": "TS-P22",
-    "verdict": "duplicate",
-    "duplicate_of": "N35"
-   },
-   {
-    "id": "TS-P23",
-    "verdict": "duplicate",
-    "duplicate_of": "N36"
-   },
-   {
-    "id": "TS-P24",
-    "verdict": "duplicate",
-    "duplicate_of": "N20"
-   },
-   {
-    "id": "TS-P25",
-    "verdict": "duplicate",
-    "duplicate_of": "N21"
-   },
-   {
-    "id": "TS-P26",
-    "verdict": "duplicate",
-    "duplicate_of": "N22"
-   },
-   {
-    "id": "TS-P27",
-    "verdict": "duplicate",
-    "duplicate_of": "N23"
-   },
-   {
-    "id": "TS-P28",
-    "verdict": "duplicate",
-    "duplicate_of": "N24"
-   },
-   {
-    "id": "TS-P29",
-    "verdict": "duplicate",
-    "duplicate_of": "N25"
-   },
-   {
-    "id": "TS-P30",
-    "verdict": "duplicate",
-    "duplicate_of": "N26"
-   }
-  ],
+  "verdicts": [],
   "model": "deepseek-flash"
  },
  "sim_threshold": 0.42

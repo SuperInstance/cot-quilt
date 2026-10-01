@@ -3,31 +3,31 @@
   "missing": [
    {
     "point": "P12",
-    "title": "Nested organ exports",
+    "title": "Organ nested via namespace exports",
     "content": "Sub-quilt imports organ under namespace prefix and maps only manifest exports. Host bypassing exports causes non-linearized cross-ledger writes.",
-    "weight": 0.645
+    "weight": 0.633
    }
   ],
   "faulty": [
    {
     "id": "N07",
-    "problem": "Missing key details about nested cell imports and host interaction",
+    "problem": "Fails to mention that nested cell writes require namespacing to avoid ID collisions",
     "severity": "minor"
    }
   ],
   "verdict": {
    "pass": true,
-   "completeness": 0.98,
-   "rationale": "The graph covers the key points of the CoT well, with only a minor omission around nested organ exports. The overall structure and invariants are represented accurately."
+   "completeness": 0.95,
+   "rationale": "Graph covers key mechanisms but omits some failure modes like ID collisions when nesting. Overall quite thorough."
   }
  },
  "model": "NousResearch/Hermes-3-Llama-3.1-405B",
  "usage": {
-  "prompt_tokens": 10721,
-  "total_tokens": 10848,
-  "completion_tokens": 127,
-  "estimated_cost": 0.010848,
+  "prompt_tokens": 8690,
+  "total_tokens": 8814,
+  "completion_tokens": 124,
+  "estimated_cost": 0.008813999999999999,
   "prompt_tokens_details": null
  },
- "graph_sha256": "b8574326b4f757f1060c024b8931518d0747aa989110eae0332a341fe0cb1ecb"
+ "graph_sha256": "4f6bc2b75a96e4301b0245bdee84d3c554418a00cdc5b97ec0f3baea84a321a2"
 }

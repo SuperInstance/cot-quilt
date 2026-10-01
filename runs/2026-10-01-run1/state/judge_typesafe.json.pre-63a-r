@@ -6,21 +6,21 @@
   },
   "p_implementable": {
    "type": "noul",
-   "noul": 0.15
+   "noul": 0.16
   },
   "p_missing_major": {
    "type": "noul",
-   "noul": 0.24
+   "noul": 0.29
   },
   "p_faulty": {
    "type": "noul",
-   "noul": 0.27
+   "noul": 0.37
   }
  },
  "usage": {
-  "input_tokens": 5631,
+  "input_tokens": 6680,
   "output_tokens": 78
  },
  "model": "jev-1.13.0",
- "graph_summary_sha256": "773c9cf0e7ede710eafc9ffc3de502ae1c049620a1dab54c66f94157c1ffa2c8"
+ "graph_summary_sha256": "126819bcb23b67f142e5ff7b75acc807bf987720dd4b32a03f0542fd75a5907a"
 }

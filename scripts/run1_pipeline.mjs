@@ -40,6 +40,10 @@ const getArg = (flag, dflt) => {
   const i = argv.indexOf(flag);
   return i >= 0 && argv[i + 1] ? argv[i + 1] : dflt;
 };
+// --redo-seed <label>: re-call ONE decomposition seed (e.g. t07) and REUSE the
+// other cached runs verbatim. Remediation path (63-a-r): a contaminated seed
+// is re-called and receipted; nothing else re-runs provider-side.
+const REDO_SEED = getArg('--redo-seed', null);
 const RUN = path.resolve(REPO, getArg('--run', 'runs/2026-10-01-run1'));
 const LEDGER = path.join(RUN, 'seeds', 'ledger.jsonl');
 const STATE = path.join(RUN, 'state');
@@ -221,12 +225,19 @@ function parseJsonArray(raw) {
 
 async function phaseDecomposeFlash(probe, compose, seeds) {
   let st = loadState('decompose_flash');
-  if (st) { log('decompose_flash: cached'); return st; }
-  log('phase 2 DECOMPOSE-FLASH (3 seeds, cache-friendly identical prefix)');
+  if (st && !REDO_SEED) { log('decompose_flash: cached'); return st; }
   const cot = compose.r.content ?? '';
   const userBase = `FLEET QUESTION:\n${QUESTION}\n\nCHAIN-OF-THOUGHT (verbatim):\n${cot}\n`;
-  st = { model: probe.flash_model, system_sha256: sha256(FLASH_SYSTEM), runs: [] };
-  for (const s of seeds) {
+  if (st && REDO_SEED) {
+    // remediation: keep the cached runs EXCEPT the redone seed, receipted reuse
+    const keep = st.runs.filter((r) => r.label !== REDO_SEED);
+    log(`phase 2 DECOMPOSE-FLASH REDO seed ${REDO_SEED} (reusing ${keep.length} cached runs: ${keep.map((r) => r.label).join(',')})`);
+    st = { ...st, runs: keep.map((r) => ({ ...r, reused: true, reuse_note: 'reused verbatim by 63-a-r remediation (not re-called)' })) };
+  } else {
+    log('phase 2 DECOMPOSE-FLASH (3 seeds, cache-friendly identical prefix)');
+    st = { model: probe.flash_model, system_sha256: sha256(FLASH_SYSTEM), runs: [] };
+  }
+  for (const s of REDO_SEED ? seeds.filter((x) => x.label === REDO_SEED) : seeds) {
     const user = `${userBase}(seed book-keeping: temperature=${s.temperature}, seed=${s.seed_int}; decomposition diversity comes from temperature; stay faithful to the CoT.)`;
     let raw, r, repaired = false;
     try {
@@ -240,8 +251,11 @@ async function phaseDecomposeFlash(probe, compose, seeds) {
       // the failed raw is persisted beside the ledger for post-mortem (never delete)
       if (r?.content) writeAtomic(path.join(RUN, 'seeds', `flash-raw-${s.label}-failed.txt`), r.content);
       log(`  seed ${s.temperature}: parse/HTTP issue -> receipted repair retry (${String(e.message).slice(0, 80)})`);
+      // CoT context is MANDATORY here (63-a-r receipted finding F2: a repair
+      // without the CoT hallucinated a generic project plan). The repair must
+      // decompose the CoT, not invent.
       r = await callAndReceipt('decompose_flash_repair', 'deepseek', probe.flash_model,
-        () => deepseekChat({ model: probe.flash_model, messages: [{ role: 'user', content: `The following was supposed to be a STRICT JSON array of decomposition nodes but is broken or empty. Return the repaired STRICT JSON array ONLY. Constraints: 20-26 nodes; content <= 20 words; no double-quote characters inside string values; complete the array.\n\n=== broken output ===\n${(r?.content ?? String(e.message)).slice(0, 6000)}\n\nSchema reminder: {"point","title","content","weight","deps"}.` }], temperature: 0.0, max_tokens: 16384 }),
+        () => deepseekChat({ model: probe.flash_model, messages: [{ role: 'user', content: `The following was supposed to be a STRICT JSON array of decomposition nodes but is broken or empty. Decompose the CoT BELOW and return the repaired STRICT JSON array ONLY. Constraints: 20-26 nodes; content <= 20 words; no double-quote characters inside string values; complete the array.\n\n=== broken output (may be empty) ===\n${(r?.content ?? String(e.message)).slice(0, 3000) || '(empty — the model burned its budget on hidden reasoning)'}\n\n=== original CoT (verbatim, authoritative) ===\n${cot.slice(0, 40000)}\n\nSchema reminder: {"point","title","content","weight","deps"}.` }], temperature: 0.0, max_tokens: 16384 }),
         { seed: s.seed_int, temperature: 0.0, purpose: `JSON repair for seed t=${s.temperature}` });
       repaired = true;
       st.runs.push({ ...s, nodes: parseJsonArray(r.content), raw_len: r.content.length, repaired });
@@ -351,6 +365,9 @@ function mergeArm(clusters, tsState) {
       title: top.title || `cell from ${c.point}`,
       content: top.content,
       weight: Math.round((members.reduce((s, x) => s + x.weight, 0) / members.length) * 1000) / 1000,
+      // 63-a-r fix (F1): carry the UNION of member deps forward — deps are the
+      // edge source; dropping them here is why the as-found graph had 0 edges.
+      deps: [...new Set(members.flatMap((x) => (Array.isArray(x.deps) ? x.deps.map(String) : [])))],
       seed_votes: seedSet.length,
       seeds: seedSet,
       composers: seedSet.map((t) => `flash@${t}`),
@@ -473,9 +490,11 @@ async function phaseMerge(probe, flashState, tsState) {
     const existing = merged.map((m) => `${m.id} [${m.point}] ${m.title}`).join('\n');
     const cands = tsOnly.map((t) => `${t.id} [${t.point}] ${t.content}`).join('\n');
     const sys = 'You are the cross-reviewer of the cot-quilt pipeline. Another model (typesafe jev-1.13.0) extracted candidate nodes point-wise from the same CoT. Adjudicate each candidate against the EXISTING nodes of the merged graph: is it genuinely new, a duplicate, or salvageable with a fix? Output STRICT JSON only.';
-    const usr = `EXISTING NODES:\n${existing}\n\nCANDIDATES:\n${cands}\n\nReturn STRICT JSON array: [{"id":"TS-P12","verdict":"keep|duplicate|fix","duplicate_of":"N07","corrected_content":"..."}] — duplicate_of only for duplicates, corrected_content only for fixes.`;
+    const usr = `EXISTING NODES:\n${existing}\n\nCANDIDATES:\n${cands}\n\nReturn STRICT JSON array: [{"id":"TS-P12","verdict":"keep|duplicate|fix","duplicate_of":"N07","corrected_content":"..."}] — duplicate_of only for duplicates, corrected_content only for fixes. The array MUST be complete (one entry per candidate) and compact — truncation is a failure.`;
+    // 63-a-r fix (F3): 3000 tokens truncated the verdict array -> parse failed ->
+    // every typesafe-only node stayed unadjudicated. 6000 + completeness line.
     const r = await callAndReceipt('merge_xreview', 'deepseek', probe.flash_model,
-      () => deepseekChat({ model: probe.flash_model, messages: [{ role: 'system', content: sys }, { role: 'user', content: usr }], temperature: 0.0, max_tokens: 3000 }),
+      () => deepseekChat({ model: probe.flash_model, messages: [{ role: 'system', content: sys }, { role: 'user', content: usr }], temperature: 0.0, max_tokens: 6000 }),
       { purpose: 'cross-model adjudication of typesafe-only nodes (compose/test separation)' });
     let verdicts = [];
     try { verdicts = parseJsonArray(r.content); } catch (e) {
