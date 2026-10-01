@@ -271,9 +271,232 @@
     }
    ],
    "raw_len": 4860,
-   "repaired": false,
-   "reused": true,
-   "reuse_note": "reused verbatim by 63-a-r remediation (not re-called)"
+   "repaired": false
+  },
+  {
+   "temperature": 0.7,
+   "label": "t07",
+   "seed_int": 59707,
+   "seed_hex": "e93b",
+   "source": "sha256-derived (non-quantum, receipted)",
+   "nodes": [
+    {
+     "point": 1,
+     "title": "Define Goal",
+     "content": "Clarify purpose, scope, and success criteria for the project.",
+     "weight": 3,
+     "deps": []
+    },
+    {
+     "point": 2,
+     "title": "Identify Stakeholders",
+     "content": "List people, groups, and approvals needed for decisions.",
+     "weight": 2,
+     "deps": [
+      1
+     ]
+    },
+    {
+     "point": 3,
+     "title": "Gather Requirements",
+     "content": "Collect needs, constraints, and desired outcomes from stakeholders.",
+     "weight": 4,
+     "deps": [
+      2
+     ]
+    },
+    {
+     "point": 4,
+     "title": "Assess Resources",
+     "content": "Review budget, time, tools, and available skills.",
+     "weight": 3,
+     "deps": [
+      3
+     ]
+    },
+    {
+     "point": 5,
+     "title": "Map Risks",
+     "content": "Identify major risks, assumptions, and mitigation options.",
+     "weight": 3,
+     "deps": [
+      3
+     ]
+    },
+    {
+     "point": 6,
+     "title": "Define Scope",
+     "content": "Document included work, exclusions, and acceptance criteria.",
+     "weight": 4,
+     "deps": [
+      3,
+      4,
+      5
+     ]
+    },
+    {
+     "point": 7,
+     "title": "Create Timeline",
+     "content": "Build milestones, deadlines, and dependency schedule.",
+     "weight": 3,
+     "deps": [
+      4,
+      6
+     ]
+    },
+    {
+     "point": 8,
+     "title": "Assign Owners",
+     "content": "Name responsible people for each workstream and task.",
+     "weight": 3,
+     "deps": [
+      2,
+      6
+     ]
+    },
+    {
+     "point": 9,
+     "title": "Draft Budget",
+     "content": "Estimate costs, funding sources, and contingency reserve.",
+     "weight": 3,
+     "deps": [
+      4,
+      6
+     ]
+    },
+    {
+     "point": 10,
+     "title": "Set Communication Plan",
+     "content": "Define updates, meetings, channels, and escalation paths.",
+     "weight": 2,
+     "deps": [
+      2,
+      6
+     ]
+    },
+    {
+     "point": 11,
+     "title": "Prepare Materials",
+     "content": "Create templates, checklists, and shared workspace structure.",
+     "weight": 2,
+     "deps": [
+      6,
+      10
+     ]
+    },
+    {
+     "point": 12,
+     "title": "Validate Plan",
+     "content": "Review plan with stakeholders and resolve gaps.",
+     "weight": 4,
+     "deps": [
+      6,
+      7,
+      8,
+      9,
+      10
+     ]
+    },
+    {
+     "point": 13,
+     "title": "Launch Kickoff",
+     "content": "Start project, confirm roles, and publish first tasks.",
+     "weight": 3,
+     "deps": [
+      11,
+      12
+     ]
+    },
+    {
+     "point": 14,
+     "title": "Execute Tasks",
+     "content": "Complete planned work and track progress against milestones.",
+     "weight": 5,
+     "deps": [
+      13
+     ]
+    },
+    {
+     "point": 15,
+     "title": "Monitor Progress",
+     "content": "Review status, blockers, and schedule variance regularly.",
+     "weight": 4,
+     "deps": [
+      14
+     ]
+    },
+    {
+     "point": 16,
+     "title": "Manage Changes",
+     "content": "Assess change requests and update scope or timeline.",
+     "weight": 3,
+     "deps": [
+      15
+     ]
+    },
+    {
+     "point": 17,
+     "title": "Control Quality",
+     "content": "Check deliverables against acceptance criteria and standards.",
+     "weight": 4,
+     "deps": [
+      14,
+      15
+     ]
+    },
+    {
+     "point": 18,
+     "title": "Manage Risks",
+     "content": "Track risks and activate mitigation plans when needed.",
+     "weight": 3,
+     "deps": [
+      5,
+      15
+     ]
+    },
+    {
+     "point": 19,
+     "title": "Report Status",
+     "content": "Share concise updates with stakeholders and sponsors.",
+     "weight": 2,
+     "deps": [
+      10,
+      15
+     ]
+    },
+    {
+     "point": 20,
+     "title": "Closeout Review",
+     "content": "Confirm deliverables, approvals, and outstanding issues.",
+     "weight": 4,
+     "deps": [
+      17,
+      18,
+      19
+     ]
+    },
+    {
+     "point": 21,
+     "title": "Document Lessons",
+     "content": "Capture what worked, what failed, and recommendations.",
+     "weight": 3,
+     "deps": [
+      20
+     ]
+    },
+    {
+     "point": 22,
+     "title": "Archive Project",
+     "content": "Store final files, decisions, and access records.",
+     "weight": 2,
+     "deps": [
+      20,
+      21
+     ]
+    }
+   ],
+   "raw_len": 3706,
+   "repaired": true
   },
   {
    "temperature": 1.1,
@@ -553,255 +776,6 @@
     }
    ],
    "raw_len": 6460,
-   "repaired": false,
-   "reused": true,
-   "reuse_note": "reused verbatim by 63-a-r remediation (not re-called)"
-  },
-  {
-   "temperature": 0.7,
-   "label": "t07",
-   "seed_int": 59707,
-   "seed_hex": "e93b",
-   "source": "sha256-derived (non-quantum, receipted)",
-   "nodes": [
-    {
-     "point": "P1",
-     "title": "Receipt row double entry",
-     "content": "Per-cell append-only row stores before, after, cause, deps, prev_hash, and SHA-256 over canonical fields; images grow logs without deltas.",
-     "weight": 0.9,
-     "deps": []
-    },
-    {
-     "point": "P2",
-     "title": "Tip boot verification quarantine",
-     "content": "Committed tip is highest verified after_image; boot checks prev_hash links from anchor. Gaps quarantine cell, forbidding suspect tail boot.",
-     "weight": 0.9,
-     "deps": [
-      "P1"
-     ]
-    },
-    {
-     "point": "P3",
-     "title": "Single cell rewind append",
-     "content": "Rewind appends new receipt with before=current tip and after=target after_image; old receipts never deleted. Tip conflict forces retry.",
-     "weight": 0.9,
-     "deps": [
-      "P2"
-     ]
-    },
-    {
-     "point": "P4",
-     "title": "Dependents stale and ripple",
-     "content": "Reverse dep_index marks consumers stale when their pinned receipt is superseded. Rewind ripple needs freeze policy to bound cascade.",
-     "weight": 0.8,
-     "deps": [
-      "P3"
-     ]
-    },
-    {
-     "point": "P5",
-     "title": "Single cell snapshot lease",
-     "content": "Snapshot is content-addressed record with tip_seq, tip_hash, after_image, and chain proof. Per-cell lease prevents torn tip-image mismatch.",
-     "weight": 0.85,
-     "deps": [
-      "P2"
-     ]
-    },
-    {
-     "point": "P6",
-     "title": "Single cell drop in",
-     "content": "Drop-in packages snapshot, receipt log, schema, and pins. Loader verifies log and tip_hash before instantiation; redaction is signed receipt variant.",
-     "weight": 0.9,
-     "deps": [
-      "P5"
-     ]
-    },
-    {
-     "point": "P7",
-     "title": "Cell nesting import record",
-     "content": "Host imports cell as boundary, journals imported tip_hash, and writes host inputs as nested receipts. Concurrent writers serialize on prev_hash.",
-     "weight": 0.75,
-     "deps": [
-      "P6"
-     ]
-    },
-    {
-     "point": "P8",
-     "title": "Organ manifest ledger",
-     "content": "Organ manifest pins member tips and ledger hash. Append-only organ_ledger rows carry cut_vector; tampering any member tip breaks organ hash.",
-     "weight": 0.85,
-     "deps": [
-      "P3"
-     ]
-    },
-    {
-     "point": "P9",
-     "title": "Organ rewind two phase",
-     "content": "Intent row prepares group rewind; members append in order, commit records new cut. Crash leaves partial; recovery completes or compensates.",
-     "weight": 0.85,
-     "deps": [
-      "P8"
-     ]
-    },
-    {
-     "point": "P10",
-     "title": "Organ snapshot barrier",
-     "content": "Organ snapshot takes write barrier, records tip vector, requires causally closed cut. Omitted pin or mid-transaction cut dangles dependency.",
-     "weight": 0.8,
-     "deps": [
-      "P8"
-     ]
-    },
-    {
-     "point": "P11",
-     "title": "Organ drop in boot",
-     "content": "Organ drop-in loader verifies member chains and ledger hash before instantiation; one failure refuses organ boot. Large logs need pruning.",
-     "weight": 0.85,
-     "deps": [
-      "P10"
-     ]
-    },
-    {
-     "point": "P12",
-     "title": "Organ nesting namespace exports",
-     "content": "Host imports organ under namespace prefix and maps only manifest exports. Bypassing exports can non-linearize two ledgers.",
-     "weight": 0.7,
-     "deps": [
-      "P11"
-     ]
-    },
-    {
-     "point": "P13",
-     "title": "Quilt ledger global cut",
-     "content": "Hash-chained quilt_ledger rows carry global cut vector and monotonic global_epoch. Cut is one causal line, not wall-clock grouping.",
-     "weight": 0.85,
-     "deps": [
-      "P9"
-     ]
-    },
-    {
-     "point": "P14",
-     "title": "Quilt rewind hierarchical commit",
-     "content": "Quilt rewind has every organ rewind to prior cut, appends global commit. Partial quilt refuses boot until roll-forward or roll-back.",
-     "weight": 0.85,
-     "deps": [
-      "P13"
-     ]
-    },
-    {
-     "point": "P15",
-     "title": "Quilt snapshot epoch barrier",
-     "content": "Snapshot increments global_epoch, waits for in-flight receipts, records global cut. MVCC reads old tips while new writes continue past cut.",
-     "weight": 0.8,
-     "deps": [
-      "P13"
-     ]
-    },
-    {
-     "point": "P16",
-     "title": "Quilt drop in nondeterminism",
-     "content": "Quilt drop-in loader verifies all chains and ledgers before scheduler. Saved RNG seeds, timers, and clocks prevent post-boot divergence.",
-     "weight": 0.9,
-     "deps": [
-      "P15"
-     ]
-    },
-    {
-     "point": "P17",
-     "title": "Quilt nesting boundary ledger",
-     "content": "Adapter exposes only exports; parent boundary_ledger records input and output receipts. Outputs pinned by receipt hash, not mutable pointer.",
-     "weight": 0.75,
-     "deps": [
-      "P16"
-     ]
-    },
-    {
-     "point": "P18",
-     "title": "Pruning checkpoint cold storage",
-     "content": "Live tip chains to last checkpoint hash; old receipts move to cold storage. Corrupt checkpoint disables deep rewind and audit.",
-     "weight": 0.6,
-     "deps": [
-      "P2"
-     ]
-    },
-    {
-     "point": "P20",
-     "title": "Crash atomic fsync order",
-     "content": "Fsync cell logs before organ commit, organ commits before global commit. Reversed order commits rows to unflushed tips.",
-     "weight": 0.8,
-     "deps": [
-      "P14"
-     ]
-    },
-    {
-     "point": "P21",
-     "title": "External content pins",
-     "content": "Bootable save records external_pins with content_hash and retrieval_uri. Loader verifies hashes before wiring; mutable paths or tags are forbidden.",
-     "weight": 0.75,
-     "deps": [
-      "P6"
-     ]
-    },
-    {
-     "point": "P22",
-     "title": "Canonical serialization hash evolution",
-     "content": "Canonical CBOR with sorted keys and schema version reproduces hashes. Hash or schema migration is recorded as a new receipt.",
-     "weight": 0.8,
-     "deps": [
-      "P1"
-     ]
-    },
-    {
-     "point": "P23",
-     "title": "Concurrent snapshot linearization",
-     "content": "Per-cell mutexes and read leases produce a linearized cut; mutations block or fail. Unblocked mutations can mix tips never coexisting.",
-     "weight": 0.75,
-     "deps": [
-      "P5",
-      "P15"
-     ]
-    },
-    {
-     "point": "P25",
-     "title": "Partial commit reconciliation",
-     "content": "Multi-cell transactions start in intent log; recovery scans intents against cell tips and commits or compensates. No uncommitted intermediate tips.",
-     "weight": 0.8,
-     "deps": [
-      "P9"
-     ]
-    },
-    {
-     "point": "P26",
-     "title": "Namespaced ID collision",
-     "content": "Nested cell IDs become subquilt_id plus cell_id and receipt hashes include namespaced ID. Unqualified IDs can collide and overwrite logs.",
-     "weight": 0.7,
-     "deps": [
-      "P7",
-      "P12"
-     ]
-    },
-    {
-     "point": "P27",
-     "title": "Composite child snapshot pin",
-     "content": "Parent snapshot records child manifest hash and cut vector. Restore verifies child at exact cut before wiring parent dependent cells.",
-     "weight": 0.75,
-     "deps": [
-      "P17"
-     ]
-    },
-    {
-     "point": "P29",
-     "title": "Invariants containment limits",
-     "content": "Invariants repeat at all scales: append-only chains, new receipts, content-addressed cuts, atomic commits, verified boot. Chains prove local history only.",
-     "weight": 0.95,
-     "deps": [
-      "P20",
-      "P23",
-      "P25"
-     ]
-    }
-   ],
-   "raw_len": 6018,
    "repaired": false
   }
  ]
