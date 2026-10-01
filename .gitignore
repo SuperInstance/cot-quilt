@@ -1,3 +1,9 @@
-.env*
+# Credentials NEVER live in this repo (incident 2026-10-01 — see SECURITY-INCIDENT.md).
+# Keys are read at runtime from /home/z/my-project/.env.keys (outside the repo, mode 600).
+.env
+.env.*
+.env.keys
+*.env
+
 __pycache__/
 *.pyc
