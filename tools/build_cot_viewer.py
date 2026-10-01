@@ -6,7 +6,18 @@ merge clusters, critique row with full kind names."""
 import json, glob, os, math
 
 runs = sorted(glob.glob('/home/z/my-project/cot-quilt/runs/*/receipt.json'))
-rec = json.load(open(runs[-1]))
+# complete runs only (a stray partial receipt from an abandoned resume must not win the sort)
+rec = None
+for rp in reversed(runs):
+    try:
+        cand = json.load(open(rp))
+        if cand.get('judge') and cand.get('graph_v2'):
+            rec = cand
+            break
+    except Exception:
+        continue
+if rec is None:
+    raise SystemExit('no complete run found')
 run_id = rec['run']
 
 clusters = rec['phases'].get('merge', {}).get('nodes', [])
