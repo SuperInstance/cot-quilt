@@ -47,6 +47,25 @@ for line in open('/home/z/my-project/.env.keys'):
         k, v = line.strip().split('=', 1)
         KEYS[k] = v
 
+import re
+
+# Incident 2026-10-01 (SECURITY-INCIDENT.md): exception text is a secret-exfiltration
+# channel — Python embeds the offending value in errors like
+# `ValueError: unknown url type: '<the value>'`. scrub() masks credential-class
+# strings out of ANY error/telemetry text before it can reach a result or receipt.
+KEY_PAT = re.compile(
+    r'(gsk_[A-Za-z0-9_-]{8,}|sk-[A-Za-z0-9_-]{20,}|ghp_[A-Za-z0-9]{20,}'
+    r'|github_pat_[A-Za-z0-9_]{20,}|apikey_[A-Za-z0-9_]{8,}|moth_[A-Za-z0-9]{8,}'
+    r'|cfut_[A-Za-z0-9_-]{8,})')
+
+def scrub(text):
+    """Mask credential-shaped substrings in arbitrary text (never logs the value)."""
+    def _repl(m):
+        v = m.group(1)
+        cls = v[:4].rstrip('-_')          # class prefix only (e.g. 'sk', 'gsk_', 'moth')
+        return f'[{cls}-REDACTED]'
+    return KEY_PAT.sub(_repl, str(text))
+
 DS_KEY = KEYS['DEEPSEEK_API_KEY']
 TS_KEY = KEYS['TYPESAFE_API_KEY']
 MQ_KEY = KEYS['MOTHQUANTUM_API_KEY']
@@ -82,7 +101,9 @@ def http(url, key, body=None, timeout=180, method=None):
         except Exception:
             return {'status': e.code, 'body': {}, 'ms': int((time.time() - t0) * 1000)}
     except Exception as e:
-        return {'status': -1, 'body': {'error': str(e)}, 'ms': int((time.time() - t0) * 1000)}
+        # scrub BEFORE storage: an exception string must never carry a credential
+        # into a receipt (root cause of the 2026-10-01 incident).
+        return {'status': -1, 'body': {'error': scrub(str(e))}, 'ms': int((time.time() - t0) * 1000)}
 
 
 def deepseek(model, messages, max_tokens=4000, seed=None, retries=1):
@@ -384,7 +405,7 @@ def post_json_deadline(url, key, body, deadline_s, token=None):
                 result['data'] = json.load(r)
             result['ms'] = int((time.time() - t0) * 1000)
         except Exception as e:
-            result['error'] = f'{type(e).__name__}: {str(e)[:150]}'
+            result['error'] = f'{type(e).__name__}: {scrub(str(e))[:150]}'  # scrubbed: incident 2026-10-01
 
     th = threading.Thread(target=worker, daemon=True)
     th.start()
