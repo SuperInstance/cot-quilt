@@ -99,3 +99,21 @@ out: {graph_v1[], graph_v2{clusters, divergent, critique_nodes}, judge{score, ga
   receipted; runs are keyed by content, not by wall clock.
 - mothquantum per-bit jobs give TRUE 16-bit seeds (48/48 quantum bits in the flagship run);
   any fallback bit is flagged `entropy_bits_true < 16`.
+
+## v0.2 — play-testers + routes/conditional environments (receipted)
+
+- **Play-test battery** (cheap cells judge the graph, `playtest_routes.py`):
+  - seed-2.0-mini as court jester: "flabby indecision — dithers over random walks,
+    tiebreaks, aging without nailing a concrete rule"; the one right thing: dropping
+    priority post-service stops hogging. (Poignant mockery — exactly the goating role.)
+  - granite-4.2-3b as racehorse: "Yes — supplies a concrete local rule; first blocker
+    is Local-max starvation risk."
+  - Muse-Glimmer-30B: reasoner-style burn (finish=length, reasoning-only) — receipted,
+    retry with bigger budget queued.
+- **Routes + conditional environments** (jev-latest): for future prompts "with a
+  similar ask" —
+  - full design ask → enter at **Task definition** (p=0.89)
+  - starvation-freedom-only ask → enter at **No-starvation fairness claim** (p=0.97)
+  - generalization noul 0.38 (honest uncertainty outside allocation-rule domain)
+  - completeness score 1.15/3 ≈ "reusable WITH the critique cells" — matches the
+    v4-pro judge's own gap list; the graph is not yet a general routing table.

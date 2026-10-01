@@ -1,0 +1,120 @@
+{
+ "playtest": [
+  {
+   "model": "ByteDance/Seed-2.0-mini",
+   "role": "the court jester: mock whatever is flabby in this graph, then say the one thing it gets right",
+   "content": "This graph’s a mess of flabby indecision! It dithers over random walks, tiebreaks, and aging without nailing a concrete rule, just frets over edge cases like a jittery scribe. The only thing it gets right? It correctly spotted that dropping a cell’s priority post-service stops it from hogging the budget forever—basic, but it landed that one solid point.",
+   "usage": {
+    "prompt_tokens": 693,
+    "total_tokens": 1137,
+    "completion_tokens": 444,
+    "estimated_cost": 0.00024690000000000004,
+    "prompt_tokens_details": {
+     "cached_tokens": 0,
+     "cache_write_tokens": null
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 362
+    }
+   },
+   "finish": "stop",
+   "ms": 5247,
+   "error": null
+  },
+  {
+   "model": "ibm-granite/granite-4.2-3b",
+   "role": "a narrow pragmatic racehorse: would this graph let you write the algorithm today? name the first blocker",
+   "content": "Yes, the graph supplies a concrete local rule; the first blocker is the “Local‑max starvation risk” – a deterministic token can get stuck and starve lower‑urgency cells.",
+   "usage": {
+    "prompt_tokens": 667,
+    "total_tokens": 1174,
+    "completion_tokens": 507,
+    "estimated_cost": 8.085e-05,
+    "prompt_tokens_details": {
+     "cached_tokens": 0,
+     "cache_write_tokens": null
+    }
+   },
+   "finish": "stop",
+   "ms": 2540,
+   "error": null
+  },
+  {
+   "model": "meta-models/Muse-Glimmer-30B",
+   "role": "an intuitive coder: which single added cell would make this graph implementable?",
+   "content": "",
+   "usage": {
+    "prompt_tokens": 661,
+    "total_tokens": 1561,
+    "completion_tokens": 900,
+    "estimated_cost": 0.0012783,
+    "prompt_tokens_details": {
+     "cached_tokens": 0,
+     "cache_write_tokens": null
+    }
+   },
+   "finish": "length",
+   "ms": 7562,
+   "error": null
+  }
+ ],
+ "routes": {
+  "status": 200,
+  "ms": 276,
+  "answers": {
+   "route": {
+    "type": "choice",
+    "choice": "Task definition",
+    "confidence": 0.86,
+    "probabilities": {
+     "Local urgency score": 0.08,
+     "Local-max starvation risk": 0.01,
+     "Task definition": 0.89,
+     "Service lowers future priority": 0.0,
+     "No-starvation fairness claim": 0.0,
+     "Token holder moves locally": 0.02
+    }
+   },
+   "entry_check": {
+    "type": "noul",
+    "noul": 0.38
+   },
+   "skip_route": {
+    "type": "choice",
+    "choice": "No-starvation fairness claim",
+    "confidence": 0.95,
+    "probabilities": {
+     "Task definition": 0.0,
+     "Local-max starvation risk": 0.03,
+     "Local urgency score": 0.0,
+     "Service lowers future priority": 0.0,
+     "No-starvation fairness claim": 0.97,
+     "Token holder moves locally": 0.0
+    }
+   },
+   "completeness": {
+    "type": "score",
+    "score": 1.11,
+    "confidence": 0.0,
+    "legend": {
+     "0": "single-prompt artifact",
+     "1": "partially reusable",
+     "2": "reusable with the critique cells",
+     "3": "a general routing table"
+    },
+    "probabilities": {
+     "0": 0.36,
+     "1": 0.27,
+     "2": 0.28,
+     "3": 0.09
+    }
+   }
+  },
+  "usage": {
+   "input_tokens": 942,
+   "output_tokens": 193
+  },
+  "served": "jev-1.13.0"
+ },
+ "run": "20261001T190939Z-4bb8f5f5"
+}

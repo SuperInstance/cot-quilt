@@ -271,7 +271,8 @@ def merge(graphs, lens_answers):
                     if n['id'] == m.get('id') and n.get('load_expected') is not None:
                         scores.append(n['load_expected'])
         merged['nodes'].append({'label': c.get('label'), 'text': c.get('text'), 'samples': samples,
-                                'occurrence': len(samples), 'max_load': max(scores) if scores else None})
+                                'occurrence': len(samples), 'max_load': max(scores) if scores else None,
+                                'members': mem})
     merged['edges'] = [{'from': e['from'], 'to': e['to'], 'p': e['p']} for g in graphs for e in g['edges']]
     merged['receipt'] = r
     return merged
