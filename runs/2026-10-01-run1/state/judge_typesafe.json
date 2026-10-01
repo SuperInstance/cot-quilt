@@ -1,0 +1,26 @@
+{
+ "answers": {
+  "p_complete": {
+   "type": "noul",
+   "noul": 0.71
+  },
+  "p_implementable": {
+   "type": "noul",
+   "noul": 0.16
+  },
+  "p_missing_major": {
+   "type": "noul",
+   "noul": 0.29
+  },
+  "p_faulty": {
+   "type": "noul",
+   "noul": 0.37
+  }
+ },
+ "usage": {
+  "input_tokens": 6680,
+  "output_tokens": 78
+ },
+ "model": "jev-1.13.0",
+ "graph_summary_sha256": "126819bcb23b67f142e5ff7b75acc807bf987720dd4b32a03f0542fd75a5907a"
+}

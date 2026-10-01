@@ -1,0 +1,1528 @@
+{
+ "nodes": [
+  {
+   "id": "N01",
+   "point": "P1",
+   "title": "Receipt row and canonical hash",
+   "content": "Each cell appends rows with before/after, cause, deps, prev hash; canonical encoding gives stable SHA-256.",
+   "weight": 1,
+   "seed_votes": 1,
+   "seeds": [
+    0.2
+   ],
+   "composers": [
+    "flash@0.2"
+   ],
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N02",
+   "point": "P2",
+   "title": "Verified tip and pruning",
+   "content": "Boot rebuilds tip by verifying chain from anchor; pruning keeps checkpoint chain to live tip.",
+   "weight": 1,
+   "seed_votes": 1,
+   "seeds": [
+    0.2
+   ],
+   "composers": [
+    "flash@0.2"
+   ],
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N03",
+   "point": "P3",
+   "title": "Single-cell rewind",
+   "content": "Rewind appends new receipt with before=tip.after, after=target.after; old receipts remain.",
+   "weight": 0.975,
+   "seed_votes": 2,
+   "seeds": [
+    0.2,
+    1.1
+   ],
+   "composers": [
+    "flash@0.2",
+    "flash@1.1"
+   ],
+   "stability": "stable",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N04",
+   "point": "P4",
+   "title": "Dependents stale on rewind",
+   "content": "Reverse deps index marks consumers of superseded receipts stale; they must re-evaluate or rewind.",
+   "weight": 0.875,
+   "seed_votes": 2,
+   "seeds": [
+    0.2,
+    1.1
+   ],
+   "composers": [
+    "flash@0.2",
+    "flash@1.1"
+   ],
+   "stability": "stable",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N05",
+   "point": "P5",
+   "title": "Snapshot under lease",
+   "content": "Snapshot pins tip seq/hash and after-image under mutex or read lease; MVCC can avoid stop.",
+   "weight": 1,
+   "seed_votes": 1,
+   "seeds": [
+    0.2
+   ],
+   "composers": [
+    "flash@0.2"
+   ],
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N06",
+   "point": "P6",
+   "title": "Bootable cell drop-in",
+   "content": "Package snapshot, receipt log, schema, API manifest; loader verifies chain before instantiating.",
+   "weight": 1,
+   "seed_votes": 1,
+   "seeds": [
+    0.2
+   ],
+   "composers": [
+    "flash@0.2"
+   ],
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N07",
+   "point": "P7",
+   "title": "Nesting imported cell via adapter",
+   "content": "Host imports cell as boundary; writes import record; host inputs become receipts with cause host_input; nested chain stays authoritative.",
+   "weight": 0.8,
+   "seed_votes": 2,
+   "seeds": [
+    0.2,
+    1.1
+   ],
+   "composers": [
+    "flash@0.2",
+    "flash@1.1"
+   ],
+   "stability": "stable",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N08",
+   "point": "P8",
+   "title": "Organ ledger durability",
+   "content": "Organ manifest lists member tips; ledger hashes cut; fsync cell logs before organ commit.",
+   "weight": 0.9,
+   "seed_votes": 1,
+   "seeds": [
+    0.2
+   ],
+   "composers": [
+    "flash@0.2"
+   ],
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N09",
+   "point": "P9",
+   "title": "Organ rewind two-phase",
+   "content": "Intent row then member rewinds; commit only when all tips match target cut.",
+   "weight": 0.925,
+   "seed_votes": 2,
+   "seeds": [
+    0.2,
+    1.1
+   ],
+   "composers": [
+    "flash@0.2",
+    "flash@1.1"
+   ],
+   "stability": "stable",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N10",
+   "point": "P10",
+   "title": "Organ snapshot causal cut",
+   "content": "Write barrier records member tip vector and causally closed dependency cut.",
+   "weight": 0.9,
+   "seed_votes": 1,
+   "seeds": [
+    0.2
+   ],
+   "composers": [
+    "flash@0.2"
+   ],
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N11",
+   "point": "P11",
+   "title": "Bootable organ drop-in",
+   "content": "Loader verifies all member chains and organ ledger hash; refuses boot on any mismatch.",
+   "weight": 0.85,
+   "seed_votes": 2,
+   "seeds": [
+    0.2,
+    1.1
+   ],
+   "composers": [
+    "flash@0.2",
+    "flash@1.1"
+   ],
+   "stability": "stable",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N12",
+   "point": "P12",
+   "title": "Nest organ sub-quilt",
+   "content": "Host namespaces member IDs and maps only exports; boundary inputs are receipts inside sub-quilt.",
+   "weight": 0.8,
+   "seed_votes": 1,
+   "seeds": [
+    0.2
+   ],
+   "composers": [
+    "flash@0.2"
+   ],
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N13",
+   "point": "P13",
+   "title": "Quilt global ledger",
+   "content": "Global ledger rows chain global cut vectors across all cells and organs.",
+   "weight": 0.9,
+   "seed_votes": 1,
+   "seeds": [
+    0.2
+   ],
+   "composers": [
+    "flash@0.2"
+   ],
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N14",
+   "point": "P14",
+   "title": "Hierarchical quilt rewind",
+   "content": "Every organ rewinds to prior cut; global commit only when all organs and cells match.",
+   "weight": 0.9,
+   "seed_votes": 2,
+   "seeds": [
+    0.2,
+    1.1
+   ],
+   "composers": [
+    "flash@0.2",
+    "flash@1.1"
+   ],
+   "stability": "stable",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N15",
+   "point": "P15",
+   "title": "Epoch-barrier quilt snapshot",
+   "content": "Increment epoch, barrier in-flight receipts, record single causal global cut.",
+   "weight": 0.9,
+   "seed_votes": 1,
+   "seeds": [
+    0.2
+   ],
+   "composers": [
+    "flash@0.2"
+   ],
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N16",
+   "point": "P16",
+   "title": "Bootable quilt drop-in",
+   "content": "Loader verifies all chains, ledgers, wires deps, starts scheduler after verification.",
+   "weight": 1,
+   "seed_votes": 1,
+   "seeds": [
+    0.2
+   ],
+   "composers": [
+    "flash@0.2"
+   ],
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N17",
+   "point": "P17",
+   "title": "Nest whole quilt adapter",
+   "content": "Adapter exposes exports; parent pins child outputs by receipt hash in boundary ledger.",
+   "weight": 0.775,
+   "seed_votes": 2,
+   "seeds": [
+    0.2,
+    1.1
+   ],
+   "composers": [
+    "flash@0.2",
+    "flash@1.1"
+   ],
+   "stability": "stable",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N18",
+   "point": "P19",
+   "title": "Rewind dependency ripple",
+   "content": "Producer rewind makes consumer pins superseded; append dep_rewound receipts or freeze.",
+   "weight": 0.75,
+   "seed_votes": 2,
+   "seeds": [
+    0.2,
+    1.1
+   ],
+   "composers": [
+    "flash@0.2",
+    "flash@1.1"
+   ],
+   "stability": "stable",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N19",
+   "point": "P21",
+   "title": "External dependencies pinned by content hash",
+   "content": "Bootable save records external_pins name, content_hash, version, URI. Loader checks hashes before wiring; mutable paths alone undetectable.",
+   "weight": 0.75,
+   "seed_votes": 2,
+   "seeds": [
+    0.2,
+    1.1
+   ],
+   "composers": [
+    "flash@0.2",
+    "flash@1.1"
+   ],
+   "stability": "stable",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N20",
+   "point": "P24",
+   "title": "Hash and schema migration recorded as receipts",
+   "content": "Receipts carry hash_algo and schema tags. Migrations are new receipts or anchors with schema_migration cause; silent changes break chains.",
+   "weight": 0.6,
+   "seed_votes": 2,
+   "seeds": [
+    0.2,
+    1.1
+   ],
+   "composers": [
+    "flash@0.2",
+    "flash@1.1"
+   ],
+   "stability": "stable",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N21",
+   "point": "P25",
+   "title": "Reconcile partial commits",
+   "content": "Intent logs scanned against tips to commit or compensate, ensuring one terminal row.",
+   "weight": 0.8,
+   "seed_votes": 1,
+   "seeds": [
+    0.2
+   ],
+   "composers": [
+    "flash@0.2"
+   ],
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N22",
+   "point": "P26",
+   "title": "Namespacing prevents nested ID collisions",
+   "content": "Nested IDs rewritten as subquilt_id plus cell_id, and receipt hashes include namespaced ID. Unqualified IDs can collide and corrupt wiring.",
+   "weight": 0.7,
+   "seed_votes": 2,
+   "seeds": [
+    0.2,
+    1.1
+   ],
+   "composers": [
+    "flash@0.2",
+    "flash@1.1"
+   ],
+   "stability": "stable",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N23",
+   "point": "P27",
+   "title": "Parent-child composite snapshot",
+   "content": "Parent records child manifest hash and cut; child verified before parent dependents wire.",
+   "weight": 0.75,
+   "seed_votes": 2,
+   "seeds": [
+    0.2,
+    1.1
+   ],
+   "composers": [
+    "flash@0.2",
+    "flash@1.1"
+   ],
+   "stability": "stable",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N24",
+   "point": "P28",
+   "title": "Save nondeterministic runtime state explicitly",
+   "content": "RNG seeds, timers, queues, clocks are special cells or manifest fields. Omitting seed diverges post-boot receipts.",
+   "weight": 0.8,
+   "seed_votes": 2,
+   "seeds": [
+    0.2,
+    1.1
+   ],
+   "composers": [
+    "flash@0.2",
+    "flash@1.1"
+   ],
+   "stability": "stable",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N25",
+   "point": "P29",
+   "title": "Repeated core invariants",
+   "content": "Append-only hash chains, new receipts for changes, content-addressed cuts, atomic group commits, verified boot.",
+   "weight": 1,
+   "seed_votes": 1,
+   "seeds": [
+    0.2
+   ],
+   "composers": [
+    "flash@0.2"
+   ],
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N26",
+   "point": "P30",
+   "title": "Receipts prove local history only",
+   "content": "Chains prove local history only; cross-cell consistency, access, liveness, availability need organ/global ledgers, intent logs, pins, verifiers, namespaces.",
+   "weight": 0.7,
+   "seed_votes": 2,
+   "seeds": [
+    0.2,
+    1.1
+   ],
+   "composers": [
+    "flash@0.2",
+    "flash@1.1"
+   ],
+   "stability": "stable",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N27",
+   "point": "P1",
+   "title": "Define Goal",
+   "content": "Clarify purpose, scope, and success criteria for the project.",
+   "weight": 1,
+   "seed_votes": 1,
+   "seeds": [
+    0.7
+   ],
+   "composers": [
+    "flash@0.7"
+   ],
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N28",
+   "point": "P2",
+   "title": "Identify Stakeholders",
+   "content": "List people, groups, and approvals needed for decisions.",
+   "weight": 1,
+   "seed_votes": 1,
+   "seeds": [
+    0.7
+   ],
+   "composers": [
+    "flash@0.7"
+   ],
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N29",
+   "point": "P3",
+   "title": "Gather Requirements",
+   "content": "Collect needs, constraints, and desired outcomes from stakeholders.",
+   "weight": 1,
+   "seed_votes": 1,
+   "seeds": [
+    0.7
+   ],
+   "composers": [
+    "flash@0.7"
+   ],
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N30",
+   "point": "P4",
+   "title": "Assess Resources",
+   "content": "Review budget, time, tools, and available skills.",
+   "weight": 1,
+   "seed_votes": 1,
+   "seeds": [
+    0.7
+   ],
+   "composers": [
+    "flash@0.7"
+   ],
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N31",
+   "point": "P5",
+   "title": "Map Risks",
+   "content": "Identify major risks, assumptions, and mitigation options.",
+   "weight": 1,
+   "seed_votes": 1,
+   "seeds": [
+    0.7
+   ],
+   "composers": [
+    "flash@0.7"
+   ],
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N32",
+   "point": "P6",
+   "title": "Define Scope",
+   "content": "Document included work, exclusions, and acceptance criteria.",
+   "weight": 1,
+   "seed_votes": 1,
+   "seeds": [
+    0.7
+   ],
+   "composers": [
+    "flash@0.7"
+   ],
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N33",
+   "point": "P7",
+   "title": "Create Timeline",
+   "content": "Build milestones, deadlines, and dependency schedule.",
+   "weight": 1,
+   "seed_votes": 1,
+   "seeds": [
+    0.7
+   ],
+   "composers": [
+    "flash@0.7"
+   ],
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N34",
+   "point": "P8",
+   "title": "Assign Owners",
+   "content": "Name responsible people for each workstream and task.",
+   "weight": 1,
+   "seed_votes": 1,
+   "seeds": [
+    0.7
+   ],
+   "composers": [
+    "flash@0.7"
+   ],
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N35",
+   "point": "P9",
+   "title": "Draft Budget",
+   "content": "Estimate costs, funding sources, and contingency reserve.",
+   "weight": 1,
+   "seed_votes": 1,
+   "seeds": [
+    0.7
+   ],
+   "composers": [
+    "flash@0.7"
+   ],
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N36",
+   "point": "P10",
+   "title": "Set Communication Plan",
+   "content": "Define updates, meetings, channels, and escalation paths.",
+   "weight": 1,
+   "seed_votes": 1,
+   "seeds": [
+    0.7
+   ],
+   "composers": [
+    "flash@0.7"
+   ],
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N37",
+   "point": "P11",
+   "title": "Prepare Materials",
+   "content": "Create templates, checklists, and shared workspace structure.",
+   "weight": 1,
+   "seed_votes": 1,
+   "seeds": [
+    0.7
+   ],
+   "composers": [
+    "flash@0.7"
+   ],
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N38",
+   "point": "P12",
+   "title": "Validate Plan",
+   "content": "Review plan with stakeholders and resolve gaps.",
+   "weight": 1,
+   "seed_votes": 1,
+   "seeds": [
+    0.7
+   ],
+   "composers": [
+    "flash@0.7"
+   ],
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N39",
+   "point": "P13",
+   "title": "Launch Kickoff",
+   "content": "Start project, confirm roles, and publish first tasks.",
+   "weight": 1,
+   "seed_votes": 1,
+   "seeds": [
+    0.7
+   ],
+   "composers": [
+    "flash@0.7"
+   ],
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N40",
+   "point": "P14",
+   "title": "Execute Tasks",
+   "content": "Complete planned work and track progress against milestones.",
+   "weight": 1,
+   "seed_votes": 1,
+   "seeds": [
+    0.7
+   ],
+   "composers": [
+    "flash@0.7"
+   ],
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N41",
+   "point": "P15",
+   "title": "Monitor Progress",
+   "content": "Review status, blockers, and schedule variance regularly.",
+   "weight": 1,
+   "seed_votes": 1,
+   "seeds": [
+    0.7
+   ],
+   "composers": [
+    "flash@0.7"
+   ],
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N42",
+   "point": "P16",
+   "title": "Manage Changes",
+   "content": "Assess change requests and update scope or timeline.",
+   "weight": 1,
+   "seed_votes": 1,
+   "seeds": [
+    0.7
+   ],
+   "composers": [
+    "flash@0.7"
+   ],
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N43",
+   "point": "P17",
+   "title": "Control Quality",
+   "content": "Check deliverables against acceptance criteria and standards.",
+   "weight": 1,
+   "seed_votes": 1,
+   "seeds": [
+    0.7
+   ],
+   "composers": [
+    "flash@0.7"
+   ],
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N44",
+   "point": "P18",
+   "title": "Manage Risks",
+   "content": "Track risks and activate mitigation plans when needed.",
+   "weight": 1,
+   "seed_votes": 1,
+   "seeds": [
+    0.7
+   ],
+   "composers": [
+    "flash@0.7"
+   ],
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N45",
+   "point": "P19",
+   "title": "Report Status",
+   "content": "Share concise updates with stakeholders and sponsors.",
+   "weight": 1,
+   "seed_votes": 1,
+   "seeds": [
+    0.7
+   ],
+   "composers": [
+    "flash@0.7"
+   ],
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N46",
+   "point": "P20",
+   "title": "Closeout Review",
+   "content": "Confirm deliverables, approvals, and outstanding issues.",
+   "weight": 1,
+   "seed_votes": 1,
+   "seeds": [
+    0.7
+   ],
+   "composers": [
+    "flash@0.7"
+   ],
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N47",
+   "point": "P21",
+   "title": "Document Lessons",
+   "content": "Capture what worked, what failed, and recommendations.",
+   "weight": 1,
+   "seed_votes": 1,
+   "seeds": [
+    0.7
+   ],
+   "composers": [
+    "flash@0.7"
+   ],
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N48",
+   "point": "P22",
+   "title": "Archive Project",
+   "content": "Store final files, decisions, and access records.",
+   "weight": 1,
+   "seed_votes": 1,
+   "seeds": [
+    0.7
+   ],
+   "composers": [
+    "flash@0.7"
+   ],
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N49",
+   "point": "P1",
+   "title": "Receipt row and tip verification",
+   "content": "Receipt row stores before/after images, cause_ref, deps_map; hash covers canonical fields. Boot verifies hash links to anchor, quarantines gaps.",
+   "weight": 0.9,
+   "seed_votes": 1,
+   "seeds": [
+    1.1
+   ],
+   "composers": [
+    "flash@1.1"
+   ],
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N50",
+   "point": "P5",
+   "title": "Single-cell snapshot and drop-in",
+   "content": "Snapshot exports immutable tip_hash, after_image, chain proof under lease. Drop-in packages snapshot, receipt log, schema, manifest; loader verifies before instantiating.",
+   "weight": 0.9,
+   "seed_votes": 1,
+   "seeds": [
+    1.1
+   ],
+   "composers": [
+    "flash@1.1"
+   ],
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N51",
+   "point": "P10",
+   "title": "Organ snapshot acquires write barrier",
+   "content": "Organ snapshot archives manifest, member snapshots, logs, external pins, ledger slice. Write barrier freezes members; cut must be causally closed.",
+   "weight": 0.8,
+   "seed_votes": 1,
+   "seeds": [
+    1.1
+   ],
+   "composers": [
+    "flash@1.1"
+   ],
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N52",
+   "point": "P12",
+   "title": "Organ nested via namespace exports",
+   "content": "Sub-quilt imports organ under namespace prefix and maps only manifest exports. Host bypassing exports causes non-linearized cross-ledger writes.",
+   "weight": 0.645,
+   "seed_votes": 1,
+   "seeds": [
+    1.1
+   ],
+   "composers": [
+    "flash@1.1",
+    "typesafe@jev-1.13.0"
+   ],
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active",
+   "ts_load": 0.54
+  },
+  {
+   "id": "N53",
+   "point": "P13",
+   "title": "Quilt ledger defines causal global cut",
+   "content": "quilt_ledger hash-chains rows with global_cut_vector, organ_cut_vectors, and monotonic global_epoch. Cut is one causal line, not wall-clock grouping.",
+   "weight": 0.8,
+   "seed_votes": 1,
+   "seeds": [
+    1.1
+   ],
+   "composers": [
+    "flash@1.1"
+   ],
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N54",
+   "point": "P15",
+   "title": "Quilt snapshot and bootable drop-in",
+   "content": "Quilt snapshot increments epoch, waits, records one global cut. Drop-in verifies all chains and ledgers before scheduler.",
+   "weight": 0.9,
+   "seed_votes": 1,
+   "seeds": [
+    1.1
+   ],
+   "composers": [
+    "flash@1.1"
+   ],
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N55",
+   "point": "P18",
+   "title": "Pruning trades rewind depth for storage",
+   "content": "Cells keep log tail plus checkpoint; old receipts go cold. Missing checkpoint blocks deep rewind and audit.",
+   "weight": 0.6,
+   "seed_votes": 1,
+   "seeds": [
+    1.1
+   ],
+   "composers": [
+    "flash@1.1"
+   ],
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N56",
+   "point": "P20",
+   "title": "Fsync order preserves commit atomicity",
+   "content": "Fsync cell logs before organ commit, organ before global. Reversed order commits rows pointing to unflushed tips.",
+   "weight": 0.7,
+   "seed_votes": 1,
+   "seeds": [
+    1.1
+   ],
+   "composers": [
+    "flash@1.1"
+   ],
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N57",
+   "point": "P22",
+   "title": "Canonical serialization stabilizes receipt hashes",
+   "content": "Canonical CBOR with sorted keys and schema version ensures identical logical state reproduces same hash. Non-determinism forks verification.",
+   "weight": 0.8,
+   "seed_votes": 1,
+   "seeds": [
+    1.1
+   ],
+   "composers": [
+    "flash@1.1"
+   ],
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N58",
+   "point": "P23",
+   "title": "Leases linearize concurrent snapshots and writes",
+   "content": "Snapshot takes read leases on members for linearized cut; mutations block or fail. Otherwise snapshot mixes tips never coexisting.",
+   "weight": 0.7,
+   "seed_votes": 1,
+   "seeds": [
+    1.1
+   ],
+   "composers": [
+    "flash@1.1"
+   ],
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N59",
+   "point": "P25",
+   "title": "Intent log reconciles partial commits",
+   "content": "Organ/global transactions write intent logs. Recovery scans intents against tips and commits or compensates; no uncommitted intermediate tips remain.",
+   "weight": 0.7,
+   "seed_votes": 1,
+   "seeds": [
+    1.1
+   ],
+   "composers": [
+    "flash@1.1"
+   ],
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N60",
+   "point": "P29",
+   "title": "Invariants repeat at every granularity",
+   "content": "Chains append-only; every change new receipt; snapshots content-addressed; group commits atomic; dependencies hash-pinned; boot verifies before instantiate. Breaks quarantine level.",
+   "weight": 0.9,
+   "seed_votes": 1,
+   "seeds": [
+    1.1
+   ],
+   "composers": [
+    "flash@1.1"
+   ],
+   "stability": "volatile",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "TS-P1",
+   "point": "P1",
+   "title": "point P1 (jev load 0.57)",
+   "content": "P1. A cell's receipt chain is a per-cell append-only ledger row `(cell_id, seq, prev_hash, before_image, after_image, cause_ref, deps_map, wall_clock, hash)` where `hash = SHA-256(cell_id || seq || prev_hash || canonical(before_image) || canonical(after_image) || canonical(cause_ref) || canonical(deps_map))`. The double-entry property means every row stores both before and after states plus the triggering cause and exact dependency versions, making changes auditable and reversible.",
+   "weight": 0.57,
+   "deps": [],
+   "seed_votes": 0,
+   "seeds": [],
+   "composers": [
+    "typesafe@jev-1.13.0"
+   ],
+   "stability": "typesafe-only",
+   "origin": "typesafe-decompose",
+   "status": "active"
+  },
+  {
+   "id": "TS-P2",
+   "point": "P2",
+   "title": "point P2 (jev load 0.61)",
+   "content": "P2. A cell's committed current state is `tip.after_image`, where the tip is the highest-`seq` receipt whose chain verifies from a trusted anchor/genesis. Boot rebuilds `cell_tip = (seq, hash, after_image_ref)` by scanning `receipt_log` and checking `receipt[k].prev_hash == receipt[k-1].hash`.",
+   "weight": 0.61,
+   "deps": [],
+   "seed_votes": 0,
+   "seeds": [],
+   "composers": [
+    "typesafe@jev-1.13.0"
+   ],
+   "stability": "typesafe-only",
+   "origin": "typesafe-decompose",
+   "status": "active"
+  },
+  {
+   "id": "TS-P3",
+   "point": "P3",
+   "title": "point P3 (jev load 0.55)",
+   "content": "P3. Single-cell rewind uses the receipt chain as an append-only time machine: locate the target receipt `R_t` by `seq` or `hash`, verify it back to the anchor, read current tip `R_cur`, then append `R_rw = (cell_id, tip.seq+1, tip.hash, before=tip.after, after=R_t.after, cause={\"op\":\"rewind\",\"target_receipt\":R_t.hash}, deps=R_t.deps, ts=now, hash=...)`. Invariant: old receipts are never deleted; the rewind is just a new valid transition whose `after_image` equals the target's `after_image`.",
+   "weight": 0.55,
+   "deps": [],
+   "seed_votes": 0,
+   "seeds": [],
+   "composers": [
+    "typesafe@jev-1.13.0"
+   ],
+   "stability": "typesafe-only",
+   "origin": "typesafe-decompose",
+   "status": "active"
+  },
+  {
+   "id": "TS-P4",
+   "point": "P4",
+   "title": "point P4 (jev load 0.55)",
+   "content": "P4. Single-cell rewind must account for dependents, not just the rewound cell. The runtime keeps `dep_index[ (cell_id, receipt_hash) ] -> [dependent_receipt_ids]` built from each receipt's `deps_map`.",
+   "weight": 0.55,
+   "deps": [],
+   "seed_votes": 0,
+   "seeds": [],
+   "composers": [
+    "typesafe@jev-1.13.0"
+   ],
+   "stability": "typesafe-only",
+   "origin": "typesafe-decompose",
+   "status": "active"
+  },
+  {
+   "id": "TS-P5",
+   "point": "P5",
+   "title": "point P5 (jev load 0.43)",
+   "content": "P5. A single-cell snapshot is an immutable export record `cell_snapshot.json = {schema_version, cell_id, tip_seq, tip_hash, after_image, prev_hash, proof_type, chain_proof, dep_pins, created_at}`. To make it, the cell is read under its per-cell mutex or a read lease, and the snapshot is content-addressed by `file_sha256`; the included proof is the ordered receipt headers from anchor to tip, or a Merkle path if the ledger is Merkelized.",
+   "weight": 0.43,
+   "deps": [],
+   "seed_votes": 0,
+   "seeds": [],
+   "composers": [
+    "typesafe@jev-1.13.0"
+   ],
+   "stability": "typesafe-only",
+   "origin": "typesafe-decompose",
+   "status": "active"
+  },
+  {
+   "id": "TS-P6",
+   "point": "P6",
+   "title": "point P6 (jev load 0.54)",
+   "content": "P6. A single-cell bootable drop-in packages `cell_drop_in/` with `cell_snapshot.json`, `receipt_log.cbor`, `schema.cbor`, `api_manifest.json`, and `dep_pins.json`. On load, the host verifies the receipt log, recomputes `tip_hash`, compares it to the snapshot, then instantiates the cell with `state = tip.after_image`; the first future mutation appends a receipt with `prev_hash = tip.hash`.",
+   "weight": 0.54,
+   "deps": [],
+   "seed_votes": 0,
+   "seeds": [],
+   "composers": [
+    "typesafe@jev-1.13.0"
+   ],
+   "stability": "typesafe-only",
+   "origin": "typesafe-decompose",
+   "status": "active"
+  },
+  {
+   "id": "TS-P7",
+   "point": "P7",
+   "title": "point P7 (jev load 0.66)",
+   "content": "P7. To nest a single saved cell in a host quilt, the host imports it as a boundary cell and writes an import record `{host_cell_id, imported_cell_id, imported_tip_hash, content_hash, mapping}` into its import journal. Host inputs become normal receipts in the nested cell's log with `cause={\"type\":\"host_input\",\"host_txn_id\":...}`; host reads pin the exact nested receipt hash/content hash.",
+   "weight": 0.66,
+   "deps": [],
+   "seed_votes": 0,
+   "seeds": [],
+   "composers": [
+    "typesafe@jev-1.13.0"
+   ],
+   "stability": "typesafe-only",
+   "origin": "typesafe-decompose",
+   "status": "active"
+  },
+  {
+   "id": "TS-P8",
+   "point": "P8",
+   "title": "point P8 (jev load 0.57)",
+   "content": "P8. An organ is defined by `organ_manifest.json = {organ_id, version, members:[{cell_id, role, tip_hash, seq}], organ_ledger_hash, external_pins, exports}`. Its group-level bookkeeping is an append-only hash-chained file `organ_ledger.jsonl`; rows are `(ledger_seq, prev_ledger_hash, txn_id, type, cut_vector, cause, ts, hash)` where `cut_vector = {cell_id: tip_hash}`.",
+   "weight": 0.57,
+   "deps": [],
+   "seed_votes": 0,
+   "seeds": [],
+   "composers": [
+    "typesafe@jev-1.13.0"
+   ],
+   "stability": "typesafe-only",
+   "origin": "typesafe-decompose",
+   "status": "active"
+  },
+  {
+   "id": "TS-P9",
+   "point": "P9",
+   "title": "point P9 (jev load 0.46)",
+   "content": "P9. Organ rewind is a two-phase group transaction. It writes an `organ_intent.jsonl` row `{txn_id, type:\"rewind\", target_cut:T, status:\"preparing\"}`, then for each member cell in deterministic order appends a cell rewind receipt to the target cut.",
+   "weight": 0.46,
+   "deps": [],
+   "seed_votes": 0,
+   "seeds": [],
+   "composers": [
+    "typesafe@jev-1.13.0"
+   ],
+   "stability": "typesafe-only",
+   "origin": "typesafe-decompose",
+   "status": "active"
+  },
+  {
+   "id": "TS-P10",
+   "point": "P10",
+   "title": "point P10 (jev load 0.42)",
+   "content": "P10. An organ snapshot is an archive `organ_snapshot/` containing `manifest.json`, per-member `cell_snapshot.json` files, member receipt logs, `external_pins.json`, and an `organ_ledger_slice.jsonl` up to the cut. Snapshot capture first acquires the organ write barrier so no member appends during the cut, then records the member tip vector.",
+   "weight": 0.42,
+   "deps": [],
+   "seed_votes": 0,
+   "seeds": [],
+   "composers": [
+    "typesafe@jev-1.13.0"
+   ],
+   "stability": "typesafe-only",
+   "origin": "typesafe-decompose",
+   "status": "active"
+  },
+  {
+   "id": "TS-P11",
+   "point": "P11",
+   "title": "point P11 (jev load 0.38)",
+   "content": "P11. An organ saved as a bootable drop-in is the organ snapshot plus a loader manifest giving init order and public API. The loader verifies every member cell chain and the organ ledger hash before instantiating any member; if one member fails, the whole organ refuses to boot.",
+   "weight": 0.38,
+   "deps": [],
+   "seed_votes": 0,
+   "seeds": [],
+   "composers": [
+    "typesafe@jev-1.13.0"
+   ],
+   "stability": "typesafe-only",
+   "origin": "typesafe-decompose",
+   "status": "active"
+  },
+  {
+   "id": "TS-P13",
+   "point": "P13",
+   "title": "point P13 (jev load 0.49)",
+   "content": "P13. Whole-quilt coordination uses a hash-chained `quilt_ledger.jsonl` with rows `(global_seq, prev_global_hash, txn_id, type, global_cut_vector, organ_cut_vectors, cause, ts, hash)` and a monotonic `global_epoch`. The global cut vector is the set of all cell tips or all organ tip vectors across the quilt.",
+   "weight": 0.49,
+   "deps": [],
+   "seed_votes": 0,
+   "seeds": [],
+   "composers": [
+    "typesafe@jev-1.13.0"
+   ],
+   "stability": "typesafe-only",
+   "origin": "typesafe-decompose",
+   "status": "active"
+  },
+  {
+   "id": "TS-P14",
+   "point": "P14",
+   "title": "point P14 (jev load 0.41)",
+   "content": "P14. Whole-quilt rewind uses hierarchical two-phase commit: choose a prior global cut from `quilt_ledger.jsonl`, have every organ execute its organ rewind to that cut, then append a `type:\"rewind_commit\"` global ledger row with the new global cut vector. Invariant: the quilt is committed only when every organ ledger and every member cell is at the designated tip.",
+   "weight": 0.41,
+   "deps": [],
+   "seed_votes": 0,
+   "seeds": [],
+   "composers": [
+    "typesafe@jev-1.13.0"
+   ],
+   "stability": "typesafe-only",
+   "origin": "typesafe-decompose",
+   "status": "active"
+  },
+  {
+   "id": "TS-P15",
+   "point": "P15",
+   "title": "point P15 (jev load 0.44)",
+   "content": "P15. A whole-quilt snapshot is a directory `quilt_snapshot/` with `quilt_manifest.json`, per-organ or per-cell snapshots, receipt logs, `external_pins.json`, and a `global_ledger_slice.jsonl`. Snapshot capture increments `global_epoch`, waits for all in-flight receipts to land before the epoch barrier, then records the resulting global cut.",
+   "weight": 0.44,
+   "deps": [],
+   "seed_votes": 0,
+   "seeds": [],
+   "composers": [
+    "typesafe@jev-1.13.0"
+   ],
+   "stability": "typesafe-only",
+   "origin": "typesafe-decompose",
+   "status": "active"
+  },
+  {
+   "id": "TS-P16",
+   "point": "P16",
+   "title": "point P16 (jev load 0.47)",
+   "content": "P16. A whole-quilt bootable drop-in packages the global snapshot plus runtime config and bootstrap order. On boot the loader verifies all cell receipt chains, organ ledgers, and the global ledger hash, instantiates cells, wires dependencies from `deps_map`, and only then starts the scheduler.",
+   "weight": 0.47,
+   "deps": [],
+   "seed_votes": 0,
+   "seeds": [],
+   "composers": [
+    "typesafe@jev-1.13.0"
+   ],
+   "stability": "typesafe-only",
+   "origin": "typesafe-decompose",
+   "status": "active"
+  },
+  {
+   "id": "TS-P17",
+   "point": "P17",
+   "title": "point P17 (jev load 0.59)",
+   "content": "P17. Nesting a whole quilt as a sub-quilt requires an adapter that exposes only the saved quilt's `exports`. The parent records each boundary interaction in a `boundary_ledger`; an input into the sub-quilt becomes a receipt in the target sub-quilt cell with `cause={\"type\":\"parent_input\",\"parent_receipt_hash\":...}`, and an output read by the parent is pinned by the sub-quilt receipt hash.",
+   "weight": 0.59,
+   "deps": [],
+   "seed_votes": 0,
+   "seeds": [],
+   "composers": [
+    "typesafe@jev-1.13.0"
+   ],
+   "stability": "typesafe-only",
+   "origin": "typesafe-decompose",
+   "status": "active"
+  },
+  {
+   "id": "TS-P18",
+   "point": "P18",
+   "title": "point P18 (jev load 0.36)",
+   "content": "P18. Pruning is a storage failure mode. Because rewind depth depends on retained receipts, a cell may keep only a recent log tail plus a checkpoint snapshot; old receipts move to cold storage keyed by `(cell_id, receipt_hash)`.",
+   "weight": 0.36,
+   "deps": [],
+   "seed_votes": 0,
+   "seeds": [],
+   "composers": [
+    "typesafe@jev-1.13.0"
+   ],
+   "stability": "typesafe-only",
+   "origin": "typesafe-decompose",
+   "status": "active"
+  },
+  {
+   "id": "TS-P19",
+   "point": "P19",
+   "title": "point P19 (jev load 0.34)",
+   "content": "P19. Rewinding one cell can ripple through dependents. A cell's receipt `deps_map` pins another cell by `receipt_hash`; when the producer is rewound, the consumer's pin points to a superseded historical receipt.",
+   "weight": 0.34,
+   "deps": [],
+   "seed_votes": 0,
+   "seeds": [],
+   "composers": [
+    "typesafe@jev-1.13.0"
+   ],
+   "stability": "typesafe-only",
+   "origin": "typesafe-decompose",
+   "status": "active"
+  },
+  {
+   "id": "TS-P20",
+   "point": "P20",
+   "title": "point P20 (jev load 0.23)",
+   "content": "P20. Organ and global ledgers require crash-atomic ordering with cell logs. The rule is: fsync member cell receipt logs before fsyncing the organ commit row, and fsync organ commits before fsyncing the global quilt commit row.",
+   "weight": 0.23,
+   "deps": [],
+   "seed_votes": 0,
+   "seeds": [],
+   "composers": [
+    "typesafe@jev-1.13.0"
+   ],
+   "stability": "typesafe-only",
+   "origin": "typesafe-decompose",
+   "status": "active"
+  },
+  {
+   "id": "TS-P21",
+   "point": "P21",
+   "title": "point P21 (jev load 0.4)",
+   "content": "P21. External dependencies must be pinned by content hash. A bootable save records `external_pins.json` as `{name, content_hash, version, retrieval_uri}`; at load, the runtime checks hashes of any loaded dependency before wiring it.",
+   "weight": 0.4,
+   "deps": [],
+   "seed_votes": 0,
+   "seeds": [],
+   "composers": [
+    "typesafe@jev-1.13.0"
+   ],
+   "stability": "typesafe-only",
+   "origin": "typesafe-decompose",
+   "status": "active"
+  },
+  {
+   "id": "TS-P22",
+   "point": "P22",
+   "title": "point P22 (jev load 0.35)",
+   "content": "P22. Chain integrity depends on deterministic serialization. Before/after images and receipt fields must be encoded with a stable canonical format such as canonical CBOR with sorted keys and explicit schema version.",
+   "weight": 0.35,
+   "deps": [],
+   "seed_votes": 0,
+   "seeds": [],
+   "composers": [
+    "typesafe@jev-1.13.0"
+   ],
+   "stability": "typesafe-only",
+   "origin": "typesafe-decompose",
+   "status": "active"
+  },
+  {
+   "id": "TS-P23",
+   "point": "P23",
+   "title": "point P23 (jev load 0.4)",
+   "content": "P23. Concurrent snapshot/rewind writes are controlled by per-cell mutexes and version checks. A global or organ snapshot acquires read leases on all member cells to produce a linearized cut; mutations either block or fail.",
+   "weight": 0.4,
+   "deps": [],
+   "seed_votes": 0,
+   "seeds": [],
+   "composers": [
+    "typesafe@jev-1.13.0"
+   ],
+   "stability": "typesafe-only",
+   "origin": "typesafe-decompose",
+   "status": "active"
+  },
+  {
+   "id": "TS-P24",
+   "point": "P24",
+   "title": "point P24 (jev load 0.28)",
+   "content": "P24. Hash algorithm and schema evolution are failure modes. Receipts should include an algorithm tag or domain separator per cell/organ schema version, e.g.",
+   "weight": 0.28,
+   "deps": [],
+   "seed_votes": 0,
+   "seeds": [],
+   "composers": [
+    "typesafe@jev-1.13.0"
+   ],
+   "stability": "typesafe-only",
+   "origin": "typesafe-decompose",
+   "status": "active"
+  },
+  {
+   "id": "TS-P25",
+   "point": "P25",
+   "title": "point P25 (jev load 0.35)",
+   "content": "P25. Partial commit reconciliation handles failures in multi-cell operations. Every organ/global transaction starts in an intent log; recovery scans intents against current cell tips and commits or compensates.",
+   "weight": 0.35,
+   "deps": [],
+   "seed_votes": 0,
+   "seeds": [],
+   "composers": [
+    "typesafe@jev-1.13.0"
+   ],
+   "stability": "typesafe-only",
+   "origin": "typesafe-decompose",
+   "status": "active"
+  },
+  {
+   "id": "TS-P26",
+   "point": "P26",
+   "title": "point P26 (jev load 0.5)",
+   "content": "P26. Namespacing is a nesting failure mode. Nested cell IDs must be rewritten as `subquilt_id + cell_id`, and receipt hashes must include the namespaced cell ID so identical local IDs cannot collide.",
+   "weight": 0.5,
+   "deps": [],
+   "seed_votes": 0,
+   "seeds": [],
+   "composers": [
+    "typesafe@jev-1.13.0"
+   ],
+   "stability": "typesafe-only",
+   "origin": "typesafe-decompose",
+   "status": "active"
+  },
+  {
+   "id": "TS-P27",
+   "point": "P27",
+   "title": "point P27 (jev load 0.34)",
+   "content": "P27. Composite parent-child snapshot is a nesting-specific failure. If a parent quilt depends on a child sub-quilt's exported receipt hash, the parent snapshot must also record the child drop-in's manifest hash and cut vector.",
+   "weight": 0.34,
+   "deps": [],
+   "seed_votes": 0,
+   "seeds": [],
+   "composers": [
+    "typesafe@jev-1.13.0"
+   ],
+   "stability": "typesafe-only",
+   "origin": "typesafe-decompose",
+   "status": "active"
+  },
+  {
+   "id": "TS-P28",
+   "point": "P28",
+   "title": "point P28 (jev load 0.51)",
+   "content": "P28. Non-deterministic runtime state must be saved explicitly. Random seeds, timers, network pending queues, and monotonic clocks are not reconstructible from receipt after-images alone, so they must be represented as special cells or manifest fields.",
+   "weight": 0.51,
+   "deps": [],
+   "seed_votes": 0,
+   "seeds": [],
+   "composers": [
+    "typesafe@jev-1.13.0"
+   ],
+   "stability": "typesafe-only",
+   "origin": "typesafe-decompose",
+   "status": "active"
+  },
+  {
+   "id": "TS-P29",
+   "point": "P29",
+   "title": "point P29 (jev load 0.12)",
+   "content": "P29. The central invariants repeat at every granularity: receipt chains are append-only and hash-linked; every state change, including rewind, restore, and import, is a new receipt; snapshots are content-addressed cuts; group commits are atomic across members; dependencies are pinned by receipt hash or content hash rather than mutable pointers; and boot always verifies before instantiating. Failure at any level is containment: a single cell hash break quarantines that cell, an organ hash break quarantines the organ, and a global cut mismatch quarantines the whole quilt.",
+   "weight": 0.12,
+   "deps": [],
+   "seed_votes": 0,
+   "seeds": [],
+   "composers": [
+    "typesafe@jev-1.13.0"
+   ],
+   "stability": "typesafe-only",
+   "origin": "typesafe-decompose",
+   "status": "active"
+  },
+  {
+   "id": "TS-P30",
+   "point": "P30",
+   "title": "point P30 (jev load 0.15)",
+   "content": "P30. The overall failure boundary is that receipt chains prove local history but do not by themselves enforce cross-cell consistency, access control, liveness, or external availability. Those require the organ/global ledgers, intent logs, content-pinned external manifests, boot verifiers, and namespace/export boundaries described above.",
+   "weight": 0.15,
+   "deps": [],
+   "seed_votes": 0,
+   "seeds": [],
+   "composers": [
+    "typesafe@jev-1.13.0"
+   ],
+   "stability": "typesafe-only",
+   "origin": "typesafe-decompose",
+   "status": "active"
+  }
+ ],
+ "edges": [],
+ "rejected": [],
+ "notes": [
+  "xreview parse failed (no JSON array found) — candidates kept with status 'unadjudicated'"
+ ],
+ "xreview": {
+  "verdicts": [],
+  "model": "deepseek-flash"
+ },
+ "sim_threshold": 0.42
+}

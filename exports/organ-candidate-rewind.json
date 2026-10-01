@@ -1,0 +1,329 @@
+{
+ "organ_candidate": "cell-rewind-organ",
+ "exported_at_utc": "2026-10-01T23:36:21.088Z",
+ "source": {
+  "repo": "SuperInstance/cot-quilt",
+  "run": "2026-10-01-run1",
+  "question_id": "FLEET-Q-REWIND-ORGAN",
+  "graph_sha256": "fb5a2555c63ee3003184ca34d3a6506ffaacda46db51919dc0da462d24a30963"
+ },
+ "consumer_lane": "63-c",
+ "drop_in_contract": {
+  "node_semantics": "each node = a cell; content = the mechanism/invariant/failure-mode the cell must implement or assert",
+  "edge_semantics": "from -> to = dependency; weight = asserted-by fraction of composers",
+  "inclusion_rule": "core+stable flash-consensus nodes plus adversarial-critique cells (gaps the judges demanded)"
+ },
+ "nodes": [
+  {
+   "id": "N03",
+   "point": "P3",
+   "title": "Single-cell rewind",
+   "content": "Rewind appends new receipt with before=tip.after, after=target.after; old receipts remain.",
+   "weight": 0.975,
+   "seed_votes": 2,
+   "seeds": [
+    0.2,
+    1.1
+   ],
+   "composers": [
+    "flash@0.2",
+    "flash@1.1"
+   ],
+   "stability": "stable",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N04",
+   "point": "P4",
+   "title": "Dependents stale on rewind",
+   "content": "Reverse deps index marks consumers of superseded receipts stale; they must re-evaluate or rewind.",
+   "weight": 0.875,
+   "seed_votes": 2,
+   "seeds": [
+    0.2,
+    1.1
+   ],
+   "composers": [
+    "flash@0.2",
+    "flash@1.1"
+   ],
+   "stability": "stable",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N07",
+   "point": "P7",
+   "title": "Nesting imported cell via adapter",
+   "content": "Host imports cell as boundary; writes import record; host inputs become receipts with cause host_input; nested chain stays authoritative.",
+   "weight": 0.8,
+   "seed_votes": 2,
+   "seeds": [
+    0.2,
+    1.1
+   ],
+   "composers": [
+    "flash@0.2",
+    "flash@1.1"
+   ],
+   "stability": "stable",
+   "origin": "flash-decompose",
+   "status": "active",
+   "faulty_note": "minor: Missing key details about nested cell imports and host interaction"
+  },
+  {
+   "id": "N09",
+   "point": "P9",
+   "title": "Organ rewind two-phase",
+   "content": "Intent row then member rewinds; commit only when all tips match target cut.",
+   "weight": 0.925,
+   "seed_votes": 2,
+   "seeds": [
+    0.2,
+    1.1
+   ],
+   "composers": [
+    "flash@0.2",
+    "flash@1.1"
+   ],
+   "stability": "stable",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N11",
+   "point": "P11",
+   "title": "Bootable organ drop-in",
+   "content": "Loader verifies all member chains and organ ledger hash; refuses boot on any mismatch.",
+   "weight": 0.85,
+   "seed_votes": 2,
+   "seeds": [
+    0.2,
+    1.1
+   ],
+   "composers": [
+    "flash@0.2",
+    "flash@1.1"
+   ],
+   "stability": "stable",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N14",
+   "point": "P14",
+   "title": "Hierarchical quilt rewind",
+   "content": "Every organ rewinds to prior cut; global commit only when all organs and cells match.",
+   "weight": 0.9,
+   "seed_votes": 2,
+   "seeds": [
+    0.2,
+    1.1
+   ],
+   "composers": [
+    "flash@0.2",
+    "flash@1.1"
+   ],
+   "stability": "stable",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N17",
+   "point": "P17",
+   "title": "Nest whole quilt adapter",
+   "content": "Adapter exposes exports; parent pins child outputs by receipt hash in boundary ledger.",
+   "weight": 0.775,
+   "seed_votes": 2,
+   "seeds": [
+    0.2,
+    1.1
+   ],
+   "composers": [
+    "flash@0.2",
+    "flash@1.1"
+   ],
+   "stability": "stable",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N18",
+   "point": "P19",
+   "title": "Rewind dependency ripple",
+   "content": "Producer rewind makes consumer pins superseded; append dep_rewound receipts or freeze.",
+   "weight": 0.75,
+   "seed_votes": 2,
+   "seeds": [
+    0.2,
+    1.1
+   ],
+   "composers": [
+    "flash@0.2",
+    "flash@1.1"
+   ],
+   "stability": "stable",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N19",
+   "point": "P21",
+   "title": "External dependencies pinned by content hash",
+   "content": "Bootable save records external_pins name, content_hash, version, URI. Loader checks hashes before wiring; mutable paths alone undetectable.",
+   "weight": 0.75,
+   "seed_votes": 2,
+   "seeds": [
+    0.2,
+    1.1
+   ],
+   "composers": [
+    "flash@0.2",
+    "flash@1.1"
+   ],
+   "stability": "stable",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N20",
+   "point": "P24",
+   "title": "Hash and schema migration recorded as receipts",
+   "content": "Receipts carry hash_algo and schema tags. Migrations are new receipts or anchors with schema_migration cause; silent changes break chains.",
+   "weight": 0.6,
+   "seed_votes": 2,
+   "seeds": [
+    0.2,
+    1.1
+   ],
+   "composers": [
+    "flash@0.2",
+    "flash@1.1"
+   ],
+   "stability": "stable",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N22",
+   "point": "P26",
+   "title": "Namespacing prevents nested ID collisions",
+   "content": "Nested IDs rewritten as subquilt_id plus cell_id, and receipt hashes include namespaced ID. Unqualified IDs can collide and corrupt wiring.",
+   "weight": 0.7,
+   "seed_votes": 2,
+   "seeds": [
+    0.2,
+    1.1
+   ],
+   "composers": [
+    "flash@0.2",
+    "flash@1.1"
+   ],
+   "stability": "stable",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N23",
+   "point": "P27",
+   "title": "Parent-child composite snapshot",
+   "content": "Parent records child manifest hash and cut; child verified before parent dependents wire.",
+   "weight": 0.75,
+   "seed_votes": 2,
+   "seeds": [
+    0.2,
+    1.1
+   ],
+   "composers": [
+    "flash@0.2",
+    "flash@1.1"
+   ],
+   "stability": "stable",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N24",
+   "point": "P28",
+   "title": "Save nondeterministic runtime state explicitly",
+   "content": "RNG seeds, timers, queues, clocks are special cells or manifest fields. Omitting seed diverges post-boot receipts.",
+   "weight": 0.8,
+   "seed_votes": 2,
+   "seeds": [
+    0.2,
+    1.1
+   ],
+   "composers": [
+    "flash@0.2",
+    "flash@1.1"
+   ],
+   "stability": "stable",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "N26",
+   "point": "P30",
+   "title": "Receipts prove local history only",
+   "content": "Chains prove local history only; cross-cell consistency, access, liveness, availability need organ/global ledgers, intent logs, pins, verifiers, namespaces.",
+   "weight": 0.7,
+   "seed_votes": 2,
+   "seeds": [
+    0.2,
+    1.1
+   ],
+   "composers": [
+    "flash@0.2",
+    "flash@1.1"
+   ],
+   "stability": "stable",
+   "origin": "flash-decompose",
+   "status": "active"
+  },
+  {
+   "id": "C01",
+   "point": "P12",
+   "title": "Nested organ exports",
+   "content": "Sub-quilt imports organ under namespace prefix and maps only manifest exports. Host bypassing exports causes non-linearized cross-ledger writes.",
+   "weight": 0.516,
+   "deps": [],
+   "seed_votes": 0,
+   "seeds": [],
+   "composers": [
+    "judge@NousResearch/Hermes-3-Llama-3.1-405B"
+   ],
+   "stability": "critique",
+   "origin": "adversarial-critique",
+   "status": "active"
+  }
+ ],
+ "edges": [],
+ "judges": {
+  "typesafe": {
+   "p_complete": {
+    "type": "noul",
+    "noul": 0.71
+   },
+   "p_implementable": {
+    "type": "noul",
+    "noul": 0.16
+   },
+   "p_missing_major": {
+    "type": "noul",
+    "noul": 0.29
+   },
+   "p_faulty": {
+    "type": "noul",
+    "noul": 0.37
+   }
+  },
+  "hermes": {
+   "pass": true,
+   "completeness": 0.98,
+   "rationale": "The graph covers the key points of the CoT well, with only a minor omission around nested organ exports. The overall structure and invariants are represented accurately.",
+   "missing_count": 1,
+   "faulty_count": 1
+  }
+ }
+}

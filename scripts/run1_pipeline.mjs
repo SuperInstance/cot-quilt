@@ -168,12 +168,12 @@ async function phaseCompose(probe) {
 Fleet context (true; cite freely): a quilt is a reactive spreadsheet-like runtime whose state lives in CELLS. Each cell keeps DOUBLE-ENTRY BOOK-KEEPING: every state transition appends a receipt to that cell's hash-chained receipt log (the receipt chain); a receipt records what changed (before/after images), why (the triggering input or the exact dependency versions observed), and the hash of the previous receipt. Organs are named groups of cells acting as one unit; a quilt can nest inside another program or inside a larger quilt as a sub-quilt with its own exposed cells.`;
   const user = `FLEET QUESTION (answer it via the numbered reasoning trace):\n${QUESTION}\n\nBegin now. Format: a heading line "TRACE", then the numbered points P1..Pn, then a heading line "ANSWER" with a compact summary (<=200 words).`;
   const r = await callAndReceipt('compose', 'deepseek', probe.compose_model,
-    () => deepseekChat({ model: probe.compose_model, messages: [{ role: 'system', content: system }, { role: 'user', content: user }], max_tokens: 8192, timeout_ms: 600_000 }),
+    () => deepseekChat({ model: probe.compose_model, messages: [{ role: 'system', content: system }, { role: 'user', content: user }], max_tokens: 16384, timeout_ms: 540_000 }),
     { purpose: 'extended CoT on FLEET-Q-REWIND-ORGAN', notes: 'requested model name deepseek-v4-pro; api id per probe' });
   if (!r.content || r.finish === 'length') {
     // burn-guard (receipted finding: reasoner can spend the whole budget on reasoning)
     const r2 = await callAndReceipt('compose-retry', 'deepseek', probe.compose_model,
-      () => deepseekChat({ model: probe.compose_model, messages: [{ role: 'system', content: system }, { role: 'user', content: user + '\n\nBUDGET GUARD: the trace must fit; be concise per point.' }], max_tokens: 8192, timeout_ms: 600_000 }),
+      () => deepseekChat({ model: probe.compose_model, messages: [{ role: 'system', content: system }, { role: 'user', content: user + '\n\nBUDGET GUARD: the trace must fit; be concise per point.' }], max_tokens: 24000, timeout_ms: 540_000 }),
       { purpose: 'burn-guard retry at 2x budget' });
     st = { r: r2, system_sha256: sha256(system), user_sha256: sha256(user) };
   } else {
@@ -192,15 +192,31 @@ Schema per node: {"point":"P7","title":"<=6 words","content":"1-3 sentences, ato
 Rules:
 - ATOMIC: one mechanism / invariant / failure-mode per node; split compound points into multiple nodes.
 - COVERAGE: every point P1..Pn yields at least one node (a purely transitional point may yield one node with weight < 0.2 saying it is transitional bookkeeping).
-- 24-40 nodes total.
-- Output ONLY the JSON array. No markdown fences, no prose, no trailing text.`;
+- BUDGET: 20-26 nodes total; each "content" <= 20 words, compressed to the mechanical essence (do NOT restate the CoT verbatim); NEVER use the double-quote character (") inside any string value; the JSON array MUST be complete — truncation is a failure.
+- Output COMPACT JSON (no spaces/newlines between tokens), ONLY the array, no fences or prose.`;
 
 function parseJsonArray(raw) {
-  const s = raw.indexOf('['); const e = raw.lastIndexOf(']');
-  if (s < 0 || e <= s) throw new Error('no JSON array found');
-  const arr = JSON.parse(raw.slice(s, e + 1));
-  if (!Array.isArray(arr) || !arr.length) throw new Error('empty/invalid array');
-  return arr;
+  const attempt = (txt) => {
+    const s = txt.indexOf('['); const e = txt.lastIndexOf(']');
+    if (s < 0 || e <= s) throw new Error('no JSON array found');
+    return JSON.parse(txt.slice(s, e + 1));
+  };
+  try { return attempt(raw); } catch {}
+  // tolerant repair: smart quotes, control chars, trailing commas, stray escapes
+  const fixed = raw
+    .replace(/[\u201c\u201d\u201e]/g, "'").replace(/[\u2018\u2019]/g, "'")
+    // eslint-disable-next-line no-control-regex
+    .replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/g, ' ')
+    .replace(/,\s*(\]|\})/g, '$1');
+  try { return attempt(fixed); } catch {}
+  // last resort: cut at the last complete object and close the array
+  const objs = [];
+  const re = /\{[^{}]*\}/g; let m;
+  while ((m = re.exec(fixed)) !== null) {
+    try { objs.push(JSON.parse(m[0])); } catch {}
+  }
+  if (objs.length) return objs;
+  throw new Error('no JSON array found');
 }
 
 async function phaseDecomposeFlash(probe, compose, seeds) {
@@ -215,15 +231,17 @@ async function phaseDecomposeFlash(probe, compose, seeds) {
     let raw, r, repaired = false;
     try {
       r = await callAndReceipt('decompose_flash', 'deepseek', probe.flash_model,
-        () => deepseekChat({ model: probe.flash_model, messages: [{ role: 'system', content: FLASH_SYSTEM }, { role: 'user', content: user }], temperature: s.temperature, seed: s.seed_int, max_tokens: 6000 }),
+        () => deepseekChat({ model: probe.flash_model, messages: [{ role: 'system', content: FLASH_SYSTEM }, { role: 'user', content: user }], temperature: s.temperature, seed: s.seed_int, max_tokens: 16384 }),
         { seed: s.seed_int, temperature: s.temperature, purpose: `flash decomposition seed t=${s.temperature}`, request_sha256: sha256(user), notes: 'identical prefix across seeds for prompt-cache hits' });
       raw = r.content;
       st.runs.push({ ...s, nodes: parseJsonArray(raw), raw_len: raw.length, repaired });
     } catch (e) {
-      // JSON repair loop: one receipted retry (a dead call is still a row)
+      // JSON repair loop: one receipted retry (a dead call is still a row);
+      // the failed raw is persisted beside the ledger for post-mortem (never delete)
+      if (r?.content) writeAtomic(path.join(RUN, 'seeds', `flash-raw-${s.label}-failed.txt`), r.content);
       log(`  seed ${s.temperature}: parse/HTTP issue -> receipted repair retry (${String(e.message).slice(0, 80)})`);
       r = await callAndReceipt('decompose_flash_repair', 'deepseek', probe.flash_model,
-        () => deepseekChat({ model: probe.flash_model, messages: [{ role: 'user', content: `The following was supposed to be a STRICT JSON array of decomposition nodes but is broken or empty. Return the repaired STRICT JSON array ONLY.\n\n=== broken output ===\n${(r?.content ?? String(e.message)).slice(0, 6000)}\n\n=== original CoT (verbatim) ===\n${cot.slice(0, 40000)}\n\nRemind yourself of the schema: {"point","title","content","weight","deps"}.` }], temperature: 0.0, max_tokens: 6000 }),
+        () => deepseekChat({ model: probe.flash_model, messages: [{ role: 'user', content: `The following was supposed to be a STRICT JSON array of decomposition nodes but is broken or empty. Return the repaired STRICT JSON array ONLY. Constraints: 20-26 nodes; content <= 20 words; no double-quote characters inside string values; complete the array.\n\n=== broken output ===\n${(r?.content ?? String(e.message)).slice(0, 6000)}\n\nSchema reminder: {"point","title","content","weight","deps"}.` }], temperature: 0.0, max_tokens: 16384 }),
         { seed: s.seed_int, temperature: 0.0, purpose: `JSON repair for seed t=${s.temperature}` });
       repaired = true;
       st.runs.push({ ...s, nodes: parseJsonArray(r.content), raw_len: r.content.length, repaired });
