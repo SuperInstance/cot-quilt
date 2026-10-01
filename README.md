@@ -87,3 +87,15 @@ out: {graph_v1[], graph_v2{clusters, divergent, critique_nodes}, judge{score, ga
 - Failure paths receipted, not hidden: burn-guard retries, JSON repair loop,
   mothquantum per-bit fail-closed with `entropy_bits_true` count.
 - Seeds recorded even though the endpoint ignores them — book-keeping is the point.
+
+## Wave-64 instrument lessons (receipted)
+
+- The deepseek `seed` parameter is accepted but ignored (probe: seed=42 → 347, then 42 → 7).
+  Diversity is enforced by lenses; seeds stay in the ledger as book-keeping.
+- A reasoner call can burn the whole `max_tokens` on reasoning (`finish=length`, empty
+  content). The burn-guard retries at 3× budget; budget for v4-pro samples is 12k→36k.
+- Receipt writes are atomic (tmp + fsync + rename): a mid-write kill once truncated a
+  receipt and the resume created a fresh run id inside the old directory — harmless but
+  receipted; runs are keyed by content, not by wall clock.
+- mothquantum per-bit jobs give TRUE 16-bit seeds (48/48 quantum bits in the flagship run);
+  any fallback bit is flagged `entropy_bits_true < 16`.

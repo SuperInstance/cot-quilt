@@ -320,8 +320,13 @@ def refine(prompt, g2, judge_out):
 
 
 def _save(rdir, rec):
-    with open(f'{rdir}/receipt.json', 'w') as f:
+    # atomic write: a mid-write kill must never truncate the receipt (wave-64 lesson)
+    tmp = f'{rdir}/receipt.json.tmp'
+    with open(tmp, 'w') as f:
         json.dump(rec, f, indent=1, ensure_ascii=False)
+        f.flush()
+        os.fsync(f.fileno())
+    os.replace(tmp, f'{rdir}/receipt.json')
 
 
 def run(prompt, n_seeds=3, lenses=None, outdir=None):
