@@ -1,0 +1,1863 @@
+{
+ "run": "20261001T190939Z-4bb8f5f5",
+ "prompt": "Design a minimal local algorithm that decides which cell of a cellular graph receives the next unit of computation budget, given per-cell potential and resistance values. The rule must use only a cell and its direct neighbors (no global view). Explain why the rule is fair and why it cannot starve a cell forever.",
+ "started_utc": "20261001T190939Z",
+ "seed_ignore_finding": "deepseek endpoint ignores `seed` (probe receipted); diversity enforced via lenses; seeds are book-keeping",
+ "phases": {
+  "seeds": {
+   "seeds": [
+    {
+     "seed": 52840,
+     "bits16": "1100111001101000",
+     "source": "mothquantum/coin-toss-v1:1shot",
+     "entropy_bits_true": 16,
+     "job_ids": [
+      "4dd3d358-af05-4be2-b3e1-a20b7afad030",
+      "ccfb0b79-759d-4988-84a6-18680d6a4591",
+      "6053f0ad-39b7-4410-b4f8-74f72ff7a1a2",
+      "b3ad250a-a495-474b-afd4-e5775ec10a04",
+      "fdb3f332-adad-4afd-b74d-fd8e44793bcf",
+      "b73bdf43-6d3d-4905-991a-3f6912f3abd0",
+      "c6dc2c9a-c9fd-4869-96a2-89eaaf8fabf3",
+      "d717ffbf-bb7f-4d48-85d8-8fddfdf1aae5",
+      "d72b5221-3f2f-4f38-94bb-29afc6fabbec",
+      "6c7dc60a-9c19-4a5e-ab0f-cd34f1a42773",
+      "7970e640-60d7-4a3f-be35-2661af31abd9",
+      "d741dc01-4846-45bb-8661-f01f979477f8",
+      "4f00f4b1-2f22-434f-be45-981cd3070151",
+      "06e2051d-292c-4365-a3c2-f616679347f8",
+      "10ba4bad-1498-480a-bf82-f423239561d2",
+      "26c89f47-e6a8-4c21-8228-98797507c83b"
+     ]
+    },
+    {
+     "seed": 25780,
+     "bits16": "0110010010110100",
+     "source": "mothquantum/coin-toss-v1:1shot",
+     "entropy_bits_true": 16,
+     "job_ids": [
+      "d388d133-27b3-4b84-9c21-6d4c12bc528d",
+      "aa6a628f-7234-416e-8d9a-8d97fc34bb1b",
+      "f29c1aba-11f3-4784-b355-5ae3a8c28506",
+      "10f71e2b-01a6-4446-8fd0-35e9cceafebe",
+      "a5faa6dc-588a-4330-8f06-64b193ee7c25",
+      "176ef730-adb3-4e90-8d7c-893f05ad84f3",
+      "f72d17ef-bf02-4869-8374-6c789cb1ee06",
+      "7cd0245a-9a73-4aec-8595-737e41bcbe7e",
+      "9c3c1bdd-b7e3-4767-9fd7-3f91d645fa4e",
+      "73edb70e-dd52-4791-a693-e3aaa2d1458b",
+      "d8e9db98-cc77-4b30-93ea-babf6ebd0e84",
+      "bcae73ea-748f-445f-9c87-5fd880f6c5ab",
+      "3765c41d-c84c-48ad-a0f6-3c21059cf57c",
+      "1ff43127-c1fb-455a-987f-cae0f71ffdf4",
+      "c5ae3b70-9c1b-4d71-9af5-302fe25b35b9",
+      "3cd56a9f-35fa-43b2-b725-5a87eae51d06"
+     ]
+    },
+    {
+     "seed": 24417,
+     "bits16": "0101111101100001",
+     "source": "mothquantum/coin-toss-v1:1shot",
+     "entropy_bits_true": 16,
+     "job_ids": [
+      "fb6ea9b6-7b18-4d93-b2d1-b56e7206d805",
+      "a2c46da3-f4c1-4380-8a3d-3e0d13437bff",
+      "c4cd8c4f-a7ac-40ca-87a1-3811de3a02fe",
+      "0d8dec72-6c8c-4677-b920-3838fcce949a",
+      "3ef803db-9b50-42df-905f-a3c27efad217",
+      "22da566a-8a3d-4db7-804f-31033de90887",
+      "b9d1794d-2a2d-49ea-b453-c4ffea3c60e3",
+      "d665f3af-b9b5-4865-b4f8-c478318a972b",
+      "cb3bd285-bca5-40a0-9b0e-93ae9fe489ed",
+      "5f4ef598-2949-4eb9-8435-7ef6754a2a31",
+      "af27f779-45ce-40da-9954-5263bbba182b",
+      "6b25d6a4-7395-4461-b3c1-00ebca6d270e",
+      "5b439c29-fffb-4996-a717-efd807970b3b",
+      "f19f5d28-9704-416d-81f2-9cd2d1b15508",
+      "581b559e-b125-4be8-b273-c007da30f440",
+      "e44802ba-fc2e-4ac2-b002-bd70ce7883f5"
+     ]
+    }
+   ],
+   "degraded": false
+  },
+  "cot": [
+   {
+    "lens": "a skeptic who trusts only what can be checked against the stated premises",
+    "seed": {
+     "seed": 52840,
+     "bits16": "1100111001101000",
+     "source": "mothquantum/coin-toss-v1:1shot",
+     "entropy_bits_true": 16,
+     "job_ids": [
+      "4dd3d358-af05-4be2-b3e1-a20b7afad030",
+      "ccfb0b79-759d-4988-84a6-18680d6a4591",
+      "6053f0ad-39b7-4410-b4f8-74f72ff7a1a2",
+      "b3ad250a-a495-474b-afd4-e5775ec10a04",
+      "fdb3f332-adad-4afd-b74d-fd8e44793bcf",
+      "b73bdf43-6d3d-4905-991a-3f6912f3abd0",
+      "c6dc2c9a-c9fd-4869-96a2-89eaaf8fabf3",
+      "d717ffbf-bb7f-4d48-85d8-8fddfdf1aae5",
+      "d72b5221-3f2f-4f38-94bb-29afc6fabbec",
+      "6c7dc60a-9c19-4a5e-ab0f-cd34f1a42773",
+      "7970e640-60d7-4a3f-be35-2661af31abd9",
+      "d741dc01-4846-45bb-8661-f01f979477f8",
+      "4f00f4b1-2f22-434f-be45-981cd3070151",
+      "06e2051d-292c-4365-a3c2-f616679347f8",
+      "10ba4bad-1498-480a-bf82-f423239561d2",
+      "26c89f47-e6a8-4c21-8228-98797507c83b"
+     ]
+    },
+    "usage": {
+     "prompt_tokens": 110,
+     "completion_tokens": 15834,
+     "total_tokens": 15944,
+     "prompt_tokens_details": {
+      "cached_tokens": 0
+     },
+     "completion_tokens_details": {
+      "reasoning_tokens": 15203
+     },
+     "prompt_cache_hit_tokens": 0,
+     "prompt_cache_miss_tokens": 110
+    },
+    "finish": "stop",
+    "ms": 150641,
+    "answer_sha1": "8749efd53e25"
+   },
+   {
+    "lens": "an engineer who wants the smallest mechanism that could work",
+    "seed": {
+     "seed": 25780,
+     "bits16": "0110010010110100",
+     "source": "mothquantum/coin-toss-v1:1shot",
+     "entropy_bits_true": 16,
+     "job_ids": [
+      "d388d133-27b3-4b84-9c21-6d4c12bc528d",
+      "aa6a628f-7234-416e-8d9a-8d97fc34bb1b",
+      "f29c1aba-11f3-4784-b355-5ae3a8c28506",
+      "10f71e2b-01a6-4446-8fd0-35e9cceafebe",
+      "a5faa6dc-588a-4330-8f06-64b193ee7c25",
+      "176ef730-adb3-4e90-8d7c-893f05ad84f3",
+      "f72d17ef-bf02-4869-8374-6c789cb1ee06",
+      "7cd0245a-9a73-4aec-8595-737e41bcbe7e",
+      "9c3c1bdd-b7e3-4767-9fd7-3f91d645fa4e",
+      "73edb70e-dd52-4791-a693-e3aaa2d1458b",
+      "d8e9db98-cc77-4b30-93ea-babf6ebd0e84",
+      "bcae73ea-748f-445f-9c87-5fd880f6c5ab",
+      "3765c41d-c84c-48ad-a0f6-3c21059cf57c",
+      "1ff43127-c1fb-455a-987f-cae0f71ffdf4",
+      "c5ae3b70-9c1b-4d71-9af5-302fe25b35b9",
+      "3cd56a9f-35fa-43b2-b725-5a87eae51d06"
+     ]
+    },
+    "usage": {
+     "prompt_tokens": 107,
+     "completion_tokens": 11303,
+     "total_tokens": 11410,
+     "prompt_tokens_details": {
+      "cached_tokens": 0
+     },
+     "completion_tokens_details": {
+      "reasoning_tokens": 10681
+     },
+     "prompt_cache_hit_tokens": 0,
+     "prompt_cache_miss_tokens": 107
+    },
+    "finish": "stop",
+    "ms": 129872,
+    "answer_sha1": "fcd607d5025a"
+   },
+   {
+    "lens": "a teacher who explains by building one small piece at a time",
+    "seed": {
+     "seed": 24417,
+     "bits16": "0101111101100001",
+     "source": "mothquantum/coin-toss-v1:1shot",
+     "entropy_bits_true": 16,
+     "job_ids": [
+      "fb6ea9b6-7b18-4d93-b2d1-b56e7206d805",
+      "a2c46da3-f4c1-4380-8a3d-3e0d13437bff",
+      "c4cd8c4f-a7ac-40ca-87a1-3811de3a02fe",
+      "0d8dec72-6c8c-4677-b920-3838fcce949a",
+      "3ef803db-9b50-42df-905f-a3c27efad217",
+      "22da566a-8a3d-4db7-804f-31033de90887",
+      "b9d1794d-2a2d-49ea-b453-c4ffea3c60e3",
+      "d665f3af-b9b5-4865-b4f8-c478318a972b",
+      "cb3bd285-bca5-40a0-9b0e-93ae9fe489ed",
+      "5f4ef598-2949-4eb9-8435-7ef6754a2a31",
+      "af27f779-45ce-40da-9954-5263bbba182b",
+      "6b25d6a4-7395-4461-b3c1-00ebca6d270e",
+      "5b439c29-fffb-4996-a717-efd807970b3b",
+      "f19f5d28-9704-416d-81f2-9cd2d1b15508",
+      "581b559e-b125-4be8-b273-c007da30f440",
+      "e44802ba-fc2e-4ac2-b002-bd70ce7883f5"
+     ]
+    },
+    "usage": {
+     "prompt_tokens": 109,
+     "completion_tokens": 21692,
+     "total_tokens": 21801,
+     "prompt_tokens_details": {
+      "cached_tokens": 0
+     },
+     "completion_tokens_details": {
+      "reasoning_tokens": 20800
+     },
+     "prompt_cache_hit_tokens": 0,
+     "prompt_cache_miss_tokens": 109
+    },
+    "finish": "stop",
+    "ms": 175101,
+    "answer_sha1": "0e2a0075cae6"
+   }
+  ],
+  "split_wire": [
+   {
+    "sample": 0,
+    "n_steps": 8,
+    "ts_status": 200,
+    "ts_served": "jev-1.13.0",
+    "ts_ms": 263,
+    "steps": [
+     {
+      "id": "s1",
+      "kind": "PREMISE",
+      "text": "The task is to design a local rule for choosing the next budget cell using only a cell and its direct neighbors, and to justify fairness and no starvation."
+     },
+     {
+      "id": "s2",
+      "kind": "INFERENCE",
+      "text": "A purely local rule cannot find the unique global maximum in one step, so it must select local maxima, pass a token, or use randomized propagation."
+     },
+     {
+      "id": "s3",
+      "kind": "DECISION",
+      "text": "Define each cell's urgency as score = potential / resistance and compare it only with direct neighbors."
+     },
+     {
+      "id": "s4",
+      "kind": "CHECK",
+      "text": "A cell that is a strict local maximum can take the budget, but ties or multiple maxima need ID tie-breaking or backoff."
+     },
+     {
+      "id": "s5",
+      "kind": "INFERENCE",
+      "text": "If receiving a budget reduces the cell's potential or raises resistance, its score drops and it stops monopolizing."
+     },
+     {
+      "id": "s6",
+      "kind": "CHECK",
+      "text": "Local-max greedy alone can starve cells separated by valleys, so add a token or random walk to cross the graph."
+     },
+     {
+      "id": "s7",
+      "kind": "DECISION",
+      "text": "Use a token or random walk biased by local score; the token holder receives the budget and moves to a neighbor based only on local values."
+     },
+     {
+      "id": "s8",
+      "kind": "CONCLUSION",
+      "text": "On a connected graph, the random walk visits every cell infinitely often, and score reduction after service prevents permanent starvation."
+     }
+    ],
+    "graph": {
+     "nodes": [
+      {
+       "id": "s1",
+       "kind": "PREMISE",
+       "text": "The task is to design a local rule for choosing the next budget cell using only a cell and its direct neighbors, and to justify fairness and no starvation.",
+       "load_score": 2.62,
+       "load_expected": 2.63
+      },
+      {
+       "id": "s2",
+       "kind": "INFERENCE",
+       "text": "A purely local rule cannot find the unique global maximum in one step, so it must select local maxima, pass a token, or use randomized propagation.",
+       "load_score": 2.01,
+       "load_expected": 2.02
+      },
+      {
+       "id": "s3",
+       "kind": "DECISION",
+       "text": "Define each cell's urgency as score = potential / resistance and compare it only with direct neighbors.",
+       "load_score": 2.57,
+       "load_expected": 2.56
+      },
+      {
+       "id": "s4",
+       "kind": "CHECK",
+       "text": "A cell that is a strict local maximum can take the budget, but ties or multiple maxima need ID tie-breaking or backoff.",
+       "load_score": 1.06,
+       "load_expected": 1.05
+      },
+      {
+       "id": "s5",
+       "kind": "INFERENCE",
+       "text": "If receiving a budget reduces the cell's potential or raises resistance, its score drops and it stops monopolizing.",
+       "load_score": 1.37,
+       "load_expected": 1.37
+      },
+      {
+       "id": "s6",
+       "kind": "CHECK",
+       "text": "Local-max greedy alone can starve cells separated by valleys, so add a token or random walk to cross the graph.",
+       "load_score": 2.18,
+       "load_expected": 2.17
+      },
+      {
+       "id": "s7",
+       "kind": "DECISION",
+       "text": "Use a token or random walk biased by local score; the token holder receives the budget and moves to a neighbor based only on local values.",
+       "load_score": 2.73,
+       "load_expected": 2.72
+      },
+      {
+       "id": "s8",
+       "kind": "CONCLUSION",
+       "text": "On a connected graph, the random walk visits every cell infinitely often, and score reduction after service prevents permanent starvation.",
+       "load_score": 1.98,
+       "load_expected": 1.98
+      }
+     ],
+     "edges": [
+      {
+       "from": "s1",
+       "to": "s2",
+       "p": 1.0
+      },
+      {
+       "from": "s1",
+       "to": "s3",
+       "p": 0.69
+      },
+      {
+       "from": "s3",
+       "to": "s4",
+       "p": 0.55
+      },
+      {
+       "from": "s3",
+       "to": "s5",
+       "p": 0.88
+      },
+      {
+       "from": "s2",
+       "to": "s6",
+       "p": 0.89
+      },
+      {
+       "from": "s2",
+       "to": "s7",
+       "p": 0.47
+      },
+      {
+       "from": "s6",
+       "to": "s8",
+       "p": 0.55
+      }
+     ]
+    },
+    "battery_error": null
+   },
+   {
+    "sample": 1,
+    "n_steps": 8,
+    "ts_status": 200,
+    "ts_served": "jev-1.13.0",
+    "ts_ms": 266,
+    "steps": [
+     {
+      "id": "s1",
+      "kind": "PREMISE",
+      "text": "Design a minimal local rule to choose which cell receives the next computation budget using only the current cell and its direct neighbors."
+     },
+     {
+      "id": "s2",
+      "kind": "INFERENCE",
+      "text": "Per-cell potential and resistance can be combined into local weights, e.g. potential divided by resistance."
+     },
+     {
+      "id": "s3",
+      "kind": "DECISION",
+      "text": "Use a single budget token that moves locally from the current cell to itself or a neighbor."
+     },
+     {
+      "id": "s4",
+      "kind": "INFERENCE",
+      "text": "At each step, the token-holder chooses among itself and neighbors with probability proportional to their local weights."
+     },
+     {
+      "id": "s5",
+      "kind": "CHECK",
+      "text": "A positive floor on every weight ensures all transitions have nonzero probability."
+     },
+     {
+      "id": "s6",
+      "kind": "INFERENCE",
+      "text": "On a connected finite graph, this local token walk is an irreducible Markov chain."
+     },
+     {
+      "id": "s7",
+      "kind": "CONCLUSION",
+      "text": "Irreducibility makes every cell visited infinitely often with probability 1, so no cell starves forever and fairness is long-run proportional to weights."
+     },
+     {
+      "id": "s8",
+      "kind": "CHECK",
+      "text": "A deterministic local max rule could starve cells, so randomness with positive probabilities is the minimal safeguard."
+     }
+    ],
+    "graph": {
+     "nodes": [
+      {
+       "id": "s1",
+       "kind": "PREMISE",
+       "text": "Design a minimal local rule to choose which cell receives the next computation budget using only the current cell and its direct neighbors.",
+       "load_score": 2.89,
+       "load_expected": 2.91
+      },
+      {
+       "id": "s2",
+       "kind": "INFERENCE",
+       "text": "Per-cell potential and resistance can be combined into local weights, e.g. potential divided by resistance.",
+       "load_score": 2.43,
+       "load_expected": 2.42
+      },
+      {
+       "id": "s3",
+       "kind": "DECISION",
+       "text": "Use a single budget token that moves locally from the current cell to itself or a neighbor.",
+       "load_score": 2.95,
+       "load_expected": 2.97
+      },
+      {
+       "id": "s4",
+       "kind": "INFERENCE",
+       "text": "At each step, the token-holder chooses among itself and neighbors with probability proportional to their local weights.",
+       "load_score": 2.95,
+       "load_expected": 2.96
+      },
+      {
+       "id": "s5",
+       "kind": "CHECK",
+       "text": "A positive floor on every weight ensures all transitions have nonzero probability.",
+       "load_score": 2.53,
+       "load_expected": 2.54
+      },
+      {
+       "id": "s6",
+       "kind": "INFERENCE",
+       "text": "On a connected finite graph, this local token walk is an irreducible Markov chain.",
+       "load_score": 2.77,
+       "load_expected": 2.79
+      },
+      {
+       "id": "s7",
+       "kind": "CONCLUSION",
+       "text": "Irreducibility makes every cell visited infinitely often with probability 1, so no cell starves forever and fairness is long-run proportional to weights.",
+       "load_score": 2.83,
+       "load_expected": 2.84
+      },
+      {
+       "id": "s8",
+       "kind": "CHECK",
+       "text": "A deterministic local max rule could starve cells, so randomness with positive probabilities is the minimal safeguard.",
+       "load_score": 2.6,
+       "load_expected": 2.59
+      }
+     ],
+     "edges": [
+      {
+       "from": "s1",
+       "to": "s2",
+       "p": 1.0
+      },
+      {
+       "from": "s1",
+       "to": "s3",
+       "p": 0.87
+      },
+      {
+       "from": "s2",
+       "to": "s4",
+       "p": 0.52
+      },
+      {
+       "from": "s4",
+       "to": "s5",
+       "p": 0.57
+      },
+      {
+       "from": "s5",
+       "to": "s6",
+       "p": 0.96
+      },
+      {
+       "from": "s6",
+       "to": "s7",
+       "p": 0.81
+      },
+      {
+       "from": "s5",
+       "to": "s8",
+       "p": 0.49
+      }
+     ]
+    },
+    "battery_error": null
+   },
+   {
+    "sample": 2,
+    "n_steps": 8,
+    "ts_status": 200,
+    "ts_served": "jev-1.13.0",
+    "ts_ms": 266,
+    "steps": [
+     {
+      "id": "s1",
+      "kind": "PREMISE",
+      "text": "Need design a minimal local algorithm to choose which cell gets the next computation budget using only a cell and its direct neighbors."
+     },
+     {
+      "id": "s2",
+      "kind": "INFERENCE",
+      "text": "A natural local priority is urgency = potential / resistance: higher potential and lower resistance mean more deserving."
+     },
+     {
+      "id": "s3",
+      "kind": "DECISION",
+      "text": "Use a token: the current holder compares its urgency with neighbors and moves to the highest-urgency neighbor if that neighbor beats it."
+     },
+     {
+      "id": "s4",
+      "kind": "INFERENCE",
+      "text": "If no neighbor beats the current cell, the token stays and that cell consumes the budget, reducing its potential."
+     },
+     {
+      "id": "s5",
+      "kind": "CHECK",
+      "text": "With fixed potentials/resistances, the token can get stuck at a local maximum and starve lower-urgency cells."
+     },
+     {
+      "id": "s6",
+      "kind": "DECISION",
+      "text": "Add a local waiting/aging term so a cell's effective urgency rises the longer it goes unserved."
+     },
+     {
+      "id": "s7",
+      "kind": "INFERENCE",
+      "text": "The token then eventually leaves a repeatedly served cell and reaches waiting cells, so no cell starves forever."
+     },
+     {
+      "id": "s8",
+      "kind": "CONCLUSION",
+      "text": "The rule uses only local comparisons and aging, making it minimal, fair, and starvation-free."
+     }
+    ],
+    "graph": {
+     "nodes": [
+      {
+       "id": "s1",
+       "kind": "PREMISE",
+       "text": "Need design a minimal local algorithm to choose which cell gets the next computation budget using only a cell and its direct neighbors.",
+       "load_score": 2.7,
+       "load_expected": 2.7
+      },
+      {
+       "id": "s2",
+       "kind": "INFERENCE",
+       "text": "A natural local priority is urgency = potential / resistance: higher potential and lower resistance mean more deserving.",
+       "load_score": 2.16,
+       "load_expected": 2.16
+      },
+      {
+       "id": "s3",
+       "kind": "DECISION",
+       "text": "Use a token: the current holder compares its urgency with neighbors and moves to the highest-urgency neighbor if that neighbor beats it.",
+       "load_score": 2.87,
+       "load_expected": 2.86
+      },
+      {
+       "id": "s4",
+       "kind": "INFERENCE",
+       "text": "If no neighbor beats the current cell, the token stays and that cell consumes the budget, reducing its potential.",
+       "load_score": 2.7,
+       "load_expected": 2.71
+      },
+      {
+       "id": "s5",
+       "kind": "CHECK",
+       "text": "With fixed potentials/resistances, the token can get stuck at a local maximum and starve lower-urgency cells.",
+       "load_score": 1.98,
+       "load_expected": 1.97
+      },
+      {
+       "id": "s6",
+       "kind": "DECISION",
+       "text": "Add a local waiting/aging term so a cell's effective urgency rises the longer it goes unserved.",
+       "load_score": 2.96,
+       "load_expected": 2.96
+      },
+      {
+       "id": "s7",
+       "kind": "INFERENCE",
+       "text": "The token then eventually leaves a repeatedly served cell and reaches waiting cells, so no cell starves forever.",
+       "load_score": 2.84,
+       "load_expected": 2.83
+      },
+      {
+       "id": "s8",
+       "kind": "CONCLUSION",
+       "text": "The rule uses only local comparisons and aging, making it minimal, fair, and starvation-free.",
+       "load_score": 2.81,
+       "load_expected": 2.8
+      }
+     ],
+     "edges": [
+      {
+       "from": "s1",
+       "to": "s2",
+       "p": 1.0
+      },
+      {
+       "from": "s2",
+       "to": "s3",
+       "p": 0.73
+      },
+      {
+       "from": "s3",
+       "to": "s4",
+       "p": 0.98
+      },
+      {
+       "from": "s3",
+       "to": "s5",
+       "p": 0.82
+      },
+      {
+       "from": "s5",
+       "to": "s6",
+       "p": 0.73
+      },
+      {
+       "from": "s6",
+       "to": "s7",
+       "p": 0.97
+      },
+      {
+       "from": "s6",
+       "to": "s8",
+       "p": 0.87
+      }
+     ]
+    },
+    "battery_error": null
+   }
+  ],
+  "merge": {
+   "clusters": 6,
+   "divergent": 4,
+   "nodes": [
+    {
+     "label": "Task definition",
+     "text": "Design a local rule using only a cell and its direct neighbors to choose the next budget recipient and ensure fairness/no starvation.",
+     "samples": [
+      0,
+      1,
+      2
+     ],
+     "occurrence": 3,
+     "max_load": 2.91
+    },
+    {
+     "label": "Local urgency score",
+     "text": "Combine potential and resistance into a local priority, typically potential/resistance, for comparing a cell with its neighbors.",
+     "samples": [
+      0,
+      1,
+      2
+     ],
+     "occurrence": 3,
+     "max_load": 2.56
+    },
+    {
+     "label": "Token holder moves locally",
+     "text": "Use a single token whose holder considers itself and neighbors and moves or serves based only on local values.",
+     "samples": [
+      0,
+      1,
+      2
+     ],
+     "occurrence": 3,
+     "max_load": 2.97
+    },
+    {
+     "label": "Service lowers future priority",
+     "text": "After service, reduce potential or raise resistance so the served cell's score drops and it stops monopolizing.",
+     "samples": [
+      0,
+      2
+     ],
+     "occurrence": 2,
+     "max_load": 2.71
+    },
+    {
+     "label": "Local-max starvation risk",
+     "text": "A deterministic local-max/greedy token can get stuck and starve lower-urgency cells, so a safeguard is needed.",
+     "samples": [
+      0,
+      1,
+      2
+     ],
+     "occurrence": 3,
+     "max_load": 2.59
+    },
+    {
+     "label": "No-starvation fairness claim",
+     "text": "The chosen local mechanism ensures long-run fairness and no cell starves forever.",
+     "samples": [
+      0,
+      1,
+      2
+     ],
+     "occurrence": 3,
+     "max_load": 2.84
+    }
+   ],
+   "divergent_nodes": [
+    {
+     "label": "Global maximum impossibility",
+     "samples": [
+      0
+     ],
+     "text": "A purely local rule cannot find the unique global maximum in one step, so it must use local maxima, token passing, or randomized propagation."
+    },
+    {
+     "label": "Tie-breaking/backoff for local maxima",
+     "samples": [
+      0
+     ],
+     "text": "If several strict local maxima or ties occur, break ties by ID or local backoff."
+    },
+    {
+     "label": "Randomized token walk",
+     "samples": [
+      0,
+      1
+     ],
+     "text": "Randomize the token's next location in proportion to local weights, with a positive floor, yielding an irreducible walk that visits every cell infinitely often."
+    },
+    {
+     "label": "Aging-based deterministic token",
+     "samples": [
+      2
+     ],
+     "text": "Add a local waiting/aging term so an unserved cell's effective urgency rises until the token leaves a local maximum and reaches it."
+    }
+   ],
+   "flash_ms": 48080
+  },
+  "judge": {
+   "score": 6,
+   "gaps": [
+    "Global-maximum impossibility: a one-step local rule cannot compute the unique global maximum, so the design must use a token or local propagation instead of global argmax.",
+    "Explicit aging mechanism: the score must include a λa_i term, with the served cell's age reset and other ages incremented, to force eventual selection.",
+    "Tie-breaking/backoff: equal local scores or multiple local maxima need a deterministic or randomized tie-break to avoid loops.",
+    "Randomized token walk alternative: positive-floor local probabilities can make an irreducible walk that visits every cell infinitely often.",
+    "Formal no-starvation proof: show the aging term dominates bounded p/r and forces the token across every cut, or use irreducibility/recurrence."
+   ],
+   "verdict": "The graph captures the high-level components but omits the key aging, tie-breaking, and proof mechanisms, so it is only moderately thorough.",
+   "judge_ms": 39548,
+   "judge_usage": {
+    "prompt_tokens": 875,
+    "completion_tokens": 3235,
+    "total_tokens": 4110,
+    "prompt_tokens_details": {
+     "cached_tokens": 640
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 3035
+    },
+    "prompt_cache_hit_tokens": 640,
+    "prompt_cache_miss_tokens": 235
+   }
+  },
+  "refine": {
+   "added": [
+    {
+     "id": "g1",
+     "kind": "CHECK",
+     "text": "Check that a one-step local rule cannot compute the unique global maximum, so a token or local propagation replaces global argmax.",
+     "bridges": [
+      "Task definition",
+      "Local urgency score",
+      "Token holder moves locally"
+     ],
+     "origin": "critique"
+    },
+    {
+     "id": "g2",
+     "kind": "DECISION",
+     "text": "Add explicit aging λ_i to the score, resetting served cell age and incrementing others to force eventual selection.",
+     "bridges": [
+      "Local urgency score",
+      "Service lowers future priority",
+      "No-starvation fairness claim"
+     ],
+     "origin": "critique"
+    },
+    {
+     "id": "g3",
+     "kind": "CHECK",
+     "text": "Check tie-breaking/backoff for equal local scores or multiple local maxima to avoid loops deterministically or randomly.",
+     "bridges": [
+      "Local urgency score",
+      "Token holder moves locally",
+      "Local-max starvation risk"
+     ],
+     "origin": "critique"
+    },
+    {
+     "id": "g4",
+     "kind": "INFERENCE",
+     "text": "Infer that positive-floor local probabilities can form an irreducible token walk visiting every cell infinitely often.",
+     "bridges": [
+      "Token holder moves locally",
+      "No-starvation fairness claim"
+     ],
+     "origin": "critique"
+    },
+    {
+     "id": "g5",
+     "kind": "CHECK",
+     "text": "Check formal no-starvation proof: aging dominates bounded p/r and crosses every cut, or irreducibility/recurrence holds.",
+     "bridges": [
+      "No-starvation fairness claim",
+      "Local-max starvation risk"
+     ],
+     "origin": "critique"
+    }
+   ],
+   "refine_ms": 26451
+  }
+ },
+ "_g2_cache": {
+  "nodes": [
+   {
+    "label": "Task definition",
+    "text": "Design a local rule using only a cell and its direct neighbors to choose the next budget recipient and ensure fairness/no starvation.",
+    "samples": [
+     0,
+     1,
+     2
+    ],
+    "occurrence": 3,
+    "max_load": 2.91
+   },
+   {
+    "label": "Local urgency score",
+    "text": "Combine potential and resistance into a local priority, typically potential/resistance, for comparing a cell with its neighbors.",
+    "samples": [
+     0,
+     1,
+     2
+    ],
+    "occurrence": 3,
+    "max_load": 2.56
+   },
+   {
+    "label": "Token holder moves locally",
+    "text": "Use a single token whose holder considers itself and neighbors and moves or serves based only on local values.",
+    "samples": [
+     0,
+     1,
+     2
+    ],
+    "occurrence": 3,
+    "max_load": 2.97
+   },
+   {
+    "label": "Service lowers future priority",
+    "text": "After service, reduce potential or raise resistance so the served cell's score drops and it stops monopolizing.",
+    "samples": [
+     0,
+     2
+    ],
+    "occurrence": 2,
+    "max_load": 2.71
+   },
+   {
+    "label": "Local-max starvation risk",
+    "text": "A deterministic local-max/greedy token can get stuck and starve lower-urgency cells, so a safeguard is needed.",
+    "samples": [
+     0,
+     1,
+     2
+    ],
+    "occurrence": 3,
+    "max_load": 2.59
+   },
+   {
+    "label": "No-starvation fairness claim",
+    "text": "The chosen local mechanism ensures long-run fairness and no cell starves forever.",
+    "samples": [
+     0,
+     1,
+     2
+    ],
+    "occurrence": 3,
+    "max_load": 2.84
+   }
+  ],
+  "edges": [
+   {
+    "from": "s1",
+    "to": "s2",
+    "p": 1.0
+   },
+   {
+    "from": "s1",
+    "to": "s3",
+    "p": 0.69
+   },
+   {
+    "from": "s3",
+    "to": "s4",
+    "p": 0.55
+   },
+   {
+    "from": "s3",
+    "to": "s5",
+    "p": 0.88
+   },
+   {
+    "from": "s2",
+    "to": "s6",
+    "p": 0.89
+   },
+   {
+    "from": "s2",
+    "to": "s7",
+    "p": 0.47
+   },
+   {
+    "from": "s6",
+    "to": "s8",
+    "p": 0.55
+   },
+   {
+    "from": "s1",
+    "to": "s2",
+    "p": 1.0
+   },
+   {
+    "from": "s1",
+    "to": "s3",
+    "p": 0.87
+   },
+   {
+    "from": "s2",
+    "to": "s4",
+    "p": 0.52
+   },
+   {
+    "from": "s4",
+    "to": "s5",
+    "p": 0.57
+   },
+   {
+    "from": "s5",
+    "to": "s6",
+    "p": 0.96
+   },
+   {
+    "from": "s6",
+    "to": "s7",
+    "p": 0.81
+   },
+   {
+    "from": "s5",
+    "to": "s8",
+    "p": 0.49
+   },
+   {
+    "from": "s1",
+    "to": "s2",
+    "p": 1.0
+   },
+   {
+    "from": "s2",
+    "to": "s3",
+    "p": 0.73
+   },
+   {
+    "from": "s3",
+    "to": "s4",
+    "p": 0.98
+   },
+   {
+    "from": "s3",
+    "to": "s5",
+    "p": 0.82
+   },
+   {
+    "from": "s5",
+    "to": "s6",
+    "p": 0.73
+   },
+   {
+    "from": "s6",
+    "to": "s7",
+    "p": 0.97
+   },
+   {
+    "from": "s6",
+    "to": "s8",
+    "p": 0.87
+   }
+  ],
+  "clusters": [
+   {
+    "label": "Task definition",
+    "members": [
+     {
+      "sample": 0,
+      "id": "s1"
+     },
+     {
+      "sample": 1,
+      "id": "s1"
+     },
+     {
+      "sample": 2,
+      "id": "s1"
+     }
+    ],
+    "text": "Design a local rule using only a cell and its direct neighbors to choose the next budget recipient and ensure fairness/no starvation."
+   },
+   {
+    "label": "Local urgency score",
+    "members": [
+     {
+      "sample": 0,
+      "id": "s3"
+     },
+     {
+      "sample": 1,
+      "id": "s2"
+     },
+     {
+      "sample": 2,
+      "id": "s2"
+     }
+    ],
+    "text": "Combine potential and resistance into a local priority, typically potential/resistance, for comparing a cell with its neighbors."
+   },
+   {
+    "label": "Token holder moves locally",
+    "members": [
+     {
+      "sample": 0,
+      "id": "s7"
+     },
+     {
+      "sample": 1,
+      "id": "s3"
+     },
+     {
+      "sample": 2,
+      "id": "s3"
+     }
+    ],
+    "text": "Use a single token whose holder considers itself and neighbors and moves or serves based only on local values."
+   },
+   {
+    "label": "Service lowers future priority",
+    "members": [
+     {
+      "sample": 0,
+      "id": "s5"
+     },
+     {
+      "sample": 2,
+      "id": "s4"
+     }
+    ],
+    "text": "After service, reduce potential or raise resistance so the served cell's score drops and it stops monopolizing."
+   },
+   {
+    "label": "Local-max starvation risk",
+    "members": [
+     {
+      "sample": 0,
+      "id": "s6"
+     },
+     {
+      "sample": 1,
+      "id": "s8"
+     },
+     {
+      "sample": 2,
+      "id": "s5"
+     }
+    ],
+    "text": "A deterministic local-max/greedy token can get stuck and starve lower-urgency cells, so a safeguard is needed."
+   },
+   {
+    "label": "No-starvation fairness claim",
+    "members": [
+     {
+      "sample": 0,
+      "id": "s8"
+     },
+     {
+      "sample": 1,
+      "id": "s7"
+     },
+     {
+      "sample": 2,
+      "id": "s8"
+     }
+    ],
+    "text": "The chosen local mechanism ensures long-run fairness and no cell starves forever."
+   }
+  ],
+  "divergent": [
+   {
+    "label": "Global maximum impossibility",
+    "samples": [
+     0
+    ],
+    "text": "A purely local rule cannot find the unique global maximum in one step, so it must use local maxima, token passing, or randomized propagation."
+   },
+   {
+    "label": "Tie-breaking/backoff for local maxima",
+    "samples": [
+     0
+    ],
+    "text": "If several strict local maxima or ties occur, break ties by ID or local backoff."
+   },
+   {
+    "label": "Randomized token walk",
+    "samples": [
+     0,
+     1
+    ],
+    "text": "Randomize the token's next location in proportion to local weights, with a positive floor, yielding an irreducible walk that visits every cell infinitely often."
+   },
+   {
+    "label": "Aging-based deterministic token",
+    "samples": [
+     2
+    ],
+    "text": "Add a local waiting/aging term so an unserved cell's effective urgency rises until the token leaves a local maximum and reaches it."
+   }
+  ]
+ },
+ "_judge_out": {
+  "score": 6,
+  "gaps": [
+   "Global-maximum impossibility: a one-step local rule cannot compute the unique global maximum, so the design must use a token or local propagation instead of global argmax.",
+   "Explicit aging mechanism: the score must include a λa_i term, with the served cell's age reset and other ages incremented, to force eventual selection.",
+   "Tie-breaking/backoff: equal local scores or multiple local maxima need a deterministic or randomized tie-break to avoid loops.",
+   "Randomized token walk alternative: positive-floor local probabilities can make an irreducible walk that visits every cell infinitely often.",
+   "Formal no-starvation proof: show the aging term dominates bounded p/r and forces the token across every cut, or use irreducibility/recurrence."
+  ],
+  "verdict": "The graph captures the high-level components but omits the key aging, tie-breaking, and proof mechanisms, so it is only moderately thorough."
+ },
+ "graph_v1": [
+  {
+   "nodes": [
+    {
+     "id": "s1",
+     "kind": "PREMISE",
+     "text": "The task is to design a local rule for choosing the next budget cell using only a cell and its direct neighbors, and to justify fairness and no starvation.",
+     "load_score": 2.62,
+     "load_expected": 2.63
+    },
+    {
+     "id": "s2",
+     "kind": "INFERENCE",
+     "text": "A purely local rule cannot find the unique global maximum in one step, so it must select local maxima, pass a token, or use randomized propagation.",
+     "load_score": 2.01,
+     "load_expected": 2.02
+    },
+    {
+     "id": "s3",
+     "kind": "DECISION",
+     "text": "Define each cell's urgency as score = potential / resistance and compare it only with direct neighbors.",
+     "load_score": 2.57,
+     "load_expected": 2.56
+    },
+    {
+     "id": "s4",
+     "kind": "CHECK",
+     "text": "A cell that is a strict local maximum can take the budget, but ties or multiple maxima need ID tie-breaking or backoff.",
+     "load_score": 1.06,
+     "load_expected": 1.05
+    },
+    {
+     "id": "s5",
+     "kind": "INFERENCE",
+     "text": "If receiving a budget reduces the cell's potential or raises resistance, its score drops and it stops monopolizing.",
+     "load_score": 1.37,
+     "load_expected": 1.37
+    },
+    {
+     "id": "s6",
+     "kind": "CHECK",
+     "text": "Local-max greedy alone can starve cells separated by valleys, so add a token or random walk to cross the graph.",
+     "load_score": 2.18,
+     "load_expected": 2.17
+    },
+    {
+     "id": "s7",
+     "kind": "DECISION",
+     "text": "Use a token or random walk biased by local score; the token holder receives the budget and moves to a neighbor based only on local values.",
+     "load_score": 2.73,
+     "load_expected": 2.72
+    },
+    {
+     "id": "s8",
+     "kind": "CONCLUSION",
+     "text": "On a connected graph, the random walk visits every cell infinitely often, and score reduction after service prevents permanent starvation.",
+     "load_score": 1.98,
+     "load_expected": 1.98
+    }
+   ],
+   "edges": [
+    {
+     "from": "s1",
+     "to": "s2",
+     "p": 1.0
+    },
+    {
+     "from": "s1",
+     "to": "s3",
+     "p": 0.69
+    },
+    {
+     "from": "s3",
+     "to": "s4",
+     "p": 0.55
+    },
+    {
+     "from": "s3",
+     "to": "s5",
+     "p": 0.88
+    },
+    {
+     "from": "s2",
+     "to": "s6",
+     "p": 0.89
+    },
+    {
+     "from": "s2",
+     "to": "s7",
+     "p": 0.47
+    },
+    {
+     "from": "s6",
+     "to": "s8",
+     "p": 0.55
+    }
+   ]
+  },
+  {
+   "nodes": [
+    {
+     "id": "s1",
+     "kind": "PREMISE",
+     "text": "Design a minimal local rule to choose which cell receives the next computation budget using only the current cell and its direct neighbors.",
+     "load_score": 2.89,
+     "load_expected": 2.91
+    },
+    {
+     "id": "s2",
+     "kind": "INFERENCE",
+     "text": "Per-cell potential and resistance can be combined into local weights, e.g. potential divided by resistance.",
+     "load_score": 2.43,
+     "load_expected": 2.42
+    },
+    {
+     "id": "s3",
+     "kind": "DECISION",
+     "text": "Use a single budget token that moves locally from the current cell to itself or a neighbor.",
+     "load_score": 2.95,
+     "load_expected": 2.97
+    },
+    {
+     "id": "s4",
+     "kind": "INFERENCE",
+     "text": "At each step, the token-holder chooses among itself and neighbors with probability proportional to their local weights.",
+     "load_score": 2.95,
+     "load_expected": 2.96
+    },
+    {
+     "id": "s5",
+     "kind": "CHECK",
+     "text": "A positive floor on every weight ensures all transitions have nonzero probability.",
+     "load_score": 2.53,
+     "load_expected": 2.54
+    },
+    {
+     "id": "s6",
+     "kind": "INFERENCE",
+     "text": "On a connected finite graph, this local token walk is an irreducible Markov chain.",
+     "load_score": 2.77,
+     "load_expected": 2.79
+    },
+    {
+     "id": "s7",
+     "kind": "CONCLUSION",
+     "text": "Irreducibility makes every cell visited infinitely often with probability 1, so no cell starves forever and fairness is long-run proportional to weights.",
+     "load_score": 2.83,
+     "load_expected": 2.84
+    },
+    {
+     "id": "s8",
+     "kind": "CHECK",
+     "text": "A deterministic local max rule could starve cells, so randomness with positive probabilities is the minimal safeguard.",
+     "load_score": 2.6,
+     "load_expected": 2.59
+    }
+   ],
+   "edges": [
+    {
+     "from": "s1",
+     "to": "s2",
+     "p": 1.0
+    },
+    {
+     "from": "s1",
+     "to": "s3",
+     "p": 0.87
+    },
+    {
+     "from": "s2",
+     "to": "s4",
+     "p": 0.52
+    },
+    {
+     "from": "s4",
+     "to": "s5",
+     "p": 0.57
+    },
+    {
+     "from": "s5",
+     "to": "s6",
+     "p": 0.96
+    },
+    {
+     "from": "s6",
+     "to": "s7",
+     "p": 0.81
+    },
+    {
+     "from": "s5",
+     "to": "s8",
+     "p": 0.49
+    }
+   ]
+  },
+  {
+   "nodes": [
+    {
+     "id": "s1",
+     "kind": "PREMISE",
+     "text": "Need design a minimal local algorithm to choose which cell gets the next computation budget using only a cell and its direct neighbors.",
+     "load_score": 2.7,
+     "load_expected": 2.7
+    },
+    {
+     "id": "s2",
+     "kind": "INFERENCE",
+     "text": "A natural local priority is urgency = potential / resistance: higher potential and lower resistance mean more deserving.",
+     "load_score": 2.16,
+     "load_expected": 2.16
+    },
+    {
+     "id": "s3",
+     "kind": "DECISION",
+     "text": "Use a token: the current holder compares its urgency with neighbors and moves to the highest-urgency neighbor if that neighbor beats it.",
+     "load_score": 2.87,
+     "load_expected": 2.86
+    },
+    {
+     "id": "s4",
+     "kind": "INFERENCE",
+     "text": "If no neighbor beats the current cell, the token stays and that cell consumes the budget, reducing its potential.",
+     "load_score": 2.7,
+     "load_expected": 2.71
+    },
+    {
+     "id": "s5",
+     "kind": "CHECK",
+     "text": "With fixed potentials/resistances, the token can get stuck at a local maximum and starve lower-urgency cells.",
+     "load_score": 1.98,
+     "load_expected": 1.97
+    },
+    {
+     "id": "s6",
+     "kind": "DECISION",
+     "text": "Add a local waiting/aging term so a cell's effective urgency rises the longer it goes unserved.",
+     "load_score": 2.96,
+     "load_expected": 2.96
+    },
+    {
+     "id": "s7",
+     "kind": "INFERENCE",
+     "text": "The token then eventually leaves a repeatedly served cell and reaches waiting cells, so no cell starves forever.",
+     "load_score": 2.84,
+     "load_expected": 2.83
+    },
+    {
+     "id": "s8",
+     "kind": "CONCLUSION",
+     "text": "The rule uses only local comparisons and aging, making it minimal, fair, and starvation-free.",
+     "load_score": 2.81,
+     "load_expected": 2.8
+    }
+   ],
+   "edges": [
+    {
+     "from": "s1",
+     "to": "s2",
+     "p": 1.0
+    },
+    {
+     "from": "s2",
+     "to": "s3",
+     "p": 0.73
+    },
+    {
+     "from": "s3",
+     "to": "s4",
+     "p": 0.98
+    },
+    {
+     "from": "s3",
+     "to": "s5",
+     "p": 0.82
+    },
+    {
+     "from": "s5",
+     "to": "s6",
+     "p": 0.73
+    },
+    {
+     "from": "s6",
+     "to": "s7",
+     "p": 0.97
+    },
+    {
+     "from": "s6",
+     "to": "s8",
+     "p": 0.87
+    }
+   ]
+  }
+ ],
+ "graph_v2": {
+  "nodes": [
+   {
+    "label": "Task definition",
+    "text": "Design a local rule using only a cell and its direct neighbors to choose the next budget recipient and ensure fairness/no starvation.",
+    "samples": [
+     0,
+     1,
+     2
+    ],
+    "occurrence": 3,
+    "max_load": 2.91
+   },
+   {
+    "label": "Local urgency score",
+    "text": "Combine potential and resistance into a local priority, typically potential/resistance, for comparing a cell with its neighbors.",
+    "samples": [
+     0,
+     1,
+     2
+    ],
+    "occurrence": 3,
+    "max_load": 2.56
+   },
+   {
+    "label": "Token holder moves locally",
+    "text": "Use a single token whose holder considers itself and neighbors and moves or serves based only on local values.",
+    "samples": [
+     0,
+     1,
+     2
+    ],
+    "occurrence": 3,
+    "max_load": 2.97
+   },
+   {
+    "label": "Service lowers future priority",
+    "text": "After service, reduce potential or raise resistance so the served cell's score drops and it stops monopolizing.",
+    "samples": [
+     0,
+     2
+    ],
+    "occurrence": 2,
+    "max_load": 2.71
+   },
+   {
+    "label": "Local-max starvation risk",
+    "text": "A deterministic local-max/greedy token can get stuck and starve lower-urgency cells, so a safeguard is needed.",
+    "samples": [
+     0,
+     1,
+     2
+    ],
+    "occurrence": 3,
+    "max_load": 2.59
+   },
+   {
+    "label": "No-starvation fairness claim",
+    "text": "The chosen local mechanism ensures long-run fairness and no cell starves forever.",
+    "samples": [
+     0,
+     1,
+     2
+    ],
+    "occurrence": 3,
+    "max_load": 2.84
+   },
+   {
+    "id": "g1",
+    "kind": "CHECK",
+    "text": "Check that a one-step local rule cannot compute the unique global maximum, so a token or local propagation replaces global argmax.",
+    "bridges": [
+     "Task definition",
+     "Local urgency score",
+     "Token holder moves locally"
+    ],
+    "origin": "critique"
+   },
+   {
+    "id": "g2",
+    "kind": "DECISION",
+    "text": "Add explicit aging λ_i to the score, resetting served cell age and incrementing others to force eventual selection.",
+    "bridges": [
+     "Local urgency score",
+     "Service lowers future priority",
+     "No-starvation fairness claim"
+    ],
+    "origin": "critique"
+   },
+   {
+    "id": "g3",
+    "kind": "CHECK",
+    "text": "Check tie-breaking/backoff for equal local scores or multiple local maxima to avoid loops deterministically or randomly.",
+    "bridges": [
+     "Local urgency score",
+     "Token holder moves locally",
+     "Local-max starvation risk"
+    ],
+    "origin": "critique"
+   },
+   {
+    "id": "g4",
+    "kind": "INFERENCE",
+    "text": "Infer that positive-floor local probabilities can form an irreducible token walk visiting every cell infinitely often.",
+    "bridges": [
+     "Token holder moves locally",
+     "No-starvation fairness claim"
+    ],
+    "origin": "critique"
+   },
+   {
+    "id": "g5",
+    "kind": "CHECK",
+    "text": "Check formal no-starvation proof: aging dominates bounded p/r and crosses every cut, or irreducibility/recurrence holds.",
+    "bridges": [
+     "No-starvation fairness claim",
+     "Local-max starvation risk"
+    ],
+    "origin": "critique"
+   }
+  ],
+  "edges": [
+   {
+    "from": "s1",
+    "to": "s2",
+    "p": 1.0
+   },
+   {
+    "from": "s1",
+    "to": "s3",
+    "p": 0.69
+   },
+   {
+    "from": "s3",
+    "to": "s4",
+    "p": 0.55
+   },
+   {
+    "from": "s3",
+    "to": "s5",
+    "p": 0.88
+   },
+   {
+    "from": "s2",
+    "to": "s6",
+    "p": 0.89
+   },
+   {
+    "from": "s2",
+    "to": "s7",
+    "p": 0.47
+   },
+   {
+    "from": "s6",
+    "to": "s8",
+    "p": 0.55
+   },
+   {
+    "from": "s1",
+    "to": "s2",
+    "p": 1.0
+   },
+   {
+    "from": "s1",
+    "to": "s3",
+    "p": 0.87
+   },
+   {
+    "from": "s2",
+    "to": "s4",
+    "p": 0.52
+   },
+   {
+    "from": "s4",
+    "to": "s5",
+    "p": 0.57
+   },
+   {
+    "from": "s5",
+    "to": "s6",
+    "p": 0.96
+   },
+   {
+    "from": "s6",
+    "to": "s7",
+    "p": 0.81
+   },
+   {
+    "from": "s5",
+    "to": "s8",
+    "p": 0.49
+   },
+   {
+    "from": "s1",
+    "to": "s2",
+    "p": 1.0
+   },
+   {
+    "from": "s2",
+    "to": "s3",
+    "p": 0.73
+   },
+   {
+    "from": "s3",
+    "to": "s4",
+    "p": 0.98
+   },
+   {
+    "from": "s3",
+    "to": "s5",
+    "p": 0.82
+   },
+   {
+    "from": "s5",
+    "to": "s6",
+    "p": 0.73
+   },
+   {
+    "from": "s6",
+    "to": "s7",
+    "p": 0.97
+   },
+   {
+    "from": "s6",
+    "to": "s8",
+    "p": 0.87
+   }
+  ],
+  "clusters": [
+   {
+    "label": "Task definition",
+    "members": [
+     {
+      "sample": 0,
+      "id": "s1"
+     },
+     {
+      "sample": 1,
+      "id": "s1"
+     },
+     {
+      "sample": 2,
+      "id": "s1"
+     }
+    ],
+    "text": "Design a local rule using only a cell and its direct neighbors to choose the next budget recipient and ensure fairness/no starvation."
+   },
+   {
+    "label": "Local urgency score",
+    "members": [
+     {
+      "sample": 0,
+      "id": "s3"
+     },
+     {
+      "sample": 1,
+      "id": "s2"
+     },
+     {
+      "sample": 2,
+      "id": "s2"
+     }
+    ],
+    "text": "Combine potential and resistance into a local priority, typically potential/resistance, for comparing a cell with its neighbors."
+   },
+   {
+    "label": "Token holder moves locally",
+    "members": [
+     {
+      "sample": 0,
+      "id": "s7"
+     },
+     {
+      "sample": 1,
+      "id": "s3"
+     },
+     {
+      "sample": 2,
+      "id": "s3"
+     }
+    ],
+    "text": "Use a single token whose holder considers itself and neighbors and moves or serves based only on local values."
+   },
+   {
+    "label": "Service lowers future priority",
+    "members": [
+     {
+      "sample": 0,
+      "id": "s5"
+     },
+     {
+      "sample": 2,
+      "id": "s4"
+     }
+    ],
+    "text": "After service, reduce potential or raise resistance so the served cell's score drops and it stops monopolizing."
+   },
+   {
+    "label": "Local-max starvation risk",
+    "members": [
+     {
+      "sample": 0,
+      "id": "s6"
+     },
+     {
+      "sample": 1,
+      "id": "s8"
+     },
+     {
+      "sample": 2,
+      "id": "s5"
+     }
+    ],
+    "text": "A deterministic local-max/greedy token can get stuck and starve lower-urgency cells, so a safeguard is needed."
+   },
+   {
+    "label": "No-starvation fairness claim",
+    "members": [
+     {
+      "sample": 0,
+      "id": "s8"
+     },
+     {
+      "sample": 1,
+      "id": "s7"
+     },
+     {
+      "sample": 2,
+      "id": "s8"
+     }
+    ],
+    "text": "The chosen local mechanism ensures long-run fairness and no cell starves forever."
+   }
+  ],
+  "divergent": [
+   {
+    "label": "Global maximum impossibility",
+    "samples": [
+     0
+    ],
+    "text": "A purely local rule cannot find the unique global maximum in one step, so it must use local maxima, token passing, or randomized propagation."
+   },
+   {
+    "label": "Tie-breaking/backoff for local maxima",
+    "samples": [
+     0
+    ],
+    "text": "If several strict local maxima or ties occur, break ties by ID or local backoff."
+   },
+   {
+    "label": "Randomized token walk",
+    "samples": [
+     0,
+     1
+    ],
+    "text": "Randomize the token's next location in proportion to local weights, with a positive floor, yielding an irreducible walk that visits every cell infinitely often."
+   },
+   {
+    "label": "Aging-based deterministic token",
+    "samples": [
+     2
+    ],
+    "text": "Add a local waiting/aging term so an unserved cell's effective urgency rises until the token leaves a local maximum and reaches it."
+   }
+  ],
+  "receipt": {
+   "model_requested": "deepseek-flash",
+   "model_served": "deepseek-flash",
+   "ms": 48080,
+   "status": 200,
+   "usage": {
+    "prompt_tokens": 1367,
+    "completion_tokens": 8783,
+    "total_tokens": 10150,
+    "prompt_tokens_details": {
+     "cached_tokens": 1152
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 8227
+    },
+    "prompt_cache_hit_tokens": 1152,
+    "prompt_cache_miss_tokens": 215
+   },
+   "finish": "stop",
+   "content": "{\"clusters\":[{\"label\":\"Task definition\",\"members\":[{\"sample\":0,\"id\":\"s1\"},{\"sample\":1,\"id\":\"s1\"},{\"sample\":2,\"id\":\"s1\"}],\"text\":\"Design a local rule using only a cell and its direct neighbors to choose the next budget recipient and ensure fairness/no starvation.\"},{\"label\":\"Local urgency score\",\"members\":[{\"sample\":0,\"id\":\"s3\"},{\"sample\":1,\"id\":\"s2\"},{\"sample\":2,\"id\":\"s2\"}],\"text\":\"Combine potential and resistance into a local priority, typically potential/resistance, for comparing a cell with its neighbors.\"},{\"label\":\"Token holder moves locally\",\"members\":[{\"sample\":0,\"id\":\"s7\"},{\"sample\":1,\"id\":\"s3\"},{\"sample\":2,\"id\":\"s3\"}],\"text\":\"Use a single token whose holder considers itself and neighbors and moves or serves based only on local values.\"},{\"label\":\"Service lowers future priority\",\"members\":[{\"sample\":0,\"id\":\"s5\"},{\"sample\":2,\"id\":\"s4\"}],\"text\":\"After service, reduce potential or raise resistance so the served cell's score drops and it stops monopolizing.\"},{\"label\":\"Local-max starvation risk\",\"members\":[{\"sample\":0,\"id\":\"s6\"},{\"sample\":1,\"id\":\"s8\"},{\"sample\":2,\"id\":\"s5\"}],\"text\":\"A deterministic local-max/greedy token can get stuck and starve lower-urgency cells, so a safeguard is needed.\"},{\"label\":\"No-starvation fairness claim\",\"members\":[{\"sample\":0,\"id\":\"s8\"},{\"sample\":1,\"id\":\"s7\"},{\"sample\":2,\"id\":\"s8\"}],\"text\":\"The chosen local mechanism ensures long-run fairness and no cell starves forever.\"}],\"divergent\":[{\"label\":\"Global maximum impossibility\",\"samples\":[0],\"text\":\"A purely local rule cannot find the unique global maximum in one step, so it must use local maxima, token passing, or randomized propagation.\"},{\"label\":\"Tie-breaking/backoff for local maxima\",\"samples\":[0],\"text\":\"If several strict local maxima or ties occur, break ties by ID or local backoff.\"},{\"label\":\"Randomized token walk\",\"samples\":[0,1],\"text\":\"Randomize the token's next location in proportion to local weights, with a positive floor, yielding an irreducible walk that visits every cell infinitely often.\"},{\"label\":\"Aging-based deterministic token\",\"samples\":[2],\"text\":\"Add a local waiting/aging term so an unserved cell's effective urgency rises until the token leaves a local maximum and reaches it.\"}]}",
+   "cot": "We need answer JSON only. Need align reasoning steps across variants same reasoning. We have three samples with lens, answer, steps. Need produce clusters with label, members sample/id, text merging. Also divergent alternate routes only in some samples.\n\nWe need identify common logical moves across steps. We need cluster steps expressing same logical move. Samples indices likely 0,1,2 corresponding order. Need map step ids s1.. etc.\n\nLet's parse each sample.\n\nSample 0 lens skeptic. Steps:\ns1 PREMISE: task design local rule choosing next budget cell using only cell and direct neighbors, justify fairness/no starvation.\ns2 INFERENCE: purely local rule cannot find unique global max in one step, so must select local maxima, pass token, or randomized propagation.\ns3 DECISION: Define urgency score = potential / resistance and compare only direct neighbors.\ns4 CHECK: A cell that is strict local max can take budget, but ties/multiple maxima need ID tie-breaking/backoff.\ns5 INFERENCE: If receiving budget reduces potential or raises resistance, score drops and stops monopolizing.\ns6 CHECK: Local-max greedy alone can starve cells separated by valleys, so add token/random walk to cross graph.\ns7 DECISION: Use token or random walk biased by local score; token holder receives budget and moves to neighbor based only on local values.\ns8 CONCLUSION: On connected graph, random walk visits every cell infinitely often, and score reduction after service prevents permanent starvation.\n\nSample 1 engineer. Steps:\ns1 PREMISE: Design minimal local rule choose cell receives next computation budget using only current cell and direct neighbors.\ns2 INFERENCE: Per-cell potential and resistance combine into local weights, e.g. potential/resistance.\ns3 DECISION: Use single budget token moves locally from current cell to itself or neighbor.\ns4 INFERENCE: At each step token-holder chooses among itself and neighbors with probability proportional to local weights.\ns5 CHECK: Positive floor on every weight ensures all transitions nonzero.\ns6 INFERENCE: On connected finite graph, local token walk is irreducible Markov chain.\ns7 CONCLUSION: Irreducibility makes every cell visited infinitely often w.p.1, so no starvation and fairness long-run proportional to weights.\ns8 CHECK: Deterministic local max rule could starve, so randomness with positive probabilities is minimal safeguard.\n\nSample 2 teacher. Steps:\ns1 PREMISE: Need design minimal local algorithm choose which cell gets next computation budget using only cell and direct neighbors.\ns2 INFERENCE: natural local priority urgency = potential/resistance: higher potential lower resistance more deserving.\ns3 DECISION: Use token: current holder compares urgency with neighbors and moves to highest-urgency neighbor if that neighbor beats it.\ns4 INFERENCE: If no neighbor beats current, token stays and cell consumes budget, reducing potential.\ns5 CHECK: With fixed potentials/resistances, token can get stuck at local maximum and starve lower-urgency cells.\ns6 DECISION: Add local waiting/aging term so effective urgency rises longer unserved.\ns7 INFERENCE: Token then eventually leaves repeatedly served cell and reaches waiting cells, so no cell starves forever.\ns8 CONCLUSION: Rule uses only local comparisons and aging, making it minimal, fair, starvation-free.\n\nNeed cluster steps across samples. Some common:\n- Premise task definition: all s1. Cluster label \"Problem statement\" members sample0 s1, sample1 s1, sample2 s1. Text: design minimal local rule selecting next budget cell using only cell/neighbors and ensure fairness/no starvation.\n- Local score potential/resistance: sample0 s3? sample1 s2; sample2 s2. Also sample0 s3 includes compare only direct neighbors. sample1 s2 potential/resistance weights. sample2 s2 urgency = potential/resistance. Cluster \"Local urgency/weight\": members 0 s3, 1 s2, 2 s2. Text: define local priority as potential divided by resistance (urgency/weight), higher potential or lower resistance.\n- Token mechanism / local decisions: sample0 s7, sample1 s3, sample2 s3. Sample0 s7 token/random walk biased by local score; sample1 s3 single token moves locally current to itself/neighbor; sample2 s3 token holder compares urgency and moves to highest-urgency neighbor if beats it. These are maybe same \"token as local state moving\". Cluster.\n- Potential reduction after service: sample0 s5, sample2 s4? sample1 maybe not explicitly? Sample1 no potential reduction; has weights maybe not reduction. Sample2 s4: if no neighbor beats current, token stays and cell consumes budget, reducing potential. Sample0 s5: receiving budget reduces potential or raises resistance, score drops. Maybe cluster \"service reduces future priority\": members 0 s5, 2 s4. Sample1 maybe not.\n- Starvation/local max problem: sample0 s6? sample1 s8? sample2 s5. Sample0 s6: local-max greedy alone can starve cells separated by valleys, add token/random walk. Sample1 s8: deterministic local max rule could starve, randomness positive probabilities minimal safeguard. Sample2 s5: fixed potentials/resistances token can get stuck at local maximum and starve lower-urgency cells. Cluster \"local max starvation risk\": members 0 s6, 1 s8, 2 s5. Text: deterministic local-max/token can get stuck and starve cells, so need randomness/aging/token propagation.\n- Random walk / irreducible Markov / infinite visits: sample0 s8, sample1 s5? s6, s7; sample2 s7. Need cluster maybe \"connected graph ensures no starvation\": sample0 s8, sample1 s6+s7? sample2 s7. Also sample1 s5 positive floor.\nLet's identify logical moves:\n\nCommon route in samples 0 and 1: use random walk/token with probabilities; connected finite graph => irreducible Markov chain => visits all cells infinitely often => fairness/no starvation. Sample0 s8 combines. Sample1 s6 irreducible, s7 conclusion. Sample2 uses aging instead of random walk: add waiting/aging term, eventually leaves, no starvation. This is divergent alternate route. Also sample0 includes random walk; sample2 uses aging. sample0 s2 mentions options local maxima, token, randomized propagation. sample1 uses randomness. Sample2 uses aging.\n\nNeed decide clusters and divergent. The instruction: Cluster steps that express same logical move. Keep genuinely different routes as divergent entries.\n\nWe can create clusters for shared moves:\n1. Task premise.\n2. Local score potential/resistance.\n3. Token/local state / move based on local values.\n4. Local-max/token can starve/stuck; need safeguard.\n5. Need ensure no starvation/fairness (maybe conclusion combined).\n6. Service reduces priority? maybe only 0/2, could be cluster if same but not sample1. But if not all, maybe divergent? It is a logical move in 0 and 2 but not 1. But sample1 relies on positive floor/randomness for anti-starvation, not reducing service. We can cluster 0 s5 and 2 s4 as \"served cell's priority drops\" (same logical move), not divergent because it's shared by some samples? The schema allows clusters with any subset? It says cluster steps that express same logical move. Divergent alternate route only in some samples. So clusters can include not all samples if same move appears in subset. Divergent for routes not common. Need distinguish. We can include cluster of 0 s5 and 2 s4. But sample1 lacks. That's okay? It says clusters with members. Divergent entries for alternate route only in some samples. Hmm \"Keep genuinely different routes as divergent entries.\" So if a route only in some samples, divergent. But a step can be same logical move shared by some, not all; cluster can be partial. Divergent entries for alternate route only in some samples (e.g., random walk vs aging).\n\nNeed perhaps produce clusters and divergent, not necessarily cover every step? Should cover all steps? Likely yes. We need map all steps into clusters or divergent. Let's ensure.\n\nLet's list all steps by sample:\n\nSample0:\ns1 premise\ns2 inference: purely local cannot find unique global max in one step, so must select local maxima, pass token, or randomized propagation.\ns3 decision: define urgency score = potential/resistance compare only direct neighbors.\ns4 check: strict local max can take budget, ties need ID tie-breaking/backoff.\ns5 inference: service reduces potential/raises resistance -> score drops stops monopolizing.\ns6 check: local-max greedy alone can starve separated by valleys, add token/random walk.\ns7 decision: token or random walk biased by local score; token holder receives budget moves based local values.\ns8 conclusion: connected graph random walk visits every cell infinitely often, score reduction prevents starvation.\n\nSample1:\ns1 premise\ns2 inference: potential and resistance combine into local weights e.g. potential/resistance.\ns3 decision: single budget token moves locally current to itself/neighbor.\ns4 inference: token-holder chooses among itself/neighbors probability proportional to weights.\ns5 check: positive floor ensures all transitions nonzero.\ns6 inference: connected finite graph local token walk irreducible Markov chain.\ns7 conclusion: irreducibility every cell visited infinitely often, no starvation fairness long-run proportional weights.\ns8 check: deterministic local max rule could starve, randomness positive probabilities minimal safeguard.\n\nSample2:\ns1 premise\ns2 inference: urgency = potential/resistance.\ns3 decision: token: holder compares urgency with neighbors and moves to highest-urgency neighbor if beats it.\ns4 inference: if no neighbor beats current, token stays and cell consumes budget reducing potential.\ns5 check: fixed potentials/resistances token stuck at local max and starve.\ns6 decision: add waiting/aging term so effective urgency rises longer unserved.\ns7 inference: token eventually leaves repeatedly served cell and reaches waiting cells, no starvation.\ns8 conclusion: local comparisons/aging minimal fair starvation-free.\n\nPotential clusters:\n\nA. Premise task definition: 0 s1, 1 s1, 2 s1. Label \"Task definition\". Text: \"Design a local rule using only a cell and its direct neighbors to pick the next budget recipient and ensure fairness/no starvation.\"\n\nB. Local priority score potential/resistance: 0 s3, 1 s2, 2 s2. Label \"Local urgency score\". Text: \"Combine potential and resistance into a local urgency/weight, typically potential/resistance, for local comparisons.\"\n\nC. Purely local limitation/options: 0 s2 maybe unique to sample0? It says local rule cannot find global max, so must select local maxima, token, or randomized propagation. Sample1/2 don't explicitly state. Could be cluster? It's a reasoning move common? Sample1 s8 says deterministic local max could starve, randomness safeguard. Sample2 s5 says local max stuck. Not same. Could be divergent for sample0? Maybe include as part of local max/starvation? But s2 is more high-level. Could cluster with sample2 s5? Hmm sample0 s2: a purely local rule cannot find unique global maximum in one step, so must select local maxima, pass a token, or use randomized propagation. Sample1 s1 design minimal local rule; sample2 s1. Could be \"local rule cannot find global max\" only sample0. Divergent? It's a route? The sample0 route uses token/random walk. Maybe not central.\n\nD. Token/local movement: 0 s7, 1 s3, 2 s3. Label \"Token holder moves locally\". Text: \"Use a single token; its holder considers itself and neighbors and moves/service based only on local scores/weights.\"\n\nE. Randomized selection/probabilities: 1 s4, maybe 0 s7? Sample0 s7 token or random walk biased by local score; sample1 s4 probability proportional weights. Sample2 s3 deterministic highest neighbor. This is divergent: random proportional vs deterministic highest/aging. But cluster for random walk route? Since sample0 and sample1 share random walk/token biased/random. Sample2 uses deterministic compare. The instruction says divergent alternate route only in some samples. We can have cluster \"Randomized token walk\" members 0 s7?, 1 s4, 1 s6, 0 s8, 1 s7, and divergent \"Aging-based deterministic token\" members 2 s3,s4,s6,s7. Need careful.\n\nF. Positive floor/nonzero probabilities: 1 s5 only. Could be cluster? It is a check specific to random route. Could be divergent? Or cluster with 1 s5 only? Usually clusters can be single? But maybe we should place as divergent if only one sample. But schema: divergent entries have samples [0,2] etc. Could have sample [1] for alternate route. But better group with random route? It expresses \"ensure all local transitions have positive probability\" which is part of random walk route. Sample0 s7 says random walk biased by local score; not explicit positive floor. Sample1 s5. Could be cluster \"Positive floor on weights\" only sample1? Hmm.\n\nG. Service reduces priority: 0 s5, 2 s4. Label \"Service lowers future priority\". Text: \"After a cell receives the budget, its potential drops or resistance rises, reducing its urgency and preventing monopoly.\"\n\nH. Local max/starvation risk: 0 s6, 1 s8, 2 s5. Label \"Local-max starvation\". Text: \"A deterministic local-max or greedy token can get stuck and starve lower-urgency cells, so a safeguard is needed.\" Sample0 s6 specifically local-max greedy starve separated by valleys; sample1 s8 deterministic local max starve; sample2 s5 fixed potentials token stuck local maximum starve. Good cluster.\n\nI. Anti-starvation conclusion via random walk/Markov: 0 s8, 1 s6, 1 s7. Label \"Irreducible walk prevents starvation\". Text: \"On a connected finite graph, the local token walk is irreducible/random walk visits every cell infinitely often, so no cell starves forever.\" Sample0 s8 includes score reduction too. sample1 s6 irreducible; s7 conclusion. We can cluster 0 s8, 1 s6, 1 s7. But sample2 s7 is aging-based anti-starvation. Divergent alternate route. Could cluster sample2 s7 with its aging. Maybe divergent \"Aging route\" includes 2 s6, 2 s7? Also sample2 s4 maybe.\n\nJ. Aging mechanism: 2 s6, maybe 2 s7. Label \"Aging term\". Divergent entry because only sample2 uses aging.\n\nK. Deterministic local max/tie-breaking: 0 s4, 2 s3? Sample0 s4: strict local max can take budget, ties need ID tie-breaking/backoff. Sample2 s3: token holder compares urgency and moves to highest neighbor if beats it. This is deterministic local max movement. Sample0 s4 describes strict local max can take budget; ties need tie-breaking. Could be a cluster \"Deterministic local-max rule\" members 0 s4, 2 s3? But sample0 s4 is check, sample2 s3 decision. They express local max token rule. Sample0 later adds random walk. Sample2 uses deterministic with aging. Sample1 uses random. Hmm.\n\nL. Minimal/fair conclusion: sample0 s8, sample1 s7, sample2 s8. All conclude local rule ensures fairness/no starvation. Cluster \"Fairness/no-starvation conclusion\". But sample0 s8 and sample1 s7 also anti-starvation mechanism; sample2 s8 conclusion. Could be cluster. Need avoid overlap? Steps can only be in one cluster? Likely yes. We can assign each step to one cluster or divergent. We need decide.\n\nMaybe best structure:\n- Clusters for common logical moves (shared across all three):\n  1. Problem premise (0s1,1s1,2s1)\n  2. Local score potential/resistance (0s3,1s2,2s2)\n  3. Token holder uses local comparisons (0s7,1s3,2s3)\n  4. Local-max/greedy can starve; need safeguard (0s6,1s8,2s5)\n  5. No starvation/fairness conclusion (0s8,1s7,2s7? or 2s8) maybe not same mechanism. Sample2 s7 says token eventually leaves and reaches waiting cells, no starvation. Sample1 s7 says irreducibility visits infinitely often. Sample0 s8 says random walk visits every cell infinitely often. These all express \"no starvation/fairness conclusion\" but mechanisms differ. Could cluster them? The logical move is conclusion. But text can mention mechanisms? If cluster steps express same logical move, maybe yes: conclusion that rule ensures no starvation and fairness. Members 0s8,1s7,2s7. But sample2 s8 is final minimal/fair conclusion. Could include 2s8 too? Hmm.\n\nDivergent:\n- Sample0 only: purely local cannot find global max; must use local maxima/token/randomized propagation (0s2). Maybe also tie-breaking/backoff (0s4). But sample0 s4 is deterministic local max check; sample2 s3 similar? Let's see.\n- Sample1 route: random proportional token walk, positive floor, irreducible Markov. Steps 1s4,1s5,1s6 maybe.\n- Sample2 route: aging term and deterministic highest urgency movement. Steps 2s4? 2s6.\n\nBut we need not force all common. The final answer should be JSON with clusters and divergent. We can include clusters with members that share same move. Divergent entries for alternate routes only in some samples.\n\nLet's perhaps build a coherent set:\n\nClusters:\n1. label \"Task premise\"; members 0s1,1s1,2s1; text \"Design a local rule using only a cell and its direct neighbors to choose the next budget recipient and ensure fairness/no starvation.\"\n2. label \"Local urgency score\"; members 0s3,1s2,2s2; text \"Combine potential and resistance into a local score, typically potential/resistance, for deciding priority.\"\n3. label \"Token as local state\"; members 0s7,1s3,2s3; text \"Use a single token whose holder considers itself and its neighbors, moving or serving based only on local values.\"\n4. label \"Service lowers priority\"; members 0s5,2s4; text \"After service, reduce potential or raise resistance so the served cell's score drops and it stops monopolizing.\"\n5. label \"Local-max starvation risk\"; members 0s6,1s8,2s5; text \"A deterministic local-max/greedy token can get stuck and starve lower-urgency cells, so a safeguard is required.\"\n6. label \"No-starvation conclusion\"; members 0s8,1s7,2s7; text \"The chosen safeguard makes every cell eventually receive service, so no cell starves forever and long-run fairness holds.\" Maybe include 2s8? But 2s8 is final conclusion. We can include 2s8 as well? It says minimal, fair, starvation-free. Same conclusion. Maybe members 0s8,1s7,2s7,2s8? But sample2 s7 is mechanism, s8 conclusion. Cluster steps same logical move? They both conclusion? 2s8 is conclusion. 0s8 includes mechanism+conclusion. 1s7 conclusion. We can include 0s8,1s7,2s8 as \"Fairness/no-starvation claim\". Then 2s7 is mechanism \"token eventually leaves...\" can be divergent aging route. But sample1 s6/s7 are mechanism+conclusion. Hmm.\n\nDivergent:\n- label \"Pure locality cannot find global max\"; samples [0]; text \"A local rule cannot identify the unique global maximum in one step, so it must fall back to local maxima, token passing, or randomized propagation.\" (0s2)\n- label \"Deterministic local-max with tie/backoff\"; samples [0,2]? Wait sample0 s4 and sample2 s3/s4? Sample0 s4: strict local max can take budget, ties need ID tie-breaking/backoff. Sample2 s3: token moves to highest-urgency neighbor if beats it. These are similar deterministic local-max route. But sample2 then aging. Sample0 later random. Could be divergent for [0,2]? It's not a full route only in some? It appears in 0 and 2, not 1. But 0 uses it as initial check then adds random. Sample2 uses deterministic plus aging. The instruction says divergent alternate route only in some samples. So we can create divergent entries for routes not shared by all. But if a step is common to 0 and 2, can be a cluster too. Hmm.\n\nMaybe simpler: clusters can be common moves; divergent entries for alternate routes:\n- \"Randomized token walk\" only samples 0,1: members 0s2?,0s7?,1s4,1s5,1s6 maybe. Text: \"Use a token whose next location is randomized (proportional to local weights with positive floor), making an irreducible Markov chain that visits all cells infinitely often.\"\n- \"Aging-based deterministic token\" only sample 2: members 2s4,2s6,2s7. Text: \"Keep deterministic local-max movement but add an aging/waiting term so stuck lower-priority cells eventually become locally maximal.\"\n- \"Tie-breaking/backoff for local maxima\" only sample 0: member 0s4. Text: \"If multiple strict local maxima or ties occur, break ties by ID or local backoff.\"\n- \"Local rule cannot find global max\" only sample 0: member 0s2. Text: \"A purely local rule cannot find the unique global maximum in one step, motivating local maxima, token passing, or randomized propagation.\"\n\nBut we need cover sample1 s4, s5, s6, s7 maybe in divergent random walk; sample0 s8 maybe in cluster no-starvation or divergent random? sample2 s8 final.\n\nLet's examine desired output shape. It asks: \"Align reasoning steps across variants of the same reasoning. Return ONLY JSON: {\"clusters\":[{\"label\":\"short concept name\",\"members\":[{\"sample\":0,\"id\":\"s1\"}],\"text\":\"one line merging the members\"}],\"divergent\":[{\"label\":\"alternate route only in some samples\",\"samples\":[0,2],\"text\":\"one line\"}]}.\"\n\nSo clusters should contain steps that align. Divergent should contain alternate routes only in some samples, with samples list. They don't require exhaustive coverage, but likely should align all steps. We can include clusters with members and divergent with steps? Divergent schema lacks members, just label, samples, text. So divergent entries don't reference step IDs. That means if we put steps into divergent, we don't need member IDs. But then some steps not represented? Maybe acceptable. But better clusters include most shared steps; divergent describe extra routes.\n\nMaybe we can create clusters for all shared and some partial, and divergent for sample-specific routes. We can include sample-specific steps in clusters? But divergent entries don't have members. The instruction: \"Keep genuinely different routes as divergent entries.\" So if a step is part of alternate route, put as divergent, not cluster. So clusters should be shared across all? Or at least across multiple samples. Divergent for routes only in some samples.\n\nLet's design with clusters that represent common logical moves across all three where possible. Then divergent for routes.\n\nCommon across all three:\n- s1 premise (all)\n- local score potential/resistance (0s3,1s2,2s2)\n- token as mechanism (0s7,1s3,2s3)\n- local-max starvation risk (0s6,1s8,2s5) — all mention deterministic/local max can starve. Yes.\n- fairness/no-starvation conclusion (0s8,1s7,2s8 or 2s7) — all conclude no starvation. Could cluster 0s8,1s7,2s8. Text generic.\n- service lowers priority (0s5,2s4) — not sample1. Could be cluster? It's a logical move in two. But sample1 doesn't have, instead randomness. So maybe divergent? But it's not a full route? It's a mechanism supporting anti-starvation in sample0 and sample2. Sample2 uses aging; sample0 uses score reduction. Sample0 s5 and sample2 s4 both service reduces potential. Sample1 doesn't. We can put as cluster with members 0s5,2s4. That's okay because same logical move across variants (not all). The instruction doesn't require all samples in cluster. It says cluster steps that express same logical move. So yes.\n\nThen divergent:\n- Sample0's \"purely local cannot find global max\" (0s2) and tie-breaking (0s4) maybe part of sample0 route. But sample0 also has random walk. Could be divergent \"Local-max with tie/backoff\" samples [0]? Or [0,2]? Sample2 s3 is deterministic local-max but no tie/backoff. Hmm.\n- Sample1's random proportional token with positive floor and irreducible Markov (1s4,1s5,1s6) is alternate route. But sample0 s8 also random walk conclusion; sample0 s7 says token or random walk biased by local score. So random route in samples 0 and 1. Divergent label \"Randomized token walk\" samples [0,1]. Text: \"When local maxima can trap the token, randomize the token's next cell with probabilities proportional to local weights (positive floor), yielding an irreducible walk that visits every cell infinitely often.\" This covers 0s2? 0s7? 1s4,1s5,1s6,1s8? But 1s8 is local max starvation risk cluster. 0s8 maybe no-starvation conclusion cluster. Hmm.\n- Sample2's aging route: samples [2]. Text: \"Instead of randomness, add a local waiting/aging term so a cell's urgency rises while unserved, eventually making it a local maximum and letting the token reach it.\" Covers 2s6,2s7 maybe 2s4.\n- Sample0's tie-breaking/backoff: samples [0]. Text: \"If multiple strict local maxima or ties occur, break ties by ID or local backoff.\" (0s4)\n- Sample0's global max impossibility: samples [0]. Text: \"A purely local rule cannot find the unique global maximum in one step, so it must use local maxima, token passing, or randomized propagation.\" (0s2)\n\nBut then sample0 s7 is in token cluster and random route? We should not duplicate? It can be in cluster token as common, and random route divergent describes 0/1. But maybe step 0s7 is token biased by local score, which is part of random route. If we already put 0s7 in token cluster, that's okay? But each step should belong to one cluster ideally. We can make token cluster include 0s7,1s3,2s3. Then random route divergent covers 1s4,s5,s6 and maybe 0s2/s7. Overlap okay? The output doesn't enforce disjointness, but alignment should avoid duplication. Hmm.\n\nMaybe better:\nClusters:\n1. Task premise: 0s1,1s1,2s1\n2. Local score: 0s3,1s2,2s2\n3. Token local mechanism: 1s3,2s3,0s7? But 0s7 includes random biased. Could be okay.\n4. Service reduces priority: 0s5,2s4\n5. Local-max starvation risk: 0s6,1s8,2s5\n6. Fairness/no-starvation conclusion: 0s8,1s7,2s8\n\nDivergent:\n- \"Randomized token walk\" samples [0,1] text \"Randomize token movement by local weights with positive floor; irreducible Markov chain visits all cells infinitely often.\" (covers 1s4,1s5,1s6; 0s7 maybe)\n- \"Aging-based deterministic token\" samples [2] text \"Add local aging/waiting term so unserved cells eventually become locally maximal; token reaches waiting cells and no cell starves.\" (covers 2s6,2s7)\n- \"Tie-breaking/backoff for local maxima\" samples [0] text \"Break ties among strict local maxima by ID or local backoff.\" (0s4)\n- \"Local rule cannot find global max\" samples [0] text \"A purely local rule cannot find the unique global maximum in one step, so use local maxima, token passing, or randomized propagation.\" (0s2)\n- Maybe \"Random walk anti-starvation\" samples [0,1] covers sample0 s8? But s8 in cluster conclusion. Hmm.\n\nWhat about sample0 s2? It's an inference. Could be divergent. Sample0 s4? divergent. Sample1 s4,s5,s6? random route divergent. Sample2 s6,s7? aging route divergent. All steps covered? Let's list:\n0 s1 cluster1\n0 s2 divergent local rule cannot global max\n0 s3 cluster2\n0 s4 divergent tie-breaking\n0 s5 cluster4\n0 s6 cluster5\n0 s7 cluster3\n0 s8 cluster6\n1 s1 cluster1\n1 s2 cluster2\n1 s3 cluster3\n1 s4 divergent random walk\n1 s5 divergent random walk\n1 s6 divergent random walk\n1 s7 cluster6\n1 s8 cluster5\n2 s1 cluster1\n2 s2 cluster2\n2 s3 cluster3\n2 s4 cluster4\n2 s5 cluster5\n2 s6 divergent aging\n2 s7 divergent aging\n2 s8 cluster6\nAll covered. Good. But divergent random walk lacks 0s7? We put 0s7 in cluster3. That's okay. Divergent aging covers 2s6,2s7. 2s4 in cluster4 service lowers priority. 2s3 in cluster3. 2s8 in cluster6. 2s5 cluster5.\n\nBut is cluster3 \"Token as local state\" truly common? Sample0 s7: Use a token or random walk biased by local score; token holder receives budget and moves to neighbor based only on local values. Sample1 s3: Use a single budget token that moves locally from current cell to itself or neighbor. Sample2 s3: Use a token: current holder compares urgency with neighbors and moves to highest-urgency neighbor if that neighbor beats it. Yes.\n\nCluster4 service reduces priority: sample0 s5: If receiving budget reduces potential or raises resistance, score drops stops monopolizing. sample2 s4: if no neighbor beats current, token stays and cell consumes budget, reducing potential. Yes. Sample1 lacks, but okay.\n\nCluster6 fairness/no-starvation conclusion: sample0 s8: On connected graph, random walk visits every cell infinitely often, and score reduction prevents permanent starvation. sample1 s7: Irreducibility makes every cell visited infinitely often w.p.1, so no cell starves forever and fairness long-run proportional to weights. sample2 s8: Rule uses only local comparisons and aging, making it minimal, fair, starvation-free. They are all conclusion. Text can be \"The local mechanism ensures long-run fairness/no starvation.\" Good.\n\nDivergent entries:\n- \"Global-max impossibility\": samples [0]. text \"A purely local rule cannot locate the unique global maximum in one step, so it must use local maxima, token passing, or randomized propagation.\"\n- \"Tie-breaking/backoff\": samples [0]. text \"If several strict local maxima or ties occur, break ties by ID or local backoff.\"\n- \"Randomized token walk\": samples [0,1]. text \"Randomize the token's next location in proportion to local weights, with a positive floor, giving an irreducible Markov chain that visits every cell infinitely often.\" This overlaps 0s7? But 0s7 in cluster. Maybe samples [0,1] okay. It covers 1s4,s5,s6. Could also mention sample0's random walk alternative. Good.\n- \"Aging-based deterministic token\": samples [2]. text \"Add a local waiting/aging term so an unserved cell's effective urgency rises until the token leaves a local maximum and reaches it.\" Covers 2s6,s7.\n- Maybe \"Positive floor\" is part of random walk. Fine.\n\nBut instruction says divergent entries have \"samples\":[0,2] etc. We can include [0], [0,1], [2]. Good.\n\nPotential issue: Cluster5 local-max starvation risk includes sample1 s8 \"deterministic local max rule could starve, so randomness with positive probabilities is minimal safeguard.\" That step also introduces randomness. But it's about risk. Fine.\nCluster6 includes sample1 s7, which mentions irreducibility. Divergent random walk includes 1s6. Good.\n\nCould also cluster sample1 s6 (irreducible Markov) with sample0 s8 and sample1 s7? Maybe cluster6 \"connected graph ensures infinite visits\" could include 0s8,1s6,1s7. Then sample2 s8 separate? But sample2 conclusion is fairness. Let's consider improving alignment.\n\nMaybe clusters:\nA Premise (0s1,1s1,2s1)\nB Local score (0s3,1s2,2s2)\nC Token mechanism (0s7,1s3,2s3)\nD Service reduces priority (0s5,2s4)\nE Local-max starvation risk (0s6,1s8,2s5)\nF Random-walk/Markov no-starvation proof (0s8,1s6,1s7) — but sample2 lacks. This is a cluster of steps expressing same logical move: connected graph/random walk -> no starvation. But sample2 uses aging, not random. Could be cluster with members 0s8,1s6,1s7. Then sample2 s7 divergent aging. Then what about sample2 s8? Cluster G fairness conclusion (2s8 maybe with 0s8? overlap). Hmm.\nInstead cluster6 \"No-starvation conclusion\" can include 0s8,1s7,2s8. Then 1s6 in divergent random walk. That's okay.\n\nWhat about sample0 s8 includes \"random walk visits every cell infinitely often\" and \"score reduction prevents starvation\"; could be in cluster6 generic conclusion. Fine.\n\nNeed ensure JSON valid only. We can produce final JSON. Need not explain. Use exact quoted labels. Ensure members have sample as integer, id string. Text one line. Desired oververbosity 5, concise.\n\nLet's decide final content.\n\nClusters:\n1 label \"Task definition\"\nmembers: {\"sample\":0,\"id\":\"s1\"}, {\"sample\":1,\"id\":\"s1\"}, {\"sample\":2,\"id\":\"s1\"}\ntext: \"Design a local rule using only a cell and its direct neighbors to choose the next budget recipient and ensure fairness/no starvation.\"\n\n2 label \"Local urgency score\"\nmembers: 0 s3, 1 s2, 2 s2\ntext: \"Combine potential and resistance into a local priority, typically potential/resistance, for comparing a cell with its neighbors.\"\n\n3 label \"Token holder moves locally\"\nmembers: 0 s7, 1 s3, 2 s3\ntext: \"Use a single token whose holder considers itself and neighbors and moves or serves based only on local values.\"\n\n4 label \"Service lowers future priority\"\nmembers: 0 s5, 2 s4\ntext: \"After service, reduce potential or raise resistance so the served cell's score drops and it stops monopolizing.\"\n\n5 label \"Local-max starvation risk\"\nmembers: 0 s6, 1 s8, 2 s5\ntext: \"A deterministic local-max/greedy token can get stuck and starve lower-urgency cells, so a safeguard is needed.\"\n\n6 label \"No-starvation fairness claim\"\nmembers: 0 s8, 1 s7, 2 s8\ntext: \"The chosen local mechanism ensures long-run fairness and no cell starves forever.\"\n\nDivergent:\n1 label \"Global maximum impossibility\"\nsamples [0]\ntext: \"A purely local rule cannot find the unique global maximum in one step, so it must use local maxima, token passing, or randomized propagation.\"\n\n2 label \"Tie-breaking/backoff for local maxima\"\nsamples [0]\ntext: \"If several strict local maxima or ties occur, break ties by ID or local backoff.\"\n\n3 label \"Randomized token walk\"\nsamples [0,1]\ntext: \"Randomize the token's next location in proportion to local weights, with a positive floor, yielding an irreducible walk that visits every cell infinitely often.\"\n\n4 label \"Aging-based deterministic token\"\nsamples [2]\ntext: \"Add a local waiting/aging term so an unserved cell's effective urgency rises until the token leaves a local maximum and reaches it.\"\n\nCheck if sample0 s2 in divergent, sample0 s4 divergent, sample1 s4,s5,s6 divergent, sample2 s6,s7 divergent. All steps covered except sample1 s6? Divergent random walk covers. sample2 s7? Aging. Good.\n\nBut cluster6 includes sample0 s8, sample1 s7, sample2 s8. Sample1 s7 mentions irreducibility; sample2 s8 conclusion. Good.\n\nCould include sample2 s7 in cluster6? It is also no starvation. But we put in aging divergent. Fine.\n\nPotential issue: Divergent \"Randomized token walk\" samples [0,1] but sample0 s7 is in cluster3. The route is only in 0 and1. Good.\n\nNeed final only JSON. Ensure no markdown. Use proper escaping. Newlines? JSON can be one line. We'll output compact but readable. Need valid JSON. Use only double quotes. Text one line.\n\nLet's final.",
+   "retried_bigger": true
+  }
+ },
+ "judge": {
+  "score": 6,
+  "gaps": [
+   "Global-maximum impossibility: a one-step local rule cannot compute the unique global maximum, so the design must use a token or local propagation instead of global argmax.",
+   "Explicit aging mechanism: the score must include a λa_i term, with the served cell's age reset and other ages incremented, to force eventual selection.",
+   "Tie-breaking/backoff: equal local scores or multiple local maxima need a deterministic or randomized tie-break to avoid loops.",
+   "Randomized token walk alternative: positive-floor local probabilities can make an irreducible walk that visits every cell infinitely often.",
+   "Formal no-starvation proof: show the aging term dominates bounded p/r and forces the token across every cut, or use irreducibility/recurrence."
+  ],
+  "verdict": "The graph captures the high-level components but omits the key aging, tie-breaking, and proof mechanisms, so it is only moderately thorough."
+ },
+ "finished_utc": "20261001T192521Z"
+}
