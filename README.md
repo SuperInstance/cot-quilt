@@ -139,3 +139,24 @@ folded back as cells → `graph.json` + `exports/organ-candidate-rewind.json`.
   transactions UNCOVERED — the graph is organ-boot v1's demand signal.
 - Methodology (how such runs are constructed) is documented for zero-shot readers in
   [`RUN-REPORT.md`](RUN-REPORT.md).
+
+## Documentation (wave-69 doc package)
+
+Route by audience — every file is complete and current as of wave-69:
+
+- Just cloned, zero context (agents): [docs/ONBOARDING.md](docs/ONBOARDING.md) —
+  identity, verify-it-works commands (incl. the keyscan ritual), gotchas, frontier.
+- Running decompositions (users): [docs/USER-GUIDE.md](docs/USER-GUIDE.md) — install,
+  first success, everyday tasks (run/resume/play-test/viewer/upload), troubleshooting,
+  FAQ (incl. the security story).
+- Extending the code (developers): [docs/DEVELOPER-GUIDE.md](docs/DEVELOPER-GUIDE.md) —
+  code layout, core concepts (lens, burn-guard, judge separation, fold-back, ledger),
+  how to add providers/patterns safely, gotchas.
+- Operating/reviewing the system (engineers):
+  [docs/ENGINEERING-NOTES.md](docs/ENGINEERING-NOTES.md) — architecture, invariants
+  (env-read keys, scrub(), append-only ledgers), failure modes incl. the realized
+  incident, receipted cost envelope, design decisions.
+- Deciding investment (executives): [docs/CTO-BRIEF.md](docs/CTO-BRIEF.md) — maturity,
+  risks, cost profile, strategic options.
+- The index of indexes (everyone): [docs/KNOWLEDGE-MAP.md](docs/KNOWLEDGE-MAP.md) —
+  every file, run, receipt, journal task ID, and the security-incident pointer.
