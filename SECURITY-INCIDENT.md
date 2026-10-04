@@ -78,6 +78,12 @@ rewrite history, we do not mask the historical receipt, and we do not delete it:
 If the fleet ever migrates hosts or archives the repo, this file is the pointer that
 explains the inert string at `receipt.json:1788`.
 
+> **Note (wave-69 reconciliation):** the published branch's history was amended in the
+> wave-67/68 secret purge to scrub the leaked credential — commit `677484d` and the
+> leak-bearing receipt exist only in pre-purge private history; the public record begins
+> at its successor `bbd8b5d`. The never-rewrite law applies to receipts as claims;
+> history rewrites for secret purges are receipted exceptions.
+
 ## 5. Prevention checklist for future lanes (zero-shot)
 
 - [x] `scripts/keyscan.mjs` exists and fails non-zero on un-receipted hits.

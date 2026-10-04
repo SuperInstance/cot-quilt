@@ -36,8 +36,11 @@ runs/
                               seeds/ledger.jsonl (append-only), state/, AUDIT-63a-r.md,
                               REMEDIATION-63a-r.md
   20261001T195410Z-503b10b9/  the run whose earlier committed receipt triggered the
-                              security incident (current tree is clean; the inert string
-                              lives in git history at commit 677484d, receipt.json:1788)
+                              security incident (current tree is clean; the leak-bearing
+                              receipt lives only in pre-purge private history at commit
+                              677484d, receipt.json:1788 — the published branch was
+                              amended in the wave-67/68 secret purge; public history
+                              begins at successor bbd8b5d)
   playtest-20261001T190939Z-*.json   v0.2 playtest receipt
   wave64-run2/                wave-64 run-2 directory
 exports/
@@ -130,9 +133,9 @@ vs actual calls, FAIL rows explained, spend of record matches usage rows.
 ## Conventions
 
 - **Keys**: read at runtime from `/home/z/my-project/.env.keys` (Python loads it
-  directly; Node uses process.env) or env vars; mode 600; gitignored (`.env`, `.env.*`,
-  `.env.keys`, `*.env`). Refer to credentials by ROLE ("the rolled deepseek credential"),
-  never by value — including in commit messages.
+  directly and ONLY from there; Node uses process.env); mode 600; gitignored
+  (`.env`, `.env.*`, `.env.keys`, `*.env`). Refer to credentials by ROLE ("the rolled
+  deepseek credential"), never by value — including in commit messages.
 - **Receipts**: atomic writes (tmp + fsync + rename); append-only ledgers; every phase
   persists before proceeding; failures are rows.
 - **Runs are content-keyed**, not wall-clock-keyed; run ids embed a content slug.
@@ -148,6 +151,11 @@ vs actual calls, FAIL rows explained, spend of record matches usage rows.
   between the exception and any persistence, including in new helpers.
 - **Never rewrite history or mask the historical receipt** (`677484d` stays verbatim);
   the suppression table + SECURITY-INCIDENT.md are the only sanctioned references to it.
+  Note: the published branch's history was amended (wave-67/68 secret purge) to scrub
+  the leaked credential — commit `677484d` and the leak-bearing receipt exist only in
+  pre-purge private history; the public record begins at its successor `bbd8b5d`. The
+  never-rewrite law applies to receipts as claims; history rewrites for secret purges
+  are receipted exceptions (see SECURITY-INCIDENT.md).
 - **Never judge with a composer model** — if you add a judge, add it on the judge side
   of the separation, and quote point ids in adversarial verdicts.
 - **Don't trust `seed` for diversity**; use lenses/temperature. Seeds are book-keeping.

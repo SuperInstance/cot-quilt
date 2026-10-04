@@ -57,14 +57,21 @@ EOF
 
 What CANNOT run without credentials and network: every live pipeline
 (`python3 cot_decompose.py`, `python3 playtest_routes.py`,
-`node scripts/run1_pipeline.mjs`, `node scripts/export_organ_bundle.mjs`). They need
-`DEEPSEEK_API_KEY`, `TYPESAFE_API_KEY`, `DEEPINFRA_API_KEY` (and `WORKER_UPLOAD_TOKEN`
-for the organ upload), read at runtime from `/home/z/my-project/.env.keys`
-(outside the repo, mode 600, gitignored) or process env. Proof they ran: the committed
+`node scripts/export_organ_bundle.mjs`). They need `DEEPSEEK_API_KEY`,
+`TYPESAFE_API_KEY`, `DEEPINFRA_API_KEY`, and `MOTHQUANTUM_API_KEY` (a hard module-level
+requirement — `cot_decompose.py:71` KeyErrors without it; `WORKER_UPLOAD_TOKEN` is also
+needed for the organ upload). The Python pipeline reads keys ONLY from the key file
+(`/home/z/my-project/.env.keys` pattern — zero `os.environ` reads); Node clients
+(`scripts/clients.mjs`) also read process env. Proof they ran: the committed
 receipts — `runs/20261001T185823Z-4bb8f5f5/receipt.json` (first receipted run: 48/48
 quantum seed bits, judge 6/10, graph v2), `runs/2026-10-01-run1/` (AUDIT + REMEDIATION
 reports, ledger append-only, all-in spend $0.098 declared), and the organ upload
 receipt in `RUN-REPORT.md` §9.
+
+`node scripts/run1_pipeline.mjs` is NOT in that list: it runs fully OFFLINE (replays
+committed state caches) — but note: the replay rewrites two sealed artifacts
+(`runs/2026-10-01-run1/graph.json` generated_at_utc + `exports/organ-candidate-rewind.json`),
+invalidating their recorded graph_sha256; `git checkout` restores them.
 
 ## Reading order (paths, not vibes)
 
@@ -105,7 +112,12 @@ receipt in `RUN-REPORT.md` §9.
 - **Never delete receipt data.** The leaked credential stays in history verbatim
   (commit `677484d`, `receipt.json:1788`) because it is inert (rolled) and history is
   never rewritten — corrections are new rows; the string is keyscan-suppressed with
-  justification. DO NOT copy that string anywhere; refer to it by role only.
+  justification. Note: the published branch's history was amended (wave-67/68 secret
+  purge) to scrub the leaked credential — commit `677484d` and the leak-bearing receipt
+  exist only in pre-purge private history; the public record begins at its successor
+  `bbd8b5d`. The never-rewrite law applies to receipts as claims; history rewrites for
+  secret purges are receipted exceptions (see SECURITY-INCIDENT.md). DO NOT copy that
+  string anywhere; refer to it by role only.
 - **`tools_build_cot_viewer.py` (root) is the older v1 viewer**; `tools/build_cot_viewer.py`
   is the v2 (multi-line labels, cluster→cluster edges). Use the tools/ one; the root
   copy is lineage.

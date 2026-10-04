@@ -110,8 +110,9 @@ Measured (receipted):
 ## Operations
 
 - **Local**: Node ≥ 18 and Python ≥ 3.9; zero npm/pip dependencies. Keys via
-  `/home/z/my-project/.env.keys` (outside the repo, mode 600) or process env; the organ
-  uploader reads `WORKER_UPLOAD_TOKEN` from env and never echoes it.
+  `/home/z/my-project/.env.keys` (outside the repo, mode 600) — the Python pipeline
+  reads ONLY that file, while Node clients (`scripts/clients.mjs`) also read process
+  env; the organ uploader reads `WORKER_UPLOAD_TOKEN` from env and never echoes it.
 - **Pre-push ritual**: `node scripts/keyscan.mjs` (must be CLEAN or only
   RECEIPTED-BENIGN rows; paste the summary line into the push receipt), then push with
   the token discipline (embed → push → ls-remote verify → scrub URL → unset helper).
@@ -137,7 +138,12 @@ Measured (receipted):
 3. **History is never rewritten, even for secrets.** The leaked credential stays
    verbatim because it is inert and because rewriting a sealed receipt falsifies the
    record. Tradeoff: a permanently scannable historical string — contained by the
-   suppression table + incident doc instead of deletion.
+   suppression table + incident doc instead of deletion. Note (wave-69 reconciliation):
+   the published branch's history was amended in the wave-67/68 secret purge to scrub
+   the leaked credential — commit `677484d` and the leak-bearing receipt exist only in
+   pre-purge private history; the public record begins at its successor `bbd8b5d`. The
+   never-rewrite law applies to receipts as claims; history rewrites for secret purges
+   are receipted exceptions (see SECURITY-INCIDENT.md).
 4. **Fold-back over re-generation.** Judge findings become cells with provenance
    (`origin='adversarial-critique'`, `origin='critique'`), keeping the graph append-only
    and auditable. Tradeoff: the graph accumulates volatile cells (26/49) — visible in

@@ -36,8 +36,10 @@ python3 --version # >= 3.9 for the Python pipeline
 ```
 
 Credentials (not included, never committed): `DEEPSEEK_API_KEY`, `TYPESAFE_API_KEY`,
-`DEEPINFRA_API_KEY` — read from process env or `/home/z/my-project/.env.keys`
-(mode 600, gitignored). The organ uploader additionally needs `WORKER_UPLOAD_TOKEN`.
+`DEEPINFRA_API_KEY`, `MOTHQUANTUM_API_KEY`. The Python pipeline reads keys ONLY from the
+key file (`/home/z/my-project/.env.keys`, mode 600, gitignored — env vars are ignored);
+Node clients (`scripts/clients.mjs`) also read process env. The organ uploader
+additionally needs `WORKER_UPLOAD_TOKEN`.
 
 ## First success in 5 minutes
 
@@ -70,7 +72,7 @@ sample cell: <a reasoning-step title from the FLEET-Q-REWIND-ORGAN graph>
 ### 1. Run the multi-seed Python pipeline (costs metered API spend)
 
 ```bash
-set -a; . /home/z/my-project/.env.keys; set +a   # or export the three keys yourself
+set -a; . /home/z/my-project/.env.keys; set +a   # the Python pipeline reads all FOUR keys from this file (env exports are ignored by it)
 python3 cot_decompose.py
 # 6 phases: SEEDS (mothquantum bits, fail-closed) → COT (3× v4-pro under lenses)
 # → SPLIT (flash ≤8 typed steps) → WIRE (typesafe battery: loads + deps)
@@ -109,6 +111,10 @@ python3 playtest_routes.py
 python3 tools/build_cot_viewer.py    # v2 renderer (multi-line labels, cluster edges)
 ```
 
+`tools/build_cot_viewer.py` writes to the HARDCODED path
+`/home/z/my-project/cf-deploy/cot-view/index.html` (`tools/build_cot_viewer.py:169`); on
+any other machine edit the path first (wave-69 drill finding).
+
 ### 6. Export + upload an organ candidate (fail-closed self-verify first)
 
 ```bash
@@ -122,7 +128,7 @@ node scripts/export_organ_bundle.mjs
 
 | Symptom | Cause | Fix |
 |---|---|---|
-| `KeyError: 'DEEPSEEK_API_KEY'` (Python) or the pipeline's fail-closed dry-run FAIL rows | Keys not in env | `set -a; . /home/z/my-project/.env.keys; set +a` (or export the three key vars); the two FAIL rows in run-1's ledger are exactly this — operator dry-run without keys |
+| `KeyError: 'MOTHQUANTUM_API_KEY'` / `'DEEPSEEK_API_KEY'` (Python) or the pipeline's fail-closed dry-run FAIL rows | Keys not in the key file | `set -a; . /home/z/my-project/.env.keys; set +a` — the Python pipeline reads the FOUR keys (`DEEPSEEK_API_KEY`, `TYPESAFE_API_KEY`, `DEEPINFRA_API_KEY`, `MOTHQUANTUM_API_KEY`) ONLY from that file (env vars are ignored; `MOTHQUANTUM_API_KEY` is a hard module-level requirement, `cot_decompose.py:71`); the two FAIL rows in run-1's ledger are exactly this — operator dry-run without keys |
 | Sample returns empty content with `finish=length` | The reasoner burned the whole budget on hidden reasoning | The burn-guard retries at 3× automatically; if you call models yourself, budget 12k→36k and check `finish_reason` |
 | Decomposed JSON is broken/malformed | Model output drifted from the strict compact-JSON contract | The repair loop retries once — but run-1's lesson: repair prompts MUST carry the verbatim CoT, or you get generic contamination |
 | Cross-review verdicts truncated/lost | Output budget too small for the candidate count | Budget ≈ candidates × expected verdict tokens × margin; assert verdict count == candidate count |
@@ -156,7 +162,11 @@ within ~2 hours and is inert. The repo keeps the incident record (`SECURITY-INCI
 scrubs credential-shaped patterns out of all error text (`scrub()`), scans before every
 push (`scripts/keyscan.mjs`), and reads keys from outside the repo at runtime only.
 The historical string stays in history verbatim by fleet law (never delete data) and is
-suppressed in the scanner as receipted-benign. Never copy it anywhere.
+suppressed in the scanner as receipted-benign. Note: the published branch's history was
+amended (wave-67/68 secret purge) to scrub the leaked credential — commit `677484d` and
+the leak-bearing receipt exist only in pre-purge private history; the public record begins
+at its successor `bbd8b5d` (the never-rewrite law applies to receipts as claims; history
+rewrites for secret purges are receipted exceptions). Never copy it anywhere.
 
 **How much does a run cost?** Receipted, not guessed: run-1 (all-in, 17 deepseek OK
 rows, 24 OK + 2 FAIL calls) ≈ **$0.098 declared** (46,840 prompt + 156,159 completion

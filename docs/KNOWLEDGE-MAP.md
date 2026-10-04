@@ -19,6 +19,9 @@
   this document by design), exposure window (≤ ~2h, rolled 22:55Z), mitigation (roll,
   this document, keyscan, gitignore, code hardening), why the commit stays in history
   (never-delete-data law; inert credential; suppression table), prevention checklist.
+  Note: the published branch's history was amended (wave-67/68 secret purge) to scrub
+  the leaked credential — commit `677484d` and the leak-bearing receipt exist only in
+  pre-purge private history; the public record begins at its successor `bbd8b5d`.
 - `cot_decompose.py` (32 KB) — the Python pipeline: `.env.keys` loader, `scrub()`
   (incident law, KEY_PAT regex), mothquantum seed client (per-bit fail-closed),
   lens personas, burn-guard (12k→36k), strict-JSON split with repair loop, typesafe
@@ -55,7 +58,8 @@
     `AUDIT-63a-r.md` (as-found audit), `REMEDIATION-63a-r.md` (4 receipted calls).
   - `20261001T195410Z-503b10b9/` — the run associated with the incident (commit
     `677484d`'s receipt lineage; current HEAD tree is keyscan-CLEAN; the inert string
-    exists only in git history).
+    exists only in pre-purge private history — the published branch was amended in the
+    wave-67/68 secret purge; the public record begins at successor `bbd8b5d`).
   - `20261001T183329Z/183810Z/184829Z-4bb8f5f5/`, `20261001T195410Z-503b10b9/`,
     `wave64-run2/`, `playtest-20261001T190939Z-4bb8f5f5.json` — earlier same-day
     attempts, run-2, and the playtest receipt.
@@ -147,7 +151,9 @@ grep -n "scrub\|KEY_PAT" cot_decompose.py scripts/clients.mjs scripts/keyscan.mj
 
 # Every receipted provider call and its cost basis (run-1)
 head -3 runs/2026-10-01-run1/seeds/ledger.jsonl
-grep -c '"status": "OK"' runs/2026-10-01-run1/seeds/ledger.jsonl
+grep -c '"status":"OK"' runs/2026-10-01-run1/seeds/ledger.jsonl
+# compact JSON — no space after the colon; expect 24 OK / 2 FAIL / 1 note row
+# (the note row, "note-1", carries no "status" field at all)
 
 # Judge verdicts and fold-back provenance
 ls runs/2026-10-01-run1/judges/ && grep -o "origin[^,]*" runs/2026-10-01-run1/graph.json | sort | uniq -c
